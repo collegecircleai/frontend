@@ -1,0 +1,116 @@
+:root {
+  /* Design System */
+  --violet: #4D3FFF;
+  --violet-light: #7B70FF;
+  --violet-pale: #F0EFFF;
+  --ink: #05050A;
+  --mist: #6B6B7E;
+  --jade: #00C896;
+  --pearl: #FFFFFF;
+  --pearl-dark: #FAF9F6;
+  
+  /* Fonts */
+  --font-sans: 'DM Sans', sans-serif;
+  --font-display: 'Playfair Display', serif;
+  --font-mono: 'DM Mono', monospace;
+
+  /* Legacy Fallbacks */
+  --bg-primary: #f8fafc;
+  --accent-primary: var(--violet);
+  --text-primary: var(--ink);
+  --grad-main: linear-gradient(135deg, #f5f3ff 0%, #f0f9ff 100%);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--grad-main);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .serif {
+  font-family: var(--font-serif);
+}
+
+/* Glass Utility */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 24px;
+}
+
+/* Neo-Brutalist Utility */
+.neo-btn {
+  background: white;
+  border: 2px solid var(--neo-border);
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 4px 4px 0px var(--neo-border);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.neo-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--neo-border);
+}
+
+.neo-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--neo-border);
+}
+
+.neo-card {
+  background: white;
+  border: 2px solid var(--neo-border);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 6px 6px 0px var(--neo-border);
+}
+
+/* Layout */
+.app-container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.main-content {
+  padding: 40px;
+  overflow-y: auto;
+}
+
+/* Grid for Features */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
