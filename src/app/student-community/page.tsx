@@ -737,34 +737,7 @@ export default function CommunityPage() {
           </motion.div>
         </section>
 
-        {/* APPLY SECTION */}
-        <section id="apply" style={{ padding: '120px 5%', marginBottom: '120px' }}>
-          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '32px' }}>
-              <div style={{ width: '32px', height: '1px', background: 'linear-gradient(90deg, transparent, #7B6BFF)' }} />
-              <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>APPLY</span>
-              <div style={{ width: '32px', height: '1px', background: 'linear-gradient(270deg, transparent, #7B6BFF)' }} />
-            </div>
-            
-            <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ textAlign: 'center', fontSize: 'clamp(40px, 5vw, 64px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '40px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
-              Ready to join<br/>
-              <span style={{ color: '#9B90FF' }}>the network?</span>
-            </motion.h2>
 
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ display: 'flex', justifyContent: 'center' }}>
-              <a 
-                href="https://docs.google.com/forms/d/e/1FAIpQLScuWSCu-8TwZPABvfl0LiOnVRDhUNjTmVV0PnRZnlYOwZLLkA/viewform" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                style={{ background: 'linear-gradient(135deg, #7B6BFF 0%, #9B90FF 100%)', border: 'none', color: '#fff', padding: '16px 40px', borderRadius: '100px', fontSize: '18px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', boxShadow: '0 10px 30px rgba(123, 107, 255, 0.4)', textDecoration: 'none', transition: 'transform 0.2s' }}
-                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-              >
-                Apply Now <ArrowRight size={20} />
-              </a>
-            </motion.div>
-          </div>
-        </section>
         {/* FINAL CTA SECTION */}
         <section style={{ position: 'relative', padding: '160px 5%', textAlign: 'center', background: `linear-gradient(180deg, ${c.gradBase} 0%, ${c.gradTop} 100%)`, overflow: 'hidden' }}>
           {/* Removed Subtle Grid Overlay */}
