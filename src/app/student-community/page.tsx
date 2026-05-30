@@ -453,7 +453,7 @@ export default function CommunityPage() {
                 <div style={{ fontSize: '10px', fontWeight: 700, color: '#00FF9D', fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '16px' }}>EARLY ECOSYSTEM ACCESS</div>
                 <h3 style={{ fontSize: '32px', fontWeight: 800, color: c.text, marginBottom: '8px' }}>Explorer Access</h3>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '24px' }}>
-                  <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>₹3000</span>
+                  <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>$10</span>
                   <span style={{ fontSize: '24px', fontWeight: 800, color: '#00FF9D' }}>FREE</span>
                 </div>
                 
@@ -473,7 +473,7 @@ export default function CommunityPage() {
                 <div style={{ fontSize: '10px', fontWeight: 700, color: '#9B90FF', fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '16px' }}>OPERATE THE ECOSYSTEM</div>
                 <h3 style={{ fontSize: '32px', fontWeight: 800, color: c.text, marginBottom: '8px' }}>Ambassador Lead</h3>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '24px' }}>
-                  <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>₹5000</span>
+                  <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>$30</span>
                   <span style={{ fontSize: '24px', fontWeight: 800, color: '#9B90FF' }}>FREE</span>
                 </div>
                 
