@@ -6,7 +6,7 @@ const LAUNCH_DATE = new Date('2026-05-30T09:30:00.000Z');
 
 export function middleware(request: NextRequest) {
   const now = new Date();
-  const isLaunched = now >= LAUNCH_DATE;
+  const isLaunched = true;
   const { pathname } = request.nextUrl;
 
   // Always allow Next.js internal assets, API routes, and public files
