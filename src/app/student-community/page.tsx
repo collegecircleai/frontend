@@ -657,8 +657,8 @@ export default function CommunityPage() {
                   { title: 'Creator Ecosystems', desc: 'Collaborate with editors, designers, and storytellers to build massive internet leverage.', highlight: false },
                   { title: 'Micro-Group Networking', desc: 'Join small growth circles for extreme accountability and ecosystem bonding.', highlight: false }
                 ].map((item, i) => (
-                  <motion.div key={i} variants={fadeInUp} style={{ background: item.highlight ? 'linear-gradient(90deg, rgba(15,15,20,0.6) 0%, rgba(60,40,100,0.4) 100%)' : (isDark ? c.cardLight : '#F7F6F2'), border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '8px', backdropFilter: 'blur(10px)' }}>
-                    <div style={{ fontSize: '18px', fontWeight: 800, color: item.highlight ? '#9B90FF' : c.text }}>{item.title}</div>
+                  <motion.div key={i} variants={fadeInUp} style={{ background: item.highlight ? (isDark ? 'linear-gradient(90deg, rgba(15,15,20,0.6) 0%, rgba(60,40,100,0.4) 100%)' : 'linear-gradient(90deg, rgba(255,255,255,0.8) 0%, rgba(123,107,255,0.15) 100%)') : (isDark ? c.cardLight : '#F7F6F2'), border: item.highlight && !isDark ? '1px solid rgba(123,107,255,0.3)' : `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '8px', backdropFilter: 'blur(10px)' }}>
+                    <div style={{ fontSize: '18px', fontWeight: 800, color: item.highlight ? (isDark ? '#9B90FF' : '#7B6BFF') : c.text }}>{item.title}</div>
                     <div style={{ fontSize: '14px', fontWeight: 500, color: c.text60, lineHeight: 1.6 }}>{item.desc}</div>
                   </motion.div>
                 ))}
