@@ -17,20 +17,20 @@ export default function CommunityPage() {
   const [activeTierModal, setActiveTierModal] = useState<string | null>(null)
   const [activePathway, setActivePathway] = useState<'builder' | 'creator'>('builder')
 
-  
+
   useEffect(() => {
     setMounted(true)
   }, [])
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
-  
+
   useEffect(() => {
     const savedTheme = localStorage.getItem('cc-ai-theme') as 'light' | 'dark';
     if (savedTheme) {
       setTheme(savedTheme);
       document.documentElement.setAttribute('data-theme', savedTheme);
     }
-    
+
     // Sync theme if Header changes it
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -40,11 +40,11 @@ export default function CommunityPage() {
         }
       });
     });
-    
+
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     return () => observer.disconnect();
   }, [])
-  
+
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
@@ -53,7 +53,7 @@ export default function CommunityPage() {
   };
 
   const isDark = theme === 'dark';
-  
+
   const c = {
     bg: isDark ? '#0A0A1E' : '#F7F6F2',
     text: isDark ? '#FFFFFF' : '#1A1A1E',
@@ -106,8 +106,8 @@ export default function CommunityPage() {
   }
 
   return (
-    <div 
-      className="content-wrapper" 
+    <div
+      className="content-wrapper"
       style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: c.bg, color: c.text }}
     >
       {mounted && (
@@ -119,7 +119,7 @@ export default function CommunityPage() {
         </ComponentErrorBoundary>
       )}
 
-      
+
       {mounted && (
         <motion.button
           onClick={toggleTheme}
@@ -145,21 +145,21 @@ export default function CommunityPage() {
       </ComponentErrorBoundary>
 
       <main style={{ flex: 1, marginTop: '120px', paddingBottom: '80px', position: 'relative', zIndex: 10 }}>
-        
+
         {/* HERO SECTION */}
-        <section style={{ 
-          padding: '0 5%', 
-          paddingTop: '20px', 
-          marginBottom: '100px', 
-          minHeight: 'calc(100vh - 120px)', 
-          display: 'flex', 
-          alignItems: 'center', 
+        <section style={{
+          padding: '0 5%',
+          paddingTop: '20px',
+          marginBottom: '100px',
+          minHeight: 'calc(100vh - 120px)',
+          display: 'flex',
+          alignItems: 'center',
           position: 'relative',
           backgroundPosition: 'center center',
           overflowX: 'hidden'
         }}>
           <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '40px', width: '100%', zIndex: 2 }}>
-            
+
             {/* Left Column */}
             <motion.div initial="hidden" animate="visible" variants={fadeInUp} style={{ flex: '1 1 500px', maxWidth: '750px' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 20px', background: c.border03, borderRadius: '100px', marginBottom: '24px', border: '1px solid rgba(255,255,255,0.1)' }}>
@@ -168,12 +168,12 @@ export default function CommunityPage() {
                   THE BUILDERS NETWORK
                 </span>
               </div>
-              
+
               <h1 style={{ fontFamily: 'var(--font-body), system-ui, sans-serif', fontSize: 'clamp(40px, 5vw, 80px)', fontWeight: 800, color: c.text, lineHeight: 1.08, marginBottom: '24px', letterSpacing: '-0.02em' }}>
                 Build the future<br />
                 <span style={{ color: '#9B90FF' }}>student culture.</span>
               </h1>
-              
+
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(16px, 1.8vw, 20px)', color: c.text70, lineHeight: 1.6, marginBottom: '40px', maxWidth: '600px' }}>
                 Join India's AI-native network of builders, operators, creators, and innovators reshaping what it means to be a student.
               </p>
@@ -233,11 +233,11 @@ export default function CommunityPage() {
                   .hero-badge-sub { font-size: 9px !important; }
                 }
               `}</style>
-              
+
               {/* Fake concentric circles behind */}
               <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 'clamp(300px, 150vw, 700px)', height: 'clamp(300px, 150vw, 700px)', borderRadius: '50%', border: `1px solid ${c.border08}`, pointerEvents: 'none' }} />
               <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 'clamp(200px, 100vw, 500px)', height: 'clamp(200px, 100vw, 500px)', borderRadius: '50%', border: `1px solid ${c.border15}`, pointerEvents: 'none' }} />
-              
+
               {/* Static Badges */}
               <div className="hero-badge hero-badge-1" style={{ position: 'absolute', top: '15%', left: '-5%', background: c.cardLight, backdropFilter: 'blur(20px)', border: `1px solid ${c.border08}`, padding: '16px 20px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '14px', zIndex: 10, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
                 <Zap size={18} color="#8B80F9" />
@@ -254,7 +254,7 @@ export default function CommunityPage() {
                   <div className="hero-badge-sub" style={{ fontSize: '10px', color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', fontWeight: 600 }}>OPEN • COHORT 02</div>
                 </div>
               </div>
-              
+
               <div className="hero-badge hero-badge-3" style={{ position: 'absolute', top: '40%', right: '-10%', background: c.cardLight, backdropFilter: 'blur(20px)', border: `1px solid ${c.border08}`, padding: '16px 20px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '14px', zIndex: 10, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
                 <Users size={18} color="#8B80F9" />
                 <div>
@@ -263,12 +263,12 @@ export default function CommunityPage() {
                 </div>
               </div>
 
-              <motion.img 
-                src="/owl-mascot.png" 
-                alt="Mascot" 
+              <motion.img
+                src="/owl-mascot.png"
+                alt="Mascot"
                 animate={{ y: [-8, 8, -8] }}
                 transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-                style={{ width: '100%', maxWidth: '800px', maxHeight: '85vh', objectFit: 'contain', zIndex: 5, position: 'relative', filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.6))' }} 
+                style={{ width: '100%', maxWidth: '800px', maxHeight: '85vh', objectFit: 'contain', zIndex: 5, position: 'relative', filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.6))' }}
               />
             </motion.div>
 
@@ -308,7 +308,7 @@ export default function CommunityPage() {
         {/* WHAT IS THE NETWORK SECTION */}
         <section style={{ padding: '0 5%', marginBottom: '120px' }}>
           <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: 'clamp(40px, 8vw, 80px)', alignItems: 'flex-start' }}>
-            
+
             {/* Left Side */}
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp} style={{ flex: '1 1 500px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
@@ -316,11 +316,11 @@ export default function CommunityPage() {
                 <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>WHAT IS THE NETWORK</span>
               </div>
               <h2 style={{ fontSize: 'clamp(40px, 5vw, 68px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '40px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
-                This isn't a club.<br/>
+                This isn't a club.<br />
                 <span style={{ color: '#9B90FF' }}>
-                  It's an operating<br/>
-                  network<br/>
-                  for AI-native<br/>
+                  It's an operating<br />
+                  network<br />
+                  for AI-native<br />
                   students.
                 </span>
               </h2>
@@ -377,61 +377,61 @@ export default function CommunityPage() {
             `}</style>
             <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 'clamp(20px, 4vw, 40px)' }}>
               {[
-                { lvl: '01', title: 'Explorer', badge: undefined, subtitle: 'Enter the ecosystem.', desc: 'Curious students stepping in early. AI study systems, workshops, networking.', icon: <Compass size={20}/>, perks: ['AI Study Systems', 'Beginner Workshops', 'Networking Access', 'Roadmap Guidance'] },
-                { lvl: '04', title: 'Ambassador Lead', badge: undefined, subtitle: 'Operate the ecosystem.', desc: 'Run communities. Host workshops. Connect founders. Shape direction.', icon: <Crown size={20}/>, perks: ['Leadership Access', 'Founder Networking', 'Verified Identity', 'Ecosystem Strategy'] }
+                { lvl: '01', title: 'Explorer', badge: undefined, subtitle: 'Enter the ecosystem.', desc: 'Curious students stepping in early. AI study systems, workshops, networking.', icon: <Compass size={20} />, perks: ['AI Study Systems', 'Beginner Workshops', 'Networking Access', 'Roadmap Guidance'] },
+                { lvl: '04', title: 'Ambassador Lead', badge: undefined, subtitle: 'Operate the ecosystem.', desc: 'Run communities. Host workshops. Connect founders. Shape direction.', icon: <Crown size={20} />, perks: ['Leadership Access', 'Founder Networking', 'Verified Identity', 'Ecosystem Strategy'] }
               ].map((tier, i) => (
                 <React.Fragment key={i}>
                   <motion.div onClick={() => setActiveTierModal(tier.lvl)} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ flex: '1 1 300px', maxWidth: '400px', background: c.tierCardGradient, border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px 24px', position: 'relative', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}>
-                    
+
                     {/* Top Bar (Level + Arrow) */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-                    <div style={{ fontSize: '10px', fontWeight: 700, color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em' }}>LV {tier.lvl}</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      {tier.badge && (
-                        <div style={{ background: 'rgba(123, 107, 255, 0.1)', color: '#9B90FF', padding: '4px 10px', borderRadius: '100px', fontSize: '9px', fontWeight: 800, letterSpacing: '0.1em', border: '1px solid rgba(123, 107, 255, 0.2)' }}>
-                          {tier.badge}
+                      <div style={{ fontSize: '10px', fontWeight: 700, color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em' }}>LV {tier.lvl}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        {tier.badge && (
+                          <div style={{ background: 'rgba(123, 107, 255, 0.1)', color: '#9B90FF', padding: '4px 10px', borderRadius: '100px', fontSize: '9px', fontWeight: 800, letterSpacing: '0.1em', border: '1px solid rgba(123, 107, 255, 0.2)' }}>
+                            {tier.badge}
+                          </div>
+                        )}
+                        <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: c.border03, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
+                          <ArrowRight size={12} color="rgba(255,255,255,0.5)" style={{ transform: 'rotate(-45deg)' }} />
                         </div>
-                      )}
-                      <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: c.border03, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
-                        <ArrowRight size={12} color="rgba(255,255,255,0.5)" style={{ transform: 'rotate(-45deg)' }} />
                       </div>
                     </div>
-                  </div>
 
-                  {/* Header */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                    <div style={{ color: '#9B90FF' }}>{tier.icon}</div>
-                    <h3 style={{ fontSize: '24px', fontWeight: 800, color: c.text, letterSpacing: '-0.02em' }}>{tier.title}</h3>
-                  </div>
+                    {/* Header */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                      <div style={{ color: '#9B90FF' }}>{tier.icon}</div>
+                      <h3 style={{ fontSize: '24px', fontWeight: 800, color: c.text, letterSpacing: '-0.02em' }}>{tier.title}</h3>
+                    </div>
 
-                  {/* Description */}
-                  <div style={{ fontSize: '13px', color: '#9B90FF', fontWeight: 600, marginBottom: '16px' }}>{tier.subtitle}</div>
-                  <p style={{ color: c.text50, fontSize: '13px', lineHeight: 1.6, marginBottom: '32px', minHeight: '60px' }}>{tier.desc}</p>
-                  
-                  <div style={{ height: '1px', background: c.border05, marginBottom: '32px', width: '100%' }} />
+                    {/* Description */}
+                    <div style={{ fontSize: '13px', color: '#9B90FF', fontWeight: 600, marginBottom: '16px' }}>{tier.subtitle}</div>
+                    <p style={{ color: c.text50, fontSize: '13px', lineHeight: 1.6, marginBottom: '32px', minHeight: '60px' }}>{tier.desc}</p>
 
-                  {/* Perks */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
-                    {tier.perks.map((perk, j) => (
-                      <div key={j} style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '13px', color: c.text, fontWeight: 500 }}>
-                        <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#7B6BFF', boxShadow: '0 0 8px #9B90FF' }} />
-                        {perk}
-                      </div>
-                    ))}
-                  </div>
+                    <div style={{ height: '1px', background: c.border05, marginBottom: '32px', width: '100%' }} />
 
-                  {/* Footer Action */}
-                  <div style={{ marginTop: '40px', fontSize: '12px', fontWeight: 600, color: c.text80, display: 'flex', alignItems: 'center' }}>
-                    Explore {tier.title} progression <ArrowRight size={12} style={{ marginLeft: '4px' }} />
-                  </div>
-                </motion.div>
-                {i === 0 && (
-                  <motion.div className="progression-arrow" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-                    <div style={{ padding: '16px', background: c.border03, borderRadius: '50%', border: `1px solid ${c.border10}` }}>
-                      <ArrowRight size={24} color="#9B90FF" />
+                    {/* Perks */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
+                      {tier.perks.map((perk, j) => (
+                        <div key={j} style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '13px', color: c.text, fontWeight: 500 }}>
+                          <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#7B6BFF', boxShadow: '0 0 8px #9B90FF' }} />
+                          {perk}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Footer Action */}
+                    <div style={{ marginTop: '40px', fontSize: '12px', fontWeight: 600, color: c.text80, display: 'flex', alignItems: 'center' }}>
+                      Explore {tier.title} progression <ArrowRight size={12} style={{ marginLeft: '4px' }} />
                     </div>
                   </motion.div>
-                )}
+                  {i === 0 && (
+                    <motion.div className="progression-arrow" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+                      <div style={{ padding: '16px', background: c.border03, borderRadius: '50%', border: `1px solid ${c.border10}` }}>
+                        <ArrowRight size={24} color="#9B90FF" />
+                      </div>
+                    </motion.div>
+                  )}
                 </React.Fragment>
               ))}
             </div>
@@ -446,7 +446,7 @@ export default function CommunityPage() {
               <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>ECOSYSTEM ACCESS</span>
               <div style={{ width: '32px', height: '1px', background: 'linear-gradient(270deg, transparent, #7B6BFF)' }} />
             </div>
-            
+
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '24px' }}>
               {/* Explorer Card */}
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden' }}>
@@ -456,12 +456,12 @@ export default function CommunityPage() {
                   <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>$10</span>
                   <span style={{ fontSize: '24px', fontWeight: 800, color: '#00FF9D' }}>FREE</span>
                 </div>
-                
+
                 <div style={{ background: 'rgba(0,255,157,0.1)', border: '1px solid rgba(0,255,157,0.2)', padding: '12px 16px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
                   <span style={{ color: '#00FF9D', fontSize: '13px', fontWeight: 600 }}>Curated ecosystem access</span>
                   <span style={{ color: '#00FF9D', fontSize: '14px', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>50 Seats Left</span>
                 </div>
-                
+
                 <button onClick={() => setActiveTierModal('01')} style={{ width: '100%', padding: '16px', background: c.border05, border: `1px solid ${c.border10}`, borderRadius: '100px', color: c.text, fontWeight: 600, fontSize: '15px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', transition: 'background 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.background = c.border10} onMouseLeave={(e) => e.currentTarget.style.background = c.border05}>
                   View Explorer Pathway <ArrowRight size={16} />
                 </button>
@@ -476,12 +476,12 @@ export default function CommunityPage() {
                   <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>$30</span>
                   <span style={{ fontSize: '24px', fontWeight: 800, color: '#9B90FF' }}>FREE</span>
                 </div>
-                
+
                 <div style={{ background: 'rgba(123, 107, 255, 0.1)', border: '1px solid rgba(123, 107, 255, 0.2)', padding: '12px 16px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
                   <span style={{ color: '#9B90FF', fontSize: '13px', fontWeight: 600 }}>Curated ecosystem access</span>
                   <span style={{ color: '#9B90FF', fontSize: '14px', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>25 Seats Left</span>
                 </div>
-                
+
                 <button onClick={() => setActiveTierModal('04')} style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #7B6BFF 0%, #9B90FF 100%)', border: 'none', borderRadius: '100px', color: '#fff', fontWeight: 600, fontSize: '15px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', boxShadow: '0 10px 20px rgba(123, 107, 255, 0.2)' }}>
                   View Ambassador Pathway <ArrowRight size={16} />
                 </button>
@@ -497,9 +497,9 @@ export default function CommunityPage() {
               <div style={{ width: '32px', height: '1px', background: 'linear-gradient(90deg, transparent, #7B6BFF)' }} />
               <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>THE EXPERIENCE</span>
             </div>
-            
+
             <h2 style={{ fontSize: 'clamp(40px, 5vw, 68px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
-              Not workshops.<br/>
+              Not workshops.<br />
               <span style={{ color: '#9B90FF' }}>Experiences.</span>
             </h2>
             <p style={{ color: c.text60, fontSize: '15px', lineHeight: 1.6, maxWidth: '400px', marginBottom: '120px' }}>
@@ -520,11 +520,11 @@ export default function CommunityPage() {
                 .experience-item { justify-content: flex-start !important; }
               }
             `}</style>
-            
+
             <div style={{ position: 'relative', padding: '0 0 40px 0' }}>
               {/* Vertical line */}
               <div className="experience-line" style={{ position: 'absolute', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, transparent, rgba(123, 107, 255, 0.3) 10%, rgba(123, 107, 255, 0.3) 90%, transparent)' }} />
-              
+
               {[
                 { step: '01', title: 'SHOCK', heading: "An AI moment they can't unsee.", desc: "We open with a live demo so visceral it rewires how students think about their next four years." },
                 { step: '02', title: 'DEMO', heading: "Live prompt engineering battles.", desc: "Resume roasting by AI. Productivity stack speedruns. Real builders, on stage, shipping." },
@@ -532,7 +532,7 @@ export default function CommunityPage() {
                 { step: '04', title: 'ONBOARD', heading: "Welcome to the network.", desc: "Discord invite. Cohort match. First mission within 48 hours. The community becomes the next chapter." }
               ].map((item, i) => (
                 <div key={i} className="experience-item" style={{ display: 'flex', justifyContent: i % 2 === 0 ? 'flex-start' : 'flex-end', position: 'relative', marginBottom: '80px' }}>
-                  
+
                   {/* Timeline Dot */}
                   <div className="experience-dot" style={{ position: 'absolute', top: '24px', transform: 'translate(-50%, -50%)', width: '28px', height: '28px', borderRadius: '50%', background: c.gradBase, border: '1px solid rgba(123,107,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
                     <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#9B90FF', boxShadow: '0 0 10px #7B6BFF' }} />
@@ -560,10 +560,10 @@ export default function CommunityPage() {
               <div style={{ width: '32px', height: '1px', background: 'linear-gradient(90deg, transparent, #7B6BFF)' }} />
               <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>WHY JOIN</span>
             </div>
-            
+
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '40px', alignItems: 'flex-end', marginBottom: '64px' }}>
               <h2 style={{ fontSize: 'clamp(36px, 4.5vw, 56px)', fontWeight: 800, color: c.text, lineHeight: 1.1, letterSpacing: '-0.02em', flex: '1 1 600px' }}>
-                Compounding leverage<br/>
+                Compounding leverage<br />
                 <span style={{ color: c.text30 }}>from day one.</span>
               </h2>
               <p style={{ color: c.text60, fontSize: '13px', maxWidth: '300px', marginBottom: '10px' }}>
@@ -572,7 +572,7 @@ export default function CommunityPage() {
             </div>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-              
+
               {/* Big Left Card */}
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} whileHover={{ y: -4 }} style={{ flex: '1 1 500px', background: isDark ? 'linear-gradient(180deg, rgba(20,15,25,0.8) 0%, rgba(30,20,50,0.4) 100%)' : 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(240,240,250,0.8) 100%)', border: `1px solid ${c.border08}`, borderRadius: '24px', padding: '40px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '320px', position: 'relative', overflow: 'hidden', backdropFilter: 'blur(20px)', transition: 'all 0.3s ease', boxShadow: '0 20px 40px rgba(0,0,0,0.03)' }}>
                 <div style={{ background: 'rgba(139,128,249,0.15)', width: '48px', height: '48px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
@@ -617,9 +617,9 @@ export default function CommunityPage() {
               <div style={{ width: '32px', height: '1px', background: 'linear-gradient(90deg, transparent, #7B6BFF)' }} />
               <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>XP PROGRESSION SYSTEM</span>
             </div>
-            
+
             <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ fontSize: 'clamp(40px, 5vw, 68px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '64px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
-              Every action compounds<br/>
+              Every action compounds<br />
               <span style={{ color: c.text30 }}>into access.</span>
             </motion.h2>
 
@@ -630,7 +630,7 @@ export default function CommunityPage() {
                   <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>EXPERTISE POINTS (XP)</span>
                   <Trophy size={16} color="#E5C158" />
                 </div>
-                
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                   {[
                     { label: 'Project contribution', pts: '+50 XP' },
@@ -675,35 +675,47 @@ export default function CommunityPage() {
             <div style={{ width: '32px', height: '1px', background: 'linear-gradient(270deg, transparent, #7B6BFF)' }} />
           </div>
 
-          <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '80px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
-            People don't join<br/>
-            <span style={{ color: '#9B90FF' }}>clubs</span><br/>
-            anymore.<br/>
-            <span style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontWeight: 400, color: c.text40 }}>they join movements.</span>
+          <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ fontSize: 'clamp(36px, 4vw, 56px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
+            Build With People Who<br />
+            <span style={{ color: '#9B90FF' }}>Are Already Building.</span>
           </motion.h2>
+
+          <motion.p initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ fontSize: 'clamp(16px, 1.8vw, 20px)', color: c.text60, lineHeight: 1.6, maxWidth: '800px', margin: '0 auto 80px auto' }}>
+            Students from IITs, IIMs, BITS, NITs, Christ, Jain, PES, SRM, VIT and hundreds of campuses learning, building, contributing and growing together.
+          </motion.p>
 
           {/* Tweet Cards */}
           <div style={{ display: 'flex', gap: '16px', overflowX: 'auto', paddingBottom: '32px', maxWidth: '1400px', margin: '0 auto', WebkitOverflowScrolling: 'touch', scrollSnapType: 'x mandatory' }}>
             {[
               {
-                name: '@arjun.builds', role: 'AI OPERATOR • BANGALORE', icon: <Flame size={14} color="#fff" />, color: '#FF5C00',
-                text: "shipped my first agent in cohort 01. tomorrow we hack the campus LMS. wild week",
-                likes: '412', replies: '51', retweets: '34'
+                name: 'Priyanshu Sarangi', role: 'IIT BHUBANESWAR • BUILDER', icon: <Terminal size={14} color="#fff" />, color: '#FF5C00',
+                text: "Joined as an Explorer. Built my first AI workflow in 3 weeks. Today I'm collaborating with students from 8+ colleges on real projects.",
+                likes: '328', replies: '24', retweets: '12'
               },
               {
-                name: '@simrun.eth', role: 'CULTURE BUILDER • DELHI', icon: <Sparkles size={14} color="#fff" />, color: '#9B90FF',
-                text: "the reel hit 240k. operators are the new founders. this isn't a phase.",
-                likes: '1240', replies: '155', retweets: '103'
+                name: 'Ananya Sharma', role: 'IIM BANGALORE • CONTRIBUTOR', icon: <Users size={14} color="#fff" />, color: '#9B90FF',
+                text: "The biggest value wasn't the workshop. It was meeting founders, builders, and ambitious students who pushed me to think bigger.",
+                likes: '412', replies: '31', retweets: '18'
               },
               {
-                name: '@kabir.codes', role: 'CAMPUS AMBASSADOR • PUNE', icon: <Moon size={14} color="#fff" />, color: '#7B6BFF',
-                text: "3am, discord on, three of us building. this is the network i was promised.",
-                likes: '380', replies: '47', retweets: '31'
+                name: 'Kabir Mehta', role: 'BITS PILANI • BUILDER', icon: <Zap size={14} color="#fff" />, color: '#7B6BFF',
+                text: "Built my portfolio, joined startup projects, and connected with mentors I would never have met through college alone.",
+                likes: '284', replies: '19', retweets: '8'
               },
               {
-                name: '@ananya.ai', role: 'AI OPERATOR • HYDERABAD', icon: <Zap size={14} color="#fff" />, color: '#FF3366',
-                text: "ran our first prompt battle today. 80 students showed. cohort is officially live.",
-                likes: '612', replies: '76', retweets: '51'
+                name: 'Simran Kaur', role: 'DELHI UNIVERSITY • AMBASSADOR', icon: <Crown size={14} color="#fff" />, color: '#FF3366',
+                text: "Managing my college community taught me leadership faster than any classroom ever could.",
+                likes: '501', replies: '42', retweets: '22'
+              },
+              {
+                name: 'Ritika Nair', role: 'CHRIST UNIVERSITY • UNIV. AMBASSADOR', icon: <Flame size={14} color="#fff" />, color: '#00FF9D',
+                text: "Started as an Explorer. Today I help coordinate students across departments and connect them to opportunities.",
+                likes: '391', replies: '28', retweets: '14'
+              },
+              {
+                name: 'Rahul Verma', role: 'NIT SURATHKAL • CONTRIBUTOR', icon: <Sparkles size={14} color="#fff" />, color: '#00C3FF',
+                text: "Working on ecosystem projects gave me real execution experience, not just certificates.",
+                likes: '347', replies: '21', retweets: '11'
               }
             ].map((tweet, i) => (
               <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeInUp} style={{ flex: '0 0 320px', scrollSnapAlign: 'start', background: c.card, border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '24px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -729,7 +741,7 @@ export default function CommunityPage() {
           </div>
 
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px', marginTop: '48px', maxWidth: '800px', margin: '48px auto 0' }}>
-            {['#builtbyoperators', '#cohort01', '#latenightbuilders', '#aithisweekend', '#campusambassadors', '#thenetwork'].map((tag, i) => (
+            {['#buildersnetwork', '#studentecosystem', '#futurebuilders', '#aioperators', '#collegecircle', '#foundernetwork', '#contributors', '#explorers'].map((tag, i) => (
               <div key={i} style={{ padding: '8px 16px', background: c.border03, border: '1px solid rgba(255,255,255,0.05)', borderRadius: '100px', fontSize: '12px', color: c.text50, fontFamily: 'var(--font-mono)' }}>
                 {tag}
               </div>
@@ -741,11 +753,11 @@ export default function CommunityPage() {
         {/* FINAL CTA SECTION */}
         <section style={{ position: 'relative', padding: '160px 5%', textAlign: 'center', background: `linear-gradient(180deg, ${c.gradBase} 0%, ${c.gradTop} 100%)`, overflow: 'hidden' }}>
           {/* Removed Subtle Grid Overlay */}
-          
+
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ position: 'relative', zIndex: 2 }}>
             <h2 style={{ fontSize: 'clamp(48px, 6vw, 80px)', fontWeight: 800, lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
-              <span style={{ color: c.text }}>India's AI-native</span><br/>
-              <span style={{ color: '#7B6BFF' }}>student culture</span><br/>
+              <span style={{ color: c.text }}>India's AI-native</span><br />
+              <span style={{ color: '#7B6BFF' }}>student culture</span><br />
               <span style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontWeight: 400, color: c.text40 }}>starts here.</span>
             </h2>
             <p style={{ color: c.text50, fontSize: '15px', marginBottom: '48px', fontWeight: 500 }}>The future will not be built by average students.</p>
@@ -769,7 +781,7 @@ export default function CommunityPage() {
         {activeTierModal && (
           <div onClick={() => setActiveTierModal(null)} style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '5%', background: c.overlay, backdropFilter: 'blur(10px)' }}>
             <motion.div data-lenis-prevent="true" onClick={(e) => e.stopPropagation()} initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} style={{ width: '100%', maxWidth: '1200px', maxHeight: '90vh', overflowY: 'auto', overscrollBehavior: 'contain', background: isDark ? 'linear-gradient(180deg, rgba(20,15,30,1) 0%, rgba(10,10,15,1) 100%)' : '#FFFFFF', border: `1px solid ${c.border10}`, borderRadius: '24px', position: 'relative', padding: '64px', boxShadow: isDark ? '0 40px 100px rgba(0,0,0,0.5)' : '0 40px 100px rgba(0,0,0,0.1)' }}>
-              
+
               {/* Close button */}
               <button onClick={() => setActiveTierModal(null)} style={{ position: 'absolute', top: '32px', right: '32px', width: '40px', height: '40px', borderRadius: '50%', background: c.border05, border: `1px solid ${c.border10}`, color: c.text, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10 }}>
                 ✕
@@ -777,7 +789,7 @@ export default function CommunityPage() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
                 <div style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>ECOSYSTEM PROGRESSION MAP</div>
-                
+
                 {/* Pathway Toggle */}
                 <div style={{ display: 'flex', background: isDark ? c.border02 : '#F7F6F2', borderRadius: '100px', padding: '4px', border: `1px solid ${c.border05}` }}>
                   <button onClick={() => setActivePathway('builder')} style={{ background: activePathway === 'builder' ? c.border05 : 'transparent', color: activePathway === 'builder' ? c.text : c.text50, border: 'none', padding: '8px 16px', borderRadius: '100px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -788,11 +800,11 @@ export default function CommunityPage() {
                   </button>
                 </div>
               </div>
-              
+
               <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '16px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif', maxWidth: '800px' }}>
                 {activePathway === 'builder' ? 'Build systems.' : 'Build narratives.'} <span style={{ color: '#9B90FF' }}>{activePathway === 'builder' ? 'Build the future.' : 'Build the culture.'}</span>
               </h2>
-              
+
               <p style={{ color: c.text50, fontSize: '15px', lineHeight: 1.6, maxWidth: '600px', marginBottom: '64px' }}>
                 {activePathway === 'builder' ? 'Explorer → Pathfinder → Builder → Ambassador Lead. For students who want to build systems, create projects, work with AI, and collaborate with founders.' : 'Explorer → Pathfinder → Creator → Culture Lead. For students interested in storytelling, content creation, editing, and internet culture.'}
               </p>
@@ -960,7 +972,7 @@ export default function CommunityPage() {
                 }
 
                 const currentTier = activeTierModal ? tierData[activeTierModal as keyof typeof tierData] : tierData['01']
-                
+
                 return (
                   <motion.div key={activeTierModal} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }} style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', width: '100%' }}>
                     {/* Left Column */}
@@ -968,7 +980,7 @@ export default function CommunityPage() {
                       {/* Info Card */}
                       <div style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px' }}>
                         <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '24px' }}>
-                          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: `rgba(${parseInt(currentTier.color.slice(1,3),16)},${parseInt(currentTier.color.slice(3,5),16)},${parseInt(currentTier.color.slice(5,7),16)},0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentTier.color }}>
+                          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: `rgba(${parseInt(currentTier.color.slice(1, 3), 16)},${parseInt(currentTier.color.slice(3, 5), 16)},${parseInt(currentTier.color.slice(5, 7), 16)},0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentTier.color }}>
                             {currentTier.icon}
                           </div>
                           <div>
@@ -981,13 +993,13 @@ export default function CommunityPage() {
                       </div>
 
                       <div style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)', marginTop: '16px' }}>WHAT UNLOCKS</div>
-                      
+
                       {/* Grid */}
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                         {currentTier.unlocks.map((perk, i) => (
                           <div key={i} style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '20px', padding: '24px' }}>
                             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '16px' }}>
-                              <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: `rgba(${parseInt(currentTier.color.slice(1,3),16)},${parseInt(currentTier.color.slice(3,5),16)},${parseInt(currentTier.color.slice(5,7),16)},0.05)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentTier.color }}>
+                              <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: `rgba(${parseInt(currentTier.color.slice(1, 3), 16)},${parseInt(currentTier.color.slice(3, 5), 16)},${parseInt(currentTier.color.slice(5, 7), 16)},0.05)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentTier.color }}>
                                 {perk.icon}
                               </div>
                               <div style={{ fontSize: '14px', fontWeight: 700, color: c.text }}>{perk.title}</div>
@@ -1006,11 +1018,11 @@ export default function CommunityPage() {
                           <div style={{ fontSize: '10px', fontWeight: 700, color: c.text40, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em' }}>XP PROGRESSION</div>
                           <div style={{ fontSize: '10px', fontWeight: 700, color: currentTier.color, fontFamily: 'var(--font-mono)' }}>{currentTier.xp.text}</div>
                         </div>
-                        
+
                         <div style={{ height: '6px', background: c.border05, borderRadius: '3px', marginBottom: '12px', overflow: 'hidden' }}>
                           <div style={{ height: '100%', width: currentTier.xp.pct, background: `linear-gradient(90deg, ${currentTier.color} 0%, rgba(255,255,255,1) 100%)`, borderRadius: '3px' }} />
                         </div>
-                        
+
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px', fontSize: '12px', color: c.text50 }}>
                           <div>{currentTier.title}</div>
                           <div>Next: {currentTier.nextTier}</div>
@@ -1041,7 +1053,7 @@ export default function CommunityPage() {
                       </div>
 
                       {/* Action Card */}
-                      <div 
+                      <div
                         onClick={() => {
                           setActiveTierModal(null);
                           setTimeout(() => {
@@ -1052,8 +1064,8 @@ export default function CommunityPage() {
                             }
                           }, 100);
                         }}
-                        style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '24px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', transition: 'background 0.2s' }} 
-                        onMouseEnter={(e) => e.currentTarget.style.background = c.border05} 
+                        style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '24px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', transition: 'background 0.2s' }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = c.border05}
                         onMouseLeave={(e) => e.currentTarget.style.background = c.border02}
                       >
                         <div>

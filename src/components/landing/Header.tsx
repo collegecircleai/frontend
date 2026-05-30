@@ -61,7 +61,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
   }, [scrollY])
 
   return (
-    <motion.header 
+    <motion.header
       style={{
         position: 'fixed',
         left: '50%',
@@ -74,8 +74,8 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: headerPadding,
-        background: isScrolled 
-          ? 'rgba(var(--header-bg), 0.75)' 
+        background: isScrolled
+          ? 'rgba(var(--header-bg), 0.75)'
           : 'rgba(var(--header-bg), 0.9)',
         backdropFilter: 'blur(24px) saturate(200%)',
         border: '1px solid var(--border-light)',
@@ -91,21 +91,21 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
         </Link>
       </div>
 
-      <nav 
+      <nav
         className="mobile-hide"
-        style={{ 
-          display: 'flex', 
+        style={{
+          display: 'flex',
           alignItems: 'center',
           position: 'relative',
-          flex: '0 1 auto' 
+          flex: '0 1 auto'
         }}
         onMouseLeave={() => setHoveredIndex(null)}
       >
         {navItems.map((item, idx) => (
           <motion.div
             key={item.label}
-            style={{ 
-              position: 'relative', 
+            style={{
+              position: 'relative',
               padding: '8px 0',
               marginRight: idx < navItems.length - 1 ? navGap : 0
             }}
@@ -122,7 +122,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
             }}>
               {item.label}
             </Link>
-            
+
             {hoveredIndex === idx && (
               <motion.div
                 layoutId="nav-underline"
@@ -142,12 +142,12 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
         ))}
       </nav>
 
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'flex-end', 
-        alignItems: 'center', 
-        gap: 'clamp(6px, 1.5vw, 12px)', 
-        flex: 1 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        gap: 'clamp(6px, 1.5vw, 12px)',
+        flex: 1
       }}>
         {/* Theme Toggle Button */}
         {mounted && (
@@ -205,16 +205,16 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
 
         <motion.button
           onClick={onGetStarted}
-          whileHover={{ 
+          whileHover={{
             scale: 1.05,
-            boxShadow: '0 8px 25px rgba(77, 63, 255, 0.3)' 
+            boxShadow: '0 8px 25px rgba(77, 63, 255, 0.3)'
           }}
           whileTap={{ scale: 0.95 }}
           style={{
             background: 'var(--violet)',
             color: 'white',
             border: 'none',
-            padding: 'clamp(8px, 2vw, 10px) clamp(12px, 3vw, 18px)', 
+            padding: 'clamp(8px, 2vw, 10px) clamp(12px, 3vw, 18px)',
             borderRadius: '12px',
             fontSize: 'clamp(11px, 2.5vw, 13px)',
             fontWeight: 600,
@@ -264,9 +264,9 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
             }}
           >
             {navItems.map((item, idx) => (
-              <Link 
-                key={item.label} 
-                href={item.href} 
+              <Link
+                key={item.label}
+                href={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
                 style={{
                   textDecoration: 'none',
