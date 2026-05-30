@@ -370,17 +370,21 @@ export default function CommunityPage() {
               </p>
             </motion.div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '20px' }}>
+            <style>{`
+              @media (max-width: 768px) {
+                .progression-arrow svg { transform: rotate(90deg); }
+              }
+            `}</style>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 'clamp(20px, 4vw, 40px)' }}>
               {[
-                { lvl: '01', title: 'Explorer', subtitle: 'Enter the ecosystem.', desc: 'Curious students stepping in early. AI study systems, workshops, networking.', icon: <Compass size={20}/>, perks: ['AI Study Systems', 'Beginner Workshops', 'Networking Access', 'Roadmap Guidance'] },
-                { lvl: '02', title: 'Pathfinder', subtitle: 'Active inside the network.', desc: 'Earn your way deeper. Workshops, accountability, project communities.', icon: <Zap size={20}/>, perks: ['AI Workflow Workshops', 'Startup Systems', 'Accountability Groups', 'Collab Circles'] },
-                { lvl: '03', title: 'Builder', badge: 'BUILDERS NETWORK', subtitle: 'Build with the network.', desc: 'Contributors, not members. Ship projects, content & IP with founders.', icon: <Terminal size={20}/>, perks: ['AI Project Access', 'Creator Cohorts', 'Founder Access', 'IP & Content'] },
-                { lvl: '04', title: 'Ambassador Lead', subtitle: 'Operate the ecosystem.', desc: 'Run communities. Host workshops. Connect founders. Shape direction.', icon: <Crown size={20}/>, perks: ['Leadership Access', 'Founder Networking', 'Verified Identity', 'Ecosystem Strategy'] }
+                { lvl: '01', title: 'Explorer', badge: undefined, subtitle: 'Enter the ecosystem.', desc: 'Curious students stepping in early. AI study systems, workshops, networking.', icon: <Compass size={20}/>, perks: ['AI Study Systems', 'Beginner Workshops', 'Networking Access', 'Roadmap Guidance'] },
+                { lvl: '04', title: 'Ambassador Lead', badge: undefined, subtitle: 'Operate the ecosystem.', desc: 'Run communities. Host workshops. Connect founders. Shape direction.', icon: <Crown size={20}/>, perks: ['Leadership Access', 'Founder Networking', 'Verified Identity', 'Ecosystem Strategy'] }
               ].map((tier, i) => (
-                <motion.div key={i} onClick={() => setActiveTierModal(tier.lvl)} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ background: c.tierCardGradient, border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px 24px', position: 'relative', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}>
-                  
-                  {/* Top Bar (Level + Arrow) */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+                <React.Fragment key={i}>
+                  <motion.div onClick={() => setActiveTierModal(tier.lvl)} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ flex: '1 1 300px', maxWidth: '400px', background: c.tierCardGradient, border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px 24px', position: 'relative', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}>
+                    
+                    {/* Top Bar (Level + Arrow) */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
                     <div style={{ fontSize: '10px', fontWeight: 700, color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em' }}>LV {tier.lvl}</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       {tier.badge && (
@@ -421,6 +425,14 @@ export default function CommunityPage() {
                     Explore {tier.title} progression <ArrowRight size={12} style={{ marginLeft: '4px' }} />
                   </div>
                 </motion.div>
+                {i === 0 && (
+                  <motion.div className="progression-arrow" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+                    <div style={{ padding: '16px', background: c.border03, borderRadius: '50%', border: `1px solid ${c.border10}` }}>
+                      <ArrowRight size={24} color="#9B90FF" />
+                    </div>
+                  </motion.div>
+                )}
+                </React.Fragment>
               ))}
             </div>
           </div>
@@ -458,8 +470,8 @@ export default function CommunityPage() {
               {/* Builder Card */}
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ background: c.tierCardGradient, border: `1px solid ${c.border10}`, borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden', boxShadow: '0 20px 40px rgba(123, 107, 255, 0.1)' }}>
                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #7B6BFF, #9B90FF)' }} />
-                <div style={{ fontSize: '10px', fontWeight: 700, color: '#9B90FF', fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '16px' }}>SERIOUS BUILDERS + CREATORS</div>
-                <h3 style={{ fontSize: '32px', fontWeight: 800, color: c.text, marginBottom: '8px' }}>Builder Network</h3>
+                <div style={{ fontSize: '10px', fontWeight: 700, color: '#9B90FF', fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '16px' }}>OPERATE THE ECOSYSTEM</div>
+                <h3 style={{ fontSize: '32px', fontWeight: 800, color: c.text, marginBottom: '8px' }}>Ambassador Lead</h3>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '24px' }}>
                   <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>₹5000</span>
                   <span style={{ fontSize: '24px', fontWeight: 800, color: '#9B90FF' }}>FREE</span>
@@ -470,8 +482,8 @@ export default function CommunityPage() {
                   <span style={{ color: '#9B90FF', fontSize: '14px', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>25 Seats Left</span>
                 </div>
                 
-                <button onClick={() => setActiveTierModal('03')} style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #7B6BFF 0%, #9B90FF 100%)', border: 'none', borderRadius: '100px', color: '#fff', fontWeight: 600, fontSize: '15px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', boxShadow: '0 10px 20px rgba(123, 107, 255, 0.2)' }}>
-                  View Builder Pathway <ArrowRight size={16} />
+                <button onClick={() => setActiveTierModal('04')} style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #7B6BFF 0%, #9B90FF 100%)', border: 'none', borderRadius: '100px', color: '#fff', fontWeight: 600, fontSize: '15px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', boxShadow: '0 10px 20px rgba(123, 107, 255, 0.2)' }}>
+                  View Ambassador Pathway <ArrowRight size={16} />
                 </button>
               </motion.div>
             </div>
