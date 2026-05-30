@@ -830,8 +830,8 @@ function Step3({
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "20px",
-                  padding: "20px 24px",
+                  gap: isMobile ? "12px" : "20px",
+                  padding: isMobile ? "16px" : "20px 24px",
                   borderRadius: "16px",
                   border: `1px solid ${formData.intent === intent.id ? COLORS.brandBlue : COLORS.border}`,
                   backgroundColor: "#fff",
@@ -933,9 +933,11 @@ function Step3({
         <div
           style={{
             display: "flex",
+            flexDirection: isMobile ? "column-reverse" : "row",
             alignItems: "center",
-            justifyContent: "space-between",
-            marginTop: "12px",
+            justifyContent: isMobile ? "center" : "space-between",
+            marginTop: "24px",
+            gap: isMobile ? "20px" : "0",
           }}
         >
           <button
@@ -958,6 +960,8 @@ function Step3({
             style={{
               display: "flex",
               alignItems: "center",
+              justifyContent: "center",
+              width: isMobile ? "100%" : "auto",
               gap: "12px",
               backgroundColor: COLORS.brandBlue,
               color: "#fff",
@@ -1196,13 +1200,23 @@ export default function Onboarding() {
         display: "flex",
         flexDirection: isMobile ? "column" : "row",
         width: "100vw",
-        minHeight: "100dvh",
-        backgroundColor: COLORS.contentBg,
+        height: "100dvh",
+        backgroundColor: isMobile ? "#FAFAFA" : COLORS.contentBg,
         fontFamily: FONTS.sans,
         overflow: "hidden",
+        position: "relative",
       }}
     >
       <GlobalStyles />
+      
+      {/* Mobile Premium Background Effects */}
+      {isMobile && (
+        <>
+          <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(77, 63, 255, 0.15) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(40px)', zIndex: 0 }} />
+          <div style={{ position: 'absolute', bottom: '10%', right: '-10%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(96, 252, 198, 0.1) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(60px)', zIndex: 0 }} />
+        </>
+      )}
+
       {step < 4 && <Sidebar step={step} isMobile={isMobile} />}
       <main
         style={{
@@ -1213,22 +1227,27 @@ export default function Onboarding() {
           position: "relative",
           overflowY: "auto",
           width: "100%",
+          zIndex: 1,
         }}
       >
         <header
           style={{
-            height: "96px",
+            height: isMobile ? "72px" : "96px",
             display: "flex",
             alignItems: "center",
             justifyContent: isMobile ? "center" : "space-between",
-            padding: isMobile ? "0" : "0 64px",
+            padding: isMobile ? "0 24px" : "0 64px",
             flexShrink: 0,
             zIndex: 100,
-            backgroundColor: isMobile ? "#fff" : "transparent",
-            borderBottom: isMobile ? `1px solid ${COLORS.border}` : "none",
+            backgroundColor: isMobile ? "rgba(255, 255, 255, 0.7)" : "transparent",
+            backdropFilter: isMobile ? "blur(20px)" : "none",
+            WebkitBackdropFilter: isMobile ? "blur(20px)" : "none",
+            borderBottom: isMobile ? `1px solid rgba(0,0,0,0.05)` : "none",
+            position: isMobile ? "sticky" : "static",
+            top: 0,
           }}
         >
-          <CCAILogo size={isMobile ? 24 : 28} variant="light" />
+          <CCAILogo size={isMobile ? 22 : 28} variant="light" />
           {!isMobile && step < 4 && (
             <div
               style={{
@@ -1248,7 +1267,7 @@ export default function Onboarding() {
           style={{
             flex: 1,
             display: "flex",
-            alignItems: "center",
+            alignItems: isMobile ? "flex-start" : "center",
             justifyContent: "center",
             padding:
               step === 4
@@ -1294,6 +1313,32 @@ export default function Onboarding() {
             {step === 4 && <Success key="s4" isMobile={isMobile} />}
           </AnimatePresence>
         </div>
+
+        {/* Desktop subtle background image */}
+        {!isMobile && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: "-20px",
+              left: "0",
+              width: "100%",
+              height: "400px",
+              opacity: 0.1,
+              pointerEvents: "none",
+            }}
+          >
+            <img
+              src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=1600"
+              alt="Book"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                filter: "grayscale(100%)",
+              }}
+            />
+          </div>
+        )}
       </main>
     </div>
   );
