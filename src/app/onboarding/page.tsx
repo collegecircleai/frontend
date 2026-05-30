@@ -408,7 +408,7 @@ function Step1({
           >
             Full Legal Name
           </label>
-          <div style={{ position: "relative" }}>
+          <div style={{ position: "relative", width: isMobile ? "100%" : "400px" }}>
             <input
               value={name}
               onChange={(e) => onNameChange(e.target.value)}
@@ -1122,27 +1122,6 @@ function Success({ isMobile }: { isMobile: boolean }) {
           INITIALIZATION COMPLETE
         </div>
       </div>
-      <div
-        style={{
-          position: "absolute",
-          bottom: "-20px",
-          left: "0",
-          width: "100%",
-          height: "400px",
-          opacity: 0.1,
-        }}
-      >
-        <img
-          src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=1600"
-          alt="Book"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            filter: "grayscale(100%)",
-          }}
-        />
-      </div>
     </div>
   );
 }
@@ -1276,7 +1255,11 @@ export default function Onboarding() {
             top: 0,
           }}
         >
-          <CCAILogo size={isMobile ? 22 : 28} variant="light" />
+          {isMobile ? (
+            <CCAILogo size={22} variant="light" />
+          ) : (
+            <div /> // Empty div to keep space-between layout for STUDENT PORTAL text
+          )}
           {!isMobile && step < 4 && (
             <div
               style={{
@@ -1288,7 +1271,7 @@ export default function Onboarding() {
                 textTransform: "uppercase",
               }}
             >
-              SCHOLARSHIP PORTAL
+              STUDENT PORTAL
             </div>
           )}
         </header>
@@ -1297,13 +1280,13 @@ export default function Onboarding() {
             flex: 1,
             display: "flex",
             alignItems: isMobile ? "flex-start" : "center",
-            justifyContent: "center",
+            justifyContent: isMobile ? "center" : "flex-start",
             padding:
               step === 4
                 ? "0"
                 : isMobile
                   ? "40px 0 80px 0"
-                  : "0 64px 80px 64px",
+                  : "0 64px 80px 10vw",
             zIndex: 10,
           }}
         >
@@ -1343,27 +1326,28 @@ export default function Onboarding() {
           </AnimatePresence>
         </div>
 
-        {/* Desktop subtle background image */}
+        {/* Desktop mascot image */}
         {!isMobile && (
           <div
             style={{
               position: "absolute",
-              bottom: "-20px",
-              left: "0",
-              width: "100%",
-              height: "400px",
-              opacity: 0.1,
+              bottom: "20px",
+              right: "40px",
+              width: "400px",
               pointerEvents: "none",
+              zIndex: 0,
             }}
           >
-            <img
-              src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=1600"
-              alt="Book"
+            <motion.img
+              src={step === 4 ? "/Smile.png" : "/owl-mascot.png"}
+              alt="Owl Mascot"
+              animate={{ y: [-8, 8, -8] }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
               style={{
                 width: "100%",
-                height: "100%",
+                height: "auto",
                 objectFit: "contain",
-                filter: "grayscale(100%)",
+                filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.15))",
               }}
             />
           </div>
