@@ -489,7 +489,7 @@ function Step2({
   isMobile: boolean;
 }) {
   const canContinue =
-    formData.college && formData.degree && formData.department;
+    formData.college && formData.degree && (formData.degree !== "other" || formData.customDegree) && formData.department;
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -587,7 +587,29 @@ function Step2({
               <option value="bcom">B.Com</option>
               <option value="bsc">B.Sc</option>
               <option value="ba">B.A</option>
+              <option value="other">Other (Please specify)</option>
             </select>
+            {formData.degree === "other" && (
+              <input
+                value={formData.customDegree || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, customDegree: e.target.value })
+                }
+                placeholder="Type your degree here..."
+                style={{
+                  width: "100%",
+                  backgroundColor: "#fff",
+                  border: `1.5px solid ${COLORS.border}`,
+                  borderRadius: "12px",
+                  padding: "14px 18px",
+                  fontSize: "14px",
+                  fontFamily: FONTS.sans,
+                  color: COLORS.textMain,
+                  outline: "none",
+                  marginTop: "12px",
+                }}
+              />
+            )}
           </div>
           <div>
             <label
@@ -1137,6 +1159,7 @@ export default function Onboarding() {
   const [formData, setFormData] = useState({
     college: "",
     degree: "",
+    customDegree: "",
     department: "",
     year: "1st Year",
     semester: "02",
@@ -1172,7 +1195,7 @@ export default function Onboarding() {
       const payload = {
         name,
         college_name: formData.college,
-        degree: formData.degree,
+        degree: formData.degree === "other" ? formData.customDegree : formData.degree,
         department: formData.department,
         course: formData.department,
         year: parseInt(formData.year.replace(/[^0-9]/g, "")) || 1,
