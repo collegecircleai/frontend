@@ -365,22 +365,31 @@ export default function CommunityPage() {
                 Level up the network.
               </h2>
               <p style={{ color: c.text60, fontSize: '15px', maxWidth: '600px', lineHeight: 1.6 }}>
-                Explorer → Pathfinder → Builder → Ambassador Lead. Every level unlocks new opportunities — earned through contribution, not bought.
+                Explore → Build → Contribute → Lead → Scale → Expand → Impact. Every level unlocks new opportunities — earned through contribution, not bought.
               </p>
             </motion.div>
 
             <style>{`
+              .tier-scroll::-webkit-scrollbar { height: 8px; }
+              .tier-scroll::-webkit-scrollbar-track { background: transparent; }
+              .tier-scroll::-webkit-scrollbar-thumb { background: rgba(123, 107, 255, 0.2); border-radius: 10px; }
+              .tier-scroll::-webkit-scrollbar-thumb:hover { background: rgba(123, 107, 255, 0.5); }
               @media (max-width: 768px) {
-                .progression-arrow svg { transform: rotate(90deg); }
+                .progression-arrow svg { transform: rotate(0deg); }
               }
             `}</style>
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 'clamp(20px, 4vw, 40px)' }}>
+            <div className="tier-scroll" style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'stretch', gap: '16px', overflowX: 'auto', paddingBottom: '40px', scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch', margin: '0 -5%', padding: '0 5% 40px 5%' }}>
               {[
-                { lvl: '01', title: 'Explorer', badge: undefined, subtitle: 'Enter the ecosystem.', desc: 'Curious students stepping in early. AI study systems, workshops, networking.', icon: <Compass size={20} />, perks: ['AI Study Systems', 'Beginner Workshops', 'Networking Access', 'Roadmap Guidance'] },
-                { lvl: '04', title: 'Ambassador Lead', badge: undefined, subtitle: 'Operate the ecosystem.', desc: 'Run communities. Host workshops. Connect founders. Shape direction.', icon: <Crown size={20} />, perks: ['Leadership Access', 'Founder Networking', 'Verified Identity', 'Ecosystem Strategy'] }
+                { lvl: '01', title: 'Explore', badge: undefined, subtitle: 'Discover what is possible.', desc: 'Most students enter college without a clear direction. Gain access to AI workshops, career guidance, and networking.', icon: <Compass size={20} />, perks: ['AI Workshops', 'Career Guidance', 'Networking Circles', 'Senior Mentorship'] },
+                { lvl: '02', title: 'Build', badge: undefined, subtitle: 'Learn by building.', desc: 'Builders don\'t just attend sessions. They create. Work on projects, startup experiments, and creator systems.', icon: <Terminal size={20} />, perks: ['AI Projects', 'Startup Experiments', 'Creator Systems', 'Collaborative Initiatives'] },
+                { lvl: '03', title: 'Contribute', badge: undefined, subtitle: 'Build things that matter.', desc: 'Active participants. Work on content systems, initiatives, and intellectual property alongside experts.', icon: <Zap size={20} />, perks: ['Community Initiatives', 'Founder Conversations', 'Industry Experts', 'Intellectual Property'] },
+                { lvl: '04', title: 'Lead', badge: undefined, subtitle: 'Become the network.', desc: 'Represent and grow the ecosystem. Help students discover opportunities, guide members, and build communities.', icon: <Crown size={20} />, perks: ['Official Ambassador Status', 'Free Subscription', '1000 AI Credits', 'Leadership Recognition'] },
+                { lvl: '05', title: 'Scale', badge: undefined, subtitle: 'Lead an entire university.', desc: 'Coordinate ecosystem growth across departments. Manage ambassadors, support expansion, and build the network.', icon: <Users size={20} />, perks: ['Full Premium Access', '3000 Credits', 'Founder Networking', 'Scale: 500–1000 Explorers'] },
+                { lvl: '06', title: 'Expand', badge: undefined, subtitle: 'Build a city-wide ecosystem.', desc: 'Connect colleges, ambassadors, contributors, and builders across an entire city. Your impact extends beyond a campus.', icon: <Network size={20} />, perks: ['Free Annual Premium', 'Revenue Sharing', 'Strategic Operator Access', 'Scale: Up to 10,000 Students'] },
+                { lvl: '07', title: 'Impact', badge: undefined, subtitle: 'Shape the future of the network.', desc: 'Country Ambassadors become strategic ecosystem partners helping scale the community nationally.', icon: <Trophy size={20} />, perks: ['Direct Founder Access', 'National Leadership', 'Strategic Planning Access', 'Premium Network'] }
               ].map((tier, i) => (
                 <React.Fragment key={i}>
-                  <motion.div onClick={() => setActiveTierModal(tier.lvl)} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ flex: '1 1 300px', maxWidth: '400px', background: c.tierCardGradient, border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px 24px', position: 'relative', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}>
+                  <motion.div onClick={() => setActiveTierModal(tier.lvl)} initial="hidden" whileInView="visible" whileHover={{ y: -5 }} viewport={{ once: true }} variants={fadeInUp} style={{ flex: '0 0 340px', scrollSnapAlign: 'center', background: c.tierCardGradient, border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px 24px', position: 'relative', display: 'flex', flexDirection: 'column', cursor: 'pointer', transition: 'transform 0.2s', boxShadow: isDark ? 'none' : '0 10px 40px rgba(0,0,0,0.03)' }}>
 
                     {/* Top Bar (Level + Arrow) */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
@@ -391,8 +400,8 @@ export default function CommunityPage() {
                             {tier.badge}
                           </div>
                         )}
-                        <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: c.border03, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
-                          <ArrowRight size={12} color="rgba(255,255,255,0.5)" style={{ transform: 'rotate(-45deg)' }} />
+                        <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: c.border03, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${c.border10}` }}>
+                          <ArrowRight size={12} color={c.text50} style={{ transform: 'rotate(-45deg)' }} />
                         </div>
                       </div>
                     </div>
@@ -424,13 +433,6 @@ export default function CommunityPage() {
                       Explore {tier.title} progression <ArrowRight size={12} style={{ marginLeft: '4px' }} />
                     </div>
                   </motion.div>
-                  {i === 0 && (
-                    <motion.div className="progression-arrow" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-                      <div style={{ padding: '16px', background: c.border03, borderRadius: '50%', border: `1px solid ${c.border10}` }}>
-                        <ArrowRight size={24} color="#9B90FF" />
-                      </div>
-                    </motion.div>
-                  )}
                 </React.Fragment>
               ))}
             </div>
@@ -573,7 +575,7 @@ export default function CommunityPage() {
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
 
               {/* Big Left Card */}
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} whileHover={{ y: -4 }} style={{ flex: '1 1 500px', background: isDark ? 'linear-gradient(180deg, rgba(20,15,25,0.8) 0%, rgba(30,20,50,0.4) 100%)' : 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(240,240,250,0.8) 100%)', border: `1px solid ${c.border08}`, borderRadius: '24px', padding: '40px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '320px', position: 'relative', overflow: 'hidden', backdropFilter: 'blur(20px)', transition: 'all 0.3s ease', boxShadow: '0 20px 40px rgba(0,0,0,0.03)' }}>
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} whileHover={{ y: -4 }} style={{ flex: '1 1 500px', background: isDark ? 'linear-gradient(180deg, rgba(20,15,25,0.8) 0%, rgba(30,20,50,0.4) 100%)' : 'linear-gradient(180deg, #F8F7FF 0%, #EBE6FF 100%)', border: `1px solid ${isDark ? c.border08 : 'rgba(139,128,249,0.15)'}`, borderRadius: '24px', padding: '40px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '320px', position: 'relative', overflow: 'hidden', backdropFilter: 'blur(20px)', transition: 'all 0.3s ease', boxShadow: isDark ? 'none' : '0 20px 40px rgba(139,128,249,0.08)' }}>
                 <div style={{ background: 'rgba(139,128,249,0.15)', width: '48px', height: '48px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
                   <Rocket size={24} color="#8B80F9" />
                 </div>
@@ -594,7 +596,7 @@ export default function CommunityPage() {
                   { title: 'Community Status', desc: 'Earned, never bought', icon: <Star size={18} /> },
                   { title: 'National Network', desc: '24 cities, 80 nodes', icon: <MapPin size={18} /> }
                 ].map((item, i) => (
-                  <motion.div key={i} variants={fadeInUp} whileHover={{ y: -4, borderColor: 'rgba(139,128,249,0.4)', boxShadow: '0 10px 30px rgba(139,128,249,0.08)' }} style={{ background: c.card, border: `1px solid ${c.border08}`, borderRadius: '24px', padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '130px', backdropFilter: 'blur(10px)', transition: 'all 0.3s ease', cursor: 'default' }}>
+                  <motion.div key={i} variants={fadeInUp} whileHover={{ y: -4, borderColor: 'rgba(139,128,249,0.4)', boxShadow: '0 10px 30px rgba(139,128,249,0.08)' }} style={{ background: isDark ? c.card : '#FFFFFF', border: `1px solid ${isDark ? c.border08 : 'rgba(0,0,0,0.04)'}`, borderRadius: '24px', padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '130px', backdropFilter: 'blur(10px)', transition: 'all 0.3s ease', cursor: 'default', boxShadow: isDark ? 'none' : '0 10px 20px rgba(0,0,0,0.02)' }}>
                     <div style={{ color: '#8B80F9', background: 'rgba(139,128,249,0.1)', width: '40px', height: '40px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {item.icon}
                     </div>
@@ -624,7 +626,7 @@ export default function CommunityPage() {
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(16px, 4vw, 24px)' }}>
               {/* Left Panel: Scoring System */}
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ flex: '1 1 450px', background: isDark ? c.cardLight : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '40px', backdropFilter: 'blur(10px)' }}>
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ flex: '1 1 450px', background: isDark ? c.cardLight : '#FFFFFF', border: `1px solid ${isDark ? c.border05 : 'rgba(0,0,0,0.04)'}`, borderRadius: '24px', padding: '40px', backdropFilter: 'blur(10px)', boxShadow: isDark ? 'none' : '0 10px 30px rgba(0,0,0,0.02)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
                   <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>EXPERTISE POINTS (XP)</span>
                   <Trophy size={16} color="#E5C158" />
@@ -656,7 +658,7 @@ export default function CommunityPage() {
                   { title: 'Creator Ecosystems', desc: 'Collaborate with editors, designers, and storytellers to build massive internet leverage.', highlight: false },
                   { title: 'Micro-Group Networking', desc: 'Join small growth circles for extreme accountability and ecosystem bonding.', highlight: false }
                 ].map((item, i) => (
-                  <motion.div key={i} variants={fadeInUp} style={{ background: item.highlight ? (isDark ? 'linear-gradient(90deg, rgba(15,15,20,0.6) 0%, rgba(60,40,100,0.4) 100%)' : 'linear-gradient(90deg, rgba(255,255,255,0.8) 0%, rgba(123,107,255,0.15) 100%)') : (isDark ? c.cardLight : '#F7F6F2'), border: item.highlight && !isDark ? '1px solid rgba(123,107,255,0.3)' : `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '8px', backdropFilter: 'blur(10px)' }}>
+                  <motion.div key={i} variants={fadeInUp} style={{ background: item.highlight ? (isDark ? 'linear-gradient(90deg, rgba(15,15,20,0.6) 0%, rgba(60,40,100,0.4) 100%)' : 'linear-gradient(90deg, #FFFFFF 0%, rgba(139,128,249,0.1) 100%)') : (isDark ? c.cardLight : '#FFFFFF'), border: item.highlight && !isDark ? '1px solid rgba(139,128,249,0.2)' : `1px solid ${isDark ? c.border05 : 'rgba(0,0,0,0.04)'}`, borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '8px', backdropFilter: 'blur(10px)', boxShadow: isDark ? 'none' : '0 10px 20px rgba(0,0,0,0.02)' }}>
                     <div style={{ fontSize: '18px', fontWeight: 800, color: item.highlight ? (isDark ? '#9B90FF' : '#7B6BFF') : c.text }}>{item.title}</div>
                     <div style={{ fontSize: '14px', fontWeight: 500, color: c.text60, lineHeight: 1.6 }}>{item.desc}</div>
                   </motion.div>
@@ -788,45 +790,61 @@ export default function CommunityPage() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
                 <div style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>ECOSYSTEM PROGRESSION MAP</div>
-
-                {/* Pathway Toggle */}
-                <div style={{ display: 'flex', background: isDark ? c.border02 : '#F7F6F2', borderRadius: '100px', padding: '4px', border: `1px solid ${c.border05}` }}>
-                  <button onClick={() => setActivePathway('builder')} style={{ background: activePathway === 'builder' ? c.border05 : 'transparent', color: activePathway === 'builder' ? c.text : c.text50, border: 'none', padding: '8px 16px', borderRadius: '100px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Terminal size={14} /> Builder Track
-                  </button>
-                  <button onClick={() => setActivePathway('creator')} style={{ background: activePathway === 'creator' ? c.border05 : 'transparent', color: activePathway === 'creator' ? c.text : c.text50, border: 'none', padding: '8px 16px', borderRadius: '100px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Sparkles size={14} /> Creator Track
-                  </button>
-                </div>
               </div>
 
               <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '16px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif', maxWidth: '800px' }}>
-                {activePathway === 'builder' ? 'Build systems.' : 'Build narratives.'} <span style={{ color: '#9B90FF' }}>{activePathway === 'builder' ? 'Build the future.' : 'Build the culture.'}</span>
+                Build systems. <span style={{ color: '#9B90FF' }}>Build the future.</span>
               </h2>
 
               <p style={{ color: c.text50, fontSize: '15px', lineHeight: 1.6, maxWidth: '600px', marginBottom: '64px' }}>
-                {activePathway === 'builder' ? 'Explorer → Pathfinder → Builder → Ambassador Lead. For students who want to build systems, create projects, work with AI, and collaborate with founders.' : 'Explorer → Pathfinder → Creator → Culture Lead. For students interested in storytelling, content creation, editing, and internet culture.'}
+                Explore → Build → Contribute → Lead → Scale → Expand → Impact. Every level unlocks new opportunities — earned through contribution, not bought.
               </p>
 
               {/* Progress Steps */}
-              <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', marginBottom: '80px', padding: '0 40px' }}>
-                <div style={{ position: 'absolute', top: '24px', left: '40px', right: '40px', height: '1px', background: c.border10, zIndex: 1 }} />
-                {[
-                  { lvl: '01', name: 'Explorer', icon: <Compass size={20} />, active: activeTierModal === '01' },
-                  { lvl: '02', name: 'Pathfinder', icon: <Zap size={20} />, active: activeTierModal === '02' },
-                  { lvl: '03', name: activePathway === 'builder' ? 'Builder' : 'Creator', icon: activePathway === 'builder' ? <Terminal size={20} /> : <Sparkles size={20} />, active: activeTierModal === '03' },
-                  { lvl: '04', name: activePathway === 'builder' ? 'Ambassador Lead' : 'Culture Lead', icon: activePathway === 'builder' ? <Crown size={20} /> : <Trophy size={20} />, active: activeTierModal === '04' }
-                ].map((step, i) => (
-                  <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', zIndex: 2, cursor: 'pointer' }} onClick={() => setActiveTierModal(step.lvl)}>
-                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: step.active ? 'rgba(0,255,157,0.1)' : (isDark ? c.gradBase : '#FFFFFF'), border: step.active ? '2px solid #00FF9D' : `1px solid ${c.border10}`, color: step.active ? '#00FF9D' : c.text40, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: step.active ? '0 0 20px rgba(0,255,157,0.2)' : 'none' }}>
-                      {step.icon}
+              <style>{`
+                .modal-nav-scroll {
+                  overflow-x: auto;
+                  scrollbar-width: none;
+                  -ms-overflow-style: none;
+                  -webkit-overflow-scrolling: touch;
+                  margin-bottom: 80px;
+                  margin-left: -5%;
+                  margin-right: -5%;
+                  padding: 0 5%;
+                }
+                .modal-nav-scroll::-webkit-scrollbar { display: none; }
+                .modal-nav-inner {
+                  display: flex;
+                  justify-content: space-between;
+                  position: relative;
+                  min-width: 550px; /* Forces scroll on narrow mobile screens */
+                  margin: 0 auto;
+                  padding: 0 20px;
+                }
+              `}</style>
+              <div className="modal-nav-scroll">
+                <div className="modal-nav-inner">
+                  <div style={{ position: 'absolute', top: '24px', left: '40px', right: '40px', height: '1px', background: c.border10, zIndex: 1 }} />
+                  {[
+                    { lvl: '01', name: 'Explore', icon: <Compass size={16} />, active: activeTierModal === '01' },
+                    { lvl: '02', name: 'Build', icon: <Terminal size={16} />, active: activeTierModal === '02' },
+                    { lvl: '03', name: 'Contribute', icon: <Zap size={16} />, active: activeTierModal === '03' },
+                    { lvl: '04', name: 'Lead', icon: <Crown size={16} />, active: activeTierModal === '04' },
+                    { lvl: '05', name: 'Scale', icon: <Users size={16} />, active: activeTierModal === '05' },
+                    { lvl: '06', name: 'Expand', icon: <Network size={16} />, active: activeTierModal === '06' },
+                    { lvl: '07', name: 'Impact', icon: <Trophy size={16} />, active: activeTierModal === '07' }
+                  ].map((step, i) => (
+                    <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', zIndex: 2, cursor: 'pointer', flex: '0 0 auto', width: '60px' }} onClick={() => setActiveTierModal(step.lvl)}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: step.active ? 'rgba(0,255,157,0.1)' : (isDark ? c.gradBase : '#FFFFFF'), border: step.active ? '2px solid #00FF9D' : `1px solid ${c.border10}`, color: step.active ? '#00FF9D' : c.text40, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: step.active ? '0 0 20px rgba(0,255,157,0.2)' : 'none', transition: 'all 0.2s ease' }}>
+                        {step.icon}
+                      </div>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '9px', fontWeight: 700, color: step.active ? '#00FF9D' : c.text40, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '2px' }}>LV {step.lvl}</div>
+                        <div style={{ fontSize: '11px', fontWeight: 600, color: step.active ? c.text : c.text40 }}>{step.name}</div>
+                      </div>
                     </div>
-                    <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '10px', fontWeight: 700, color: step.active ? '#00FF9D' : c.text40, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '4px' }}>LV {step.lvl}</div>
-                      <div style={{ fontSize: '14px', fontWeight: 600, color: step.active ? c.text : c.text40 }}>{step.name}</div>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
               {/* Two Column Layout */}
@@ -834,140 +852,158 @@ export default function CommunityPage() {
                 const tierData = {
                   '01': {
                     color: '#00FF9D',
-                    title: 'Explorer',
-                    badge: 'ENTRY INTO THE ECOSYSTEM',
-                    quote: '"Most students consume. Explorers start exploring early."',
-                    desc: "You're already curious enough to step in. Explorer is not beginner mode — it's the realization that the future is moving faster than college.",
+                    title: 'Explore',
+                    badge: 'DISCOVER WHAT IS POSSIBLE',
+                    quote: '"Every journey starts here."',
+                    desc: "Most students enter college without a clear direction. Explorers gain access to AI workshops, career guidance, networking circles, senior mentorship, and future-focused learning systems that help them understand what opportunities exist beyond the classroom.",
                     icon: <Compass size={20} />,
                     unlocks: [
-                      { icon: <Compass size={16} />, title: 'AI Study Systems', desc: 'Smart revision, crash notes, PYQ systems, exam workflows.' },
-                      { icon: <Zap size={16} />, title: 'AI Exposure', desc: 'Beginner workshops, future careers, creator + startup ecosystem.' },
-                      { icon: <Users size={16} />, title: 'Networking Access', desc: 'Discussion rooms, campus circles, student growth groups.' },
-                      { icon: <Rocket size={16} />, title: 'Guidance Systems', desc: 'Roadmaps, mentorship, college survival, direction support.' }
+                      { icon: <Compass size={16} />, title: 'AI Workshops', desc: 'Learn the fundamentals.' },
+                      { icon: <Rocket size={16} />, title: 'Career Guidance', desc: 'Direction beyond college.' },
+                      { icon: <Users size={16} />, title: 'Networking Circles', desc: 'Meet ambitious peers.' },
+                      { icon: <Crown size={16} />, title: 'Senior Mentorship', desc: 'Learn from those ahead of you.' }
                     ],
                     xp: { current: 63, max: 150, text: '63 / 150 XP', pct: '42%' },
-                    nextTier: 'Pathfinder',
+                    nextTier: 'Build',
                     activities: [
                       { title: 'Attend a workshop', xp: '+20 XP' },
                       { title: 'Join a networking session', xp: '+15 XP' },
-                      { title: 'Upload notes / PYQ', xp: '+10 XP' },
                       { title: 'Community participation', xp: '+5 XP' }
                     ],
-                    promo: ['150 XP earned', '2 workshops attended', '1 networking session', 'Active participation']
+                    promo: ['150 XP earned', '2 workshops attended', '1 networking session']
                   },
                   '02': {
                     color: '#9B90FF',
-                    title: 'Pathfinder',
-                    badge: 'ACTIVE INSIDE THE ECOSYSTEM',
-                    quote: '"Progression is earned through contribution — never bought."',
-                    desc: "Pathfinders move from curiosity to involvement. You start showing up for the work, the people, and the ambition.",
-                    icon: <Zap size={20} />,
-                    unlocks: [
-                      { icon: <Compass size={16} />, title: 'AI Workflow Workshops', desc: 'Deeper systems for building with AI, not just using it.' },
-                      { icon: <Rocket size={16} />, title: 'Startup Systems', desc: 'How ambitious students think, ship, and operate.' },
-                      { icon: <Users size={16} />, title: 'Accountability Groups', desc: 'Small circles that compound your output weekly.' },
-                      { icon: <Sparkles size={16} />, title: 'Collaboration Circles', desc: 'Project communities & cross-campus build groups.' }
-                    ],
-                    xp: { current: 297, max: 500, text: '297 / 500 XP', pct: '59.4%' },
-                    nextTier: 'Builder',
-                    activities: [
-                      { title: 'Lead a session', xp: '+35 XP' },
-                      { title: 'Ship a mini-project', xp: '+40 XP' },
-                      { title: 'Bring active members', xp: '+25 XP' },
-                      { title: 'Cohort contribution', xp: '+20 XP' }
-                    ],
-                    promo: ['500 XP earned', '1 project shipped', 'Sustained weekly activity', 'Peer endorsement']
-                  },
-                  '03': activePathway === 'builder' ? {
-                    color: '#FFB800',
-                    title: 'Builder',
-                    badge: 'BUILD WITH THE NETWORK',
-                    quote: '"Builders ship. They do not wait for permission."',
-                    desc: "Contributors, not members. You are now shipping projects, writing content, and building IP alongside founders.",
+                    title: 'Build',
+                    badge: 'LEARN BY BUILDING',
+                    quote: '"Ideas become execution."',
+                    desc: "Builders don't just attend sessions. They create. Students begin working on AI projects, startup experiments, creator systems, portfolio projects, and collaborative initiatives with ambitious students across different colleges.",
                     icon: <Terminal size={20} />,
                     unlocks: [
-                      { icon: <Code2 size={16} />, title: 'AI Project Access', desc: 'Direct access to build AI tools with the community.' },
-                      { icon: <Users size={16} />, title: 'Creator Cohorts', desc: 'Intensive groups for content and personal branding.' },
-                      { icon: <Crown size={16} />, title: 'Founder Access', desc: 'Direct lines to startup founders and leaders.' },
-                      { icon: <Compass size={16} />, title: 'IP & Content', desc: 'Monetize and distribute your intellectual property.' }
+                      { icon: <Terminal size={16} />, title: 'AI Projects', desc: 'Build real-world tools.' },
+                      { icon: <Zap size={16} />, title: 'Startup Experiments', desc: 'Test and validate ideas.' },
+                      { icon: <Sparkles size={16} />, title: 'Creator Systems', desc: 'Learn to distribute.' },
+                      { icon: <Network size={16} />, title: 'Collaborative Initiatives', desc: 'Work with students across colleges.' }
                     ],
-                    xp: { current: 640, max: 1200, text: '640 / 1200 XP', pct: '53%' },
-                    nextTier: 'Ambassador Lead',
+                    xp: { current: 297, max: 500, text: '297 / 500 XP', pct: '59.4%' },
+                    nextTier: 'Contribute',
                     activities: [
-                      { title: 'Ship a major tool', xp: '+150 XP' },
-                      { title: 'Host a cohort', xp: '+100 XP' },
-                      { title: 'Publish viral IP', xp: '+80 XP' },
-                      { title: 'Connect a founder', xp: '+50 XP' }
+                      { title: 'Ship a project', xp: '+40 XP' },
+                      { title: 'Join a build group', xp: '+25 XP' },
+                      { title: 'Cohort contribution', xp: '+20 XP' }
                     ],
-                    promo: ['1200 XP earned', '3 projects shipped', 'Community endorsement', 'Founder referral']
-                  } : {
-                    color: '#FFB800',
-                    title: 'Creator',
-                    badge: 'SHAPE THE CULTURE',
-                    quote: '"Creators don\'t just consume culture, they design it."',
-                    desc: 'You are now shipping content, building internet systems, and telling stories that expand the network.',
-                    icon: <Sparkles size={20} />,
-                    unlocks: [
-                      { icon: <Sparkles size={16} />, title: 'Creator Cohorts', desc: 'Work with editors, designers, and storytellers.' },
-                      { icon: <Code2 size={16} />, title: 'AI Content Workflows', desc: 'Learn how to scale media with AI tools.' },
-                      { icon: <Crown size={16} />, title: 'Founder Access', desc: 'Direct lines to creators and operators.' },
-                      { icon: <Compass size={16} />, title: 'IP & Content', desc: 'Monetize and distribute your digital assets.' }
-                    ],
-                    xp: { current: 640, max: 1200, text: '640 / 1200 XP', pct: '53%' },
-                    nextTier: 'Culture Lead',
-                    activities: [
-                      { title: 'Ship viral content', xp: '+150 XP' },
-                      { title: 'Host a creator session', xp: '+100 XP' },
-                      { title: 'Launch ecosystem IP', xp: '+80 XP' },
-                      { title: 'Brand collaboration', xp: '+50 XP' }
-                    ],
-                    promo: ['1200 XP earned', '3 major pieces shipped', 'Community endorsement', 'Creator referral']
+                    promo: ['500 XP earned', '1 project shipped', 'Sustained activity']
                   },
-                  '04': activePathway === 'builder' ? {
+                  '03': {
+                    color: '#FFB800',
+                    title: 'Contribute',
+                    badge: 'BUILD THINGS THAT MATTER',
+                    quote: '"Your work starts creating impact."',
+                    desc: "Contributors become active participants inside the ecosystem. They work on content systems, community initiatives, startup experiments, and intellectual property projects while gaining access to founder conversations, industry experts, builders, and creators across India.",
+                    icon: <Zap size={20} />,
+                    unlocks: [
+                      { icon: <Shield size={16} />, title: 'Community Initiatives', desc: 'Take responsibility in the network.' },
+                      { icon: <Crown size={16} />, title: 'Founder Conversations', desc: 'Direct lines to startup founders.' },
+                      { icon: <Users size={16} />, title: 'Industry Experts', desc: 'Learn from top operators.' },
+                      { icon: <Code2 size={16} />, title: 'Intellectual Property', desc: 'Build and own assets.' }
+                    ],
+                    xp: { current: 640, max: 1200, text: '640 / 1200 XP', pct: '53%' },
+                    nextTier: 'Lead',
+                    activities: [
+                      { title: 'Launch ecosystem IP', xp: '+80 XP' },
+                      { title: 'Connect a founder', xp: '+50 XP' },
+                      { title: 'Active contribution', xp: '+25 XP' }
+                    ],
+                    promo: ['1200 XP earned', 'Major impact created', 'Community endorsement']
+                  },
+                  '04': {
                     color: '#FF3366',
-                    title: 'Ambassador Lead',
-                    badge: 'OPERATE THE ECOSYSTEM',
-                    quote: '"Leadership is taking responsibility for the network\'s growth."',
-                    desc: "You run communities, host massive workshops, and connect founders. You shape the strategic direction of the network.",
+                    title: 'Lead',
+                    badge: 'BECOME THE NETWORK',
+                    quote: '"Leadership is earned through contribution."',
+                    desc: "Ambassadors represent and grow the ecosystem inside their college. They help students discover opportunities, guide new members, organize workshops, and build communities.",
                     icon: <Crown size={20} />,
                     unlocks: [
-                      { icon: <Users size={16} />, title: 'Leadership Access', desc: 'Become campus ambassadors and run city-wide chapters.' },
-                      { icon: <Network size={16} />, title: 'Founder Networking', desc: 'Exclusive closed-door founder dinners.' },
-                      { icon: <Shield size={16} />, title: 'Verified Identity', desc: 'Blue-tick equivalent within the ecosystem.' },
-                      { icon: <Compass size={16} />, title: 'Ecosystem Strategy', desc: 'Seat at the table for network decisions.' }
+                      { icon: <Shield size={16} />, title: 'Official Ambassador Status', desc: 'Physical badge included.' },
+                      { icon: <Crown size={16} />, title: 'Free Subscription', desc: 'Full College Circle access.' },
+                      { icon: <Zap size={16} />, title: '1000 AI Credits', desc: 'Power your workflows.' },
+                      { icon: <Users size={16} />, title: 'Leadership Recognition', desc: 'Official network status.' }
                     ],
                     xp: { current: 1850, max: 3000, text: '1850 / 3000 XP', pct: '61%' },
-                    nextTier: 'Ecosystem Partner',
+                    nextTier: 'Scale',
                     activities: [
-                      { title: 'Become a campus ambassador', xp: '+500 XP' },
-                      { title: 'Host a city mixer', xp: '+300 XP' },
-                      { title: 'Bring a sponsor', xp: '+400 XP' },
-                      { title: 'Strategic advisory', xp: '+200 XP' }
+                      { title: 'Become campus ambassador', xp: '+500 XP' },
+                      { title: 'Organize a workshop', xp: '+300 XP' },
+                      { title: 'Guide new members', xp: '+200 XP' }
                     ],
-                    promo: ['3000 XP earned', 'Node successfully run', 'Ecosystem impact', 'Board approval']
-                  } : {
-                    color: '#FF3366',
-                    title: 'Culture Lead',
-                    badge: 'OPERATE THE NARRATIVE',
-                    quote: '"Leadership is taking responsibility for the network\'s story."',
-                    desc: 'You run creator ecosystems, manage the brand, and scale the internet presence of the network.',
+                    promo: ['3000 XP earned', 'Campus community built', 'Board approval']
+                  },
+                  '05': {
+                    color: '#FF0055',
+                    title: 'Scale',
+                    badge: 'LEAD AN ENTIRE UNIVERSITY',
+                    quote: '"You now build systems, not events."',
+                    desc: "University Ambassadors coordinate ecosystem growth across departments and colleges. They manage ambassadors, support expansion, and help build a thriving student network.",
+                    icon: <Users size={20} />,
+                    unlocks: [
+                      { icon: <Crown size={16} />, title: 'Full Premium Access', desc: 'Highest tier subscription.' },
+                      { icon: <Zap size={16} />, title: '3000 Credits', desc: 'Massive workflow limits.' },
+                      { icon: <Network size={16} />, title: 'Founder Networking', desc: 'Exclusive closed-door access.' },
+                      { icon: <Trophy size={16} />, title: 'Scale: 500–1000 Explorers', desc: 'University Leadership Status.' }
+                    ],
+                    xp: { current: 3500, max: 5000, text: '3500 / 5000 XP', pct: '70%' },
+                    nextTier: 'Expand',
+                    activities: [
+                      { title: 'Coordinate departments', xp: '+800 XP' },
+                      { title: 'Manage ambassadors', xp: '+600 XP' },
+                      { title: 'Support expansion', xp: '+500 XP' }
+                    ],
+                    promo: ['5000 XP earned', 'University node established', 'Network expansion']
+                  },
+                  '06': {
+                    color: '#B300FF',
+                    title: 'Expand',
+                    badge: 'BUILD A CITY-WIDE ECOSYSTEM',
+                    quote: '"Your impact extends beyond a campus."',
+                    desc: "District Ambassadors connect colleges, ambassadors, contributors, and builders across an entire city.",
+                    icon: <Network size={20} />,
+                    unlocks: [
+                      { icon: <Crown size={16} />, title: 'Free Annual Premium', desc: 'Complete ecosystem access.' },
+                      { icon: <Shield size={16} />, title: 'Revenue Sharing', desc: 'Up to 25% revenue opportunities.' },
+                      { icon: <Users size={16} />, title: 'Strategic Operator Access', desc: 'Work with core team.' },
+                      { icon: <Trophy size={16} />, title: 'Scale: Up to 10,000 Students', desc: 'City-Level Leadership.' }
+                    ],
+                    xp: { current: 6000, max: 10000, text: '6000 / 10000 XP', pct: '60%' },
+                    nextTier: 'Impact',
+                    activities: [
+                      { title: 'Connect city colleges', xp: '+1500 XP' },
+                      { title: 'Host a city mixer', xp: '+1000 XP' },
+                      { title: 'Drive revenue', xp: '+1200 XP' }
+                    ],
+                    promo: ['10000 XP earned', 'City ecosystem thriving', 'Core team integration']
+                  },
+                  '07': {
+                    color: '#00FFFF',
+                    title: 'Impact',
+                    badge: 'SHAPE THE FUTURE OF THE NETWORK',
+                    quote: '"Very few people reach this level."',
+                    desc: "Country Ambassadors become strategic ecosystem partners helping scale the community nationally. They guide leadership teams, expansion initiatives, partnerships, and growth strategies.",
                     icon: <Trophy size={20} />,
                     unlocks: [
-                      { icon: <Users size={16} />, title: 'Leadership Access', desc: 'Run city-wide creator groups.' },
-                      { icon: <Network size={16} />, title: 'Brand Networking', desc: 'Exclusive closed-door creator summits.' },
-                      { icon: <Shield size={16} />, title: 'Verified Identity', desc: 'Blue-tick equivalent within the ecosystem.' },
-                      { icon: <Compass size={16} />, title: 'Media Strategy', desc: 'Seat at the table for network narratives.' }
+                      { icon: <Crown size={16} />, title: 'Direct Founder Access', desc: 'Partner level communication.' },
+                      { icon: <Network size={16} />, title: 'Strategic Planning Access', desc: 'Guide network growth.' },
+                      { icon: <Users size={16} />, title: 'Premium Network', desc: 'Ecosystem Authority.' },
+                      { icon: <Trophy size={16} />, title: 'Scale: 1,00,000+ Students', desc: 'National Leadership.' }
                     ],
-                    xp: { current: 1850, max: 3000, text: '1850 / 3000 XP', pct: '61%' },
-                    nextTier: 'Ecosystem Partner',
+                    xp: { current: 15000, max: 20000, text: '15000 / 20000 XP', pct: '75%' },
+                    nextTier: 'MAX',
                     activities: [
-                      { title: 'Run a creator node', xp: '+500 XP' },
-                      { title: 'Host a city mixer', xp: '+300 XP' },
-                      { title: 'Bring a brand sponsor', xp: '+400 XP' },
-                      { title: 'Strategic advisory', xp: '+200 XP' }
+                      { title: 'Scale nationally', xp: '+5000 XP' },
+                      { title: 'Strategic partnerships', xp: '+4000 XP' },
+                      { title: 'Guide leadership', xp: '+3000 XP' }
                     ],
-                    promo: ['3000 XP earned', 'Node successfully run', 'Ecosystem impact', 'Board approval']
-                  }
+                    promo: ['20000 XP earned', 'National ecosystem shaped', 'Partner status achieved']
+                 }
                 }
 
                 const currentTier = activeTierModal ? tierData[activeTierModal as keyof typeof tierData] : tierData['01']
@@ -1054,14 +1090,7 @@ export default function CommunityPage() {
                       {/* Action Card */}
                       <div
                         onClick={() => {
-                          setActiveTierModal(null);
-                          setTimeout(() => {
-                            if (lenis) {
-                              lenis.scrollTo('#apply', { offset: -50, duration: 1.5, easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
-                            } else {
-                              document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' });
-                            }
-                          }, 100);
+                          window.open('https://docs.google.com/forms/d/e/1FAIpQLScuWSCu-8TwZPABvfl0LiOnVRDhUNjTmVV0PnRZnlYOwZLLkA/viewform', '_blank');
                         }}
                         style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '24px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', transition: 'background 0.2s' }}
                         onMouseEnter={(e) => e.currentTarget.style.background = c.border05}
@@ -1069,7 +1098,7 @@ export default function CommunityPage() {
                       >
                         <div>
                           <div style={{ fontSize: '10px', fontWeight: 700, color: c.text40, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '8px' }}>BEGIN JOURNEY</div>
-                          <div style={{ fontSize: '20px', fontWeight: 800, color: c.text }}>Claim {currentTier.title} Access</div>
+                          <div style={{ fontSize: '20px', fontWeight: 800, color: c.text }}>Claim Access</div>
                         </div>
                         <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: c.border05, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <ArrowRight size={16} color={currentTier.color} />
