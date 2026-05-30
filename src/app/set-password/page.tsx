@@ -18,6 +18,36 @@ import { api, getFriendlyErrorMessage } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
+/* Mobile-specific overrides */
+const MobileStyles = () => (
+  <style>{`
+    @media (max-width: 1023px) {
+      .sp-right-panel {
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+        padding-top: 32px !important;
+      }
+      .sp-form-wrapper {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-top: 80px !important;
+      }
+      .sp-watermark {
+        width: 160px !important;
+        height: 160px !important;
+        right: 16px !important;
+      }
+      .sp-heading {
+        font-size: 28px !important;
+      }
+      .sp-logo-pos {
+        left: 24px !important;
+        top: 32px !important;
+      }
+    }
+  `}</style>
+);
+
 function SetPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -28,6 +58,12 @@ function SetPasswordContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
+
+  React.useEffect(() => {
+    if (!token) {
+      router.push("/login");
+    }
+  }, [token, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -102,15 +138,16 @@ function SetPasswordContent() {
 
   return (
     <div className="min-h-screen flex bg-[#F8F5F2]">
+      <MobileStyles />
       {/* LEFT: BRAND PANEL */}
       <div className="hidden lg:block lg:w-1/2">
         <BrandPanel />
       </div>
 
       {/* RIGHT: FORM */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center py-12 relative overflow-hidden">
+      <div className="sp-right-panel w-full lg:w-1/2 flex flex-col justify-center items-center py-12 relative overflow-hidden">
         {/* Precise Watermark Book (Matching Screenshot) */}
-        <div className="absolute -top-6 right-12 pointer-events-none opacity-[0.04] w-[220px] h-[220px] text-black">
+        <div className="sp-watermark absolute -top-6 right-12 pointer-events-none opacity-[0.04] w-[220px] h-[220px] text-black">
           <svg
             viewBox="0 0 24 24"
             fill="currentColor"
@@ -128,11 +165,11 @@ function SetPasswordContent() {
           </svg>
         </div>
 
-        <div className="absolute top-12 left-8 lg:hidden">
+        <div className="sp-logo-pos absolute top-12 left-8 lg:hidden">
           <CCAILogo size={32} variant="light" />
         </div>
 
-        <div className="max-w-md w-full px-8">
+        <div className="sp-form-wrapper max-w-md w-full px-8">
           <AnimatePresence mode="wait">
             {!isSuccess ? (
               <motion.div
@@ -142,23 +179,23 @@ function SetPasswordContent() {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.5 }}
               >
-                <div style={{ marginBottom: "64px" }}>
+                <div style={{ marginBottom: "56px" }}>
                   <h2
-                    className="serif"
+                    className="sp-heading serif text-3xl md:text-[40px] leading-tight"
                     style={{
-                      fontSize: "40px",
                       fontWeight: 600,
                       color: "#09090F",
-                      marginBottom: "12px",
+                      marginBottom: "16px",
                     }}
                   >
                     Secure Your Account
                   </h2>
                   <p
+                    className="text-[15px] md:text-base"
                     style={{
                       color: "#6B7280",
-                      fontSize: "16px",
                       fontFamily: "DM Sans, sans-serif",
+                      lineHeight: 1.6,
                     }}
                   >
                     Final step! Create a strong password to start your journey
