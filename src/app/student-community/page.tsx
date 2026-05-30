@@ -207,12 +207,12 @@ export default function CommunityPage() {
               {/* Stats */}
               <div style={{ display: 'flex', gap: 'clamp(24px, 5vw, 56px)', flexWrap: 'wrap' }}>
                 <div>
-                  <div style={{ fontSize: '36px', fontWeight: 800, color: c.text, fontFamily: 'var(--font-display)', marginBottom: '4px' }}>12K+</div>
-                  <div style={{ fontSize: '11px', color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.2em' }}>OPERATORS</div>
+                  <div style={{ fontSize: '36px', fontWeight: 800, color: c.text, fontFamily: 'var(--font-display)', marginBottom: '4px' }}>5K+</div>
+                  <div style={{ fontSize: '11px', color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.2em' }}>EXPLORERS</div>
                 </div>
                 <div>
                   <div style={{ fontSize: '36px', fontWeight: 800, color: c.text, fontFamily: 'var(--font-display)', marginBottom: '4px' }}>80+</div>
-                  <div style={{ fontSize: '11px', color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.2em' }}>CAMPUS NODES</div>
+                  <div style={{ fontSize: '11px', color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.2em' }}>CAMPUS AMBASSADORS</div>
                 </div>
                 <div>
                   <div style={{ fontSize: '36px', fontWeight: 800, color: c.text, fontFamily: 'var(--font-display)', marginBottom: '4px' }}>24</div>
@@ -337,7 +337,7 @@ export default function CommunityPage() {
                 { title: 'Startup Exposure', desc: 'Direct access to founders, VCs, and the Indian AI ecosystem.', icon: <Rocket size={16} color="#8B80F9" /> },
                 { title: 'Real Projects', desc: 'Work on shipped products — not toy demos, not case studies.', icon: <Code2 size={16} color="#8B80F9" /> },
                 { title: 'Mentorship', desc: '1:1 with operators who\'ve built in the AI space.', icon: <Compass size={16} color="#8B80F9" /> },
-                { title: 'Community Expansion', desc: 'Open campus nodes, run cohorts, lead culture.', icon: <Users size={16} color="#8B80F9" /> }
+                { title: 'Community Expansion', desc: 'Become campus ambassadors, run cohorts, lead culture.', icon: <Users size={16} color="#8B80F9" /> }
               ].map((card, i) => (
                 <motion.div key={i} variants={fadeInUp} style={{ background: c.cardLight, border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '24px', backdropFilter: 'blur(10px)', transition: 'transform 0.2s', cursor: 'default' }}>
                   <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: c.border03, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
@@ -684,7 +684,7 @@ export default function CommunityPage() {
                 likes: '1240', replies: '155', retweets: '103'
               },
               {
-                name: '@kabir.codes', role: 'CAMPUS NODE • PUNE', icon: <Moon size={14} color="#fff" />, color: '#7B6BFF',
+                name: '@kabir.codes', role: 'CAMPUS AMBASSADOR • PUNE', icon: <Moon size={14} color="#fff" />, color: '#7B6BFF',
                 text: "3am, discord on, three of us building. this is the network i was promised.",
                 likes: '380', replies: '47', retweets: '31'
               },
@@ -717,7 +717,7 @@ export default function CommunityPage() {
           </div>
 
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px', marginTop: '48px', maxWidth: '800px', margin: '48px auto 0' }}>
-            {['#builtbyoperators', '#cohort01', '#latenightbuilders', '#aithisweekend', '#campusnodes', '#thenetwork'].map((tag, i) => (
+            {['#builtbyoperators', '#cohort01', '#latenightbuilders', '#aithisweekend', '#campusambassadors', '#thenetwork'].map((tag, i) => (
               <div key={i} style={{ padding: '8px 16px', background: c.border03, border: '1px solid rgba(255,255,255,0.05)', borderRadius: '100px', fontSize: '12px', color: c.text50, fontFamily: 'var(--font-mono)' }}>
                 {tag}
               </div>
@@ -935,7 +935,7 @@ export default function CommunityPage() {
                     desc: "You run communities, host massive workshops, and connect founders. You shape the strategic direction of the network.",
                     icon: <Crown size={20} />,
                     unlocks: [
-                      { icon: <Users size={16} />, title: 'Leadership Access', desc: 'Run campus nodes and city-wide chapters.' },
+                      { icon: <Users size={16} />, title: 'Leadership Access', desc: 'Become campus ambassadors and run city-wide chapters.' },
                       { icon: <Network size={16} />, title: 'Founder Networking', desc: 'Exclusive closed-door founder dinners.' },
                       { icon: <Shield size={16} />, title: 'Verified Identity', desc: 'Blue-tick equivalent within the ecosystem.' },
                       { icon: <Compass size={16} />, title: 'Ecosystem Strategy', desc: 'Seat at the table for network decisions.' }
@@ -943,7 +943,7 @@ export default function CommunityPage() {
                     xp: { current: 1850, max: 3000, text: '1850 / 3000 XP', pct: '61%' },
                     nextTier: 'Ecosystem Partner',
                     activities: [
-                      { title: 'Run a campus node', xp: '+500 XP' },
+                      { title: 'Become a campus ambassador', xp: '+500 XP' },
                       { title: 'Host a city mixer', xp: '+300 XP' },
                       { title: 'Bring a sponsor', xp: '+400 XP' },
                       { title: 'Strategic advisory', xp: '+200 XP' }
