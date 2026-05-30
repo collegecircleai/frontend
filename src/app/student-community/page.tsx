@@ -676,8 +676,9 @@ export default function CommunityPage() {
           </div>
 
           <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ fontSize: 'clamp(36px, 4vw, 56px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
-            Build With People Who<br />
-            <span style={{ color: '#9B90FF' }}>Are Already Building.</span>
+            The best opportunities rarely<br />
+            <span style={{ color: '#9B90FF' }}>come from classrooms.</span><br />
+            <span style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontWeight: 400, color: c.text40, fontSize: 'clamp(28px, 3vw, 42px)' }}>They come from the people you build with.</span>
           </motion.h2>
 
           <motion.p initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ fontSize: 'clamp(16px, 1.8vw, 20px)', color: c.text60, lineHeight: 1.6, maxWidth: '800px', margin: '0 auto 80px auto' }}>
