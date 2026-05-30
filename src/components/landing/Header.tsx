@@ -51,7 +51,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
     { label: 'How it Works', href: '/preview#how-it-works' },
     { label: 'Features', href: '/preview#features' },
     { label: 'Personalisation', href: '/preview#personalisation' },
-    { label: 'Committee', href: '/committee' }
+    { label: 'Student Community', href: '/student-community' }
   ]
 
   useEffect(() => {

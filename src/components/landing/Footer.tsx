@@ -9,7 +9,7 @@ export default function Footer() {
     { name: 'How it Works', href: '/#how-it-works' },
     { name: 'Features', href: '/#features' },
     { name: 'Personalisation', href: '/#personalisation' },
-    { name: 'Committee', href: '/committee' }
+    { name: 'Student Community', href: '/student-community' }
   ]
 
   return (
@@ -72,9 +72,20 @@ export default function Footer() {
             gap: 'clamp(8px, 2vw, 16px)' 
           }}
         >
-          <div style={{ fontSize: 'clamp(12px, 2vw, 14px)', fontWeight: 600, color: 'white' }}>
-            collegecircleai.in
-          </div>
+          <Link 
+            href="https://collegecircleai.com"
+            style={{ 
+              fontSize: 'clamp(12px, 2vw, 14px)', 
+              fontWeight: 600, 
+              color: 'white',
+              textDecoration: 'none',
+              transition: 'opacity 0.2s ease'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
+            onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+          >
+            collegecircleai.com
+          </Link>
           <div style={{ 
             display: 'flex', 
             gap: 'clamp(20px, 3vw, 28px)', 
