@@ -442,7 +442,7 @@ export default function CommunityPage() {
                 <h3 style={{ fontSize: '32px', fontWeight: 800, color: c.text, marginBottom: '8px' }}>Explorer Access</h3>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '24px' }}>
                   <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>₹3000</span>
-                  <span style={{ fontSize: '24px', fontWeight: 800, color: '#00FF9D' }}>FREE RIGHT NOW</span>
+                  <span style={{ fontSize: '24px', fontWeight: 800, color: '#00FF9D' }}>FREE</span>
                 </div>
                 
                 <div style={{ background: 'rgba(0,255,157,0.1)', border: '1px solid rgba(0,255,157,0.2)', padding: '12px 16px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
@@ -462,7 +462,7 @@ export default function CommunityPage() {
                 <h3 style={{ fontSize: '32px', fontWeight: 800, color: c.text, marginBottom: '8px' }}>Builder Network</h3>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '24px' }}>
                   <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>₹5000</span>
-                  <span style={{ fontSize: '24px', fontWeight: 800, color: '#9B90FF' }}>FREE RIGHT NOW</span>
+                  <span style={{ fontSize: '24px', fontWeight: 800, color: '#9B90FF' }}>FREE</span>
                 </div>
                 
                 <div style={{ background: 'rgba(123, 107, 255, 0.1)', border: '1px solid rgba(123, 107, 255, 0.2)', padding: '12px 16px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
