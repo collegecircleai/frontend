@@ -144,7 +144,7 @@ export default function CommunityPage() {
         <Header onGetStarted={() => window.location.href = '/login'} />
       </ComponentErrorBoundary>
 
-      <main style={{ flex: 1, marginTop: '120px', paddingBottom: '80px', position: 'relative', zIndex: 10 }}>
+      <main style={{ flex: 1, marginTop: '120px', position: 'relative', zIndex: 10 }}>
 
         {/* HERO SECTION */}
         <section style={{
