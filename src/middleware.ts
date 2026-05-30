@@ -29,13 +29,8 @@ export function middleware(request: NextRequest) {
 
   // Logic if the app is NOT YET launched
   if (!isLaunched) {
-<<<<<<< HEAD
-    // Allow the Launch page (root) and the Preview Landing Page
-    if (pathname !== '/' && pathname !== '/preview') {
-=======
     // Allow the Launch page (root), Preview Landing Page, and Student Community Page
     if (pathname !== '/' && pathname !== '/preview' && pathname !== '/student-community') {
->>>>>>> 6556f79a (Fix course progress calculation bug by accurately tracking fully completed units instead of topics.)
       return NextResponse.redirect(new URL('/', request.url));
     }
     return NextResponse.next();

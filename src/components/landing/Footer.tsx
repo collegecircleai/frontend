@@ -6,16 +6,10 @@ import { Linkedin, Instagram, Mail } from 'lucide-react'
 
 export default function Footer() {
   const navLinks = [
-<<<<<<< HEAD
-    { name: 'How it Works', href: '#how-it-works' },
-    { name: 'Features', href: '#features' },
-    { name: 'Personalisation', href: '#personalisation' }
-=======
     { name: 'How it Works', href: '/#how-it-works' },
     { name: 'Features', href: '/#features' },
     { name: 'Personalisation', href: '/#personalisation' },
     { name: 'Student Community', href: '/student-community' }
->>>>>>> 6556f79a (Fix course progress calculation bug by accurately tracking fully completed units instead of topics.)
   ]
 
   return (

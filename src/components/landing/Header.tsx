@@ -48,16 +48,10 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
   const navGap = useTransform(smoothScrollY, [0, 200], ['32px', '20px'])
 
   const navItems = [
-<<<<<<< HEAD
-    { label: 'How it Works', href: '#how-it-works' },
-    { label: 'Features', href: '#features' },
-    { label: 'Personalisation', href: '#personalisation' }
-=======
     { label: 'How it Works', href: '/preview#how-it-works' },
     { label: 'Features', href: '/preview#features' },
     { label: 'Personalisation', href: '/preview#personalisation' },
     { label: 'Student Community', href: '/student-community' }
->>>>>>> 6556f79a (Fix course progress calculation bug by accurately tracking fully completed units instead of topics.)
   ]
 
   useEffect(() => {
