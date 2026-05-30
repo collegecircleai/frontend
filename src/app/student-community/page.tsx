@@ -171,7 +171,7 @@ export default function CommunityPage() {
 
               <h1 style={{ fontFamily: 'var(--font-body), system-ui, sans-serif', fontSize: 'clamp(40px, 5vw, 80px)', fontWeight: 800, color: c.text, lineHeight: 1.08, marginBottom: '24px', letterSpacing: '-0.02em' }}>
                 Build the future<br />
-                <span style={{ color: '#9B90FF' }}>student culture.</span>
+                <span style={{ color: '#9B90FF' }}>student ecosystem.</span>
               </h1>
 
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(16px, 1.8vw, 20px)', color: c.text70, lineHeight: 1.6, marginBottom: '40px', maxWidth: '600px' }}>
@@ -757,7 +757,7 @@ export default function CommunityPage() {
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ position: 'relative', zIndex: 2 }}>
             <h2 style={{ fontSize: 'clamp(48px, 6vw, 80px)', fontWeight: 800, lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
               <span style={{ color: c.text }}>India's AI-native</span><br />
-              <span style={{ color: '#7B6BFF' }}>student culture</span><br />
+              <span style={{ color: '#7B6BFF' }}>student ecosystem</span><br />
               <span style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontWeight: 400, color: c.text40 }}>starts here.</span>
             </h2>
             <p style={{ color: c.text50, fontSize: '15px', marginBottom: '48px', fontWeight: 500 }}>The future will not be built by average students.</p>
