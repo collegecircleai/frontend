@@ -169,9 +169,8 @@ export default function CommunityPage() {
                 </span>
               </div>
 
-              <h1 style={{ fontFamily: 'var(--font-body), system-ui, sans-serif', fontSize: 'clamp(40px, 5vw, 80px)', fontWeight: 800, color: c.text, lineHeight: 1.08, marginBottom: '24px', letterSpacing: '-0.02em' }}>
-                Build the future<br />
-                <span style={{ color: '#9B90FF' }}>student ecosystem.</span>
+              <h1 style={{ fontFamily: 'Georgia, serif', fontSize: 'clamp(32px, 4.5vw, 72px)', fontWeight: 700, color: c.text, lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-0.02em' }}>
+                Build the future <span style={{ color: '#9B90FF', fontStyle: 'italic' }}>student ecosystem.</span>
               </h1>
 
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(16px, 1.8vw, 20px)', color: c.text70, lineHeight: 1.6, marginBottom: '40px', maxWidth: '600px' }}>
