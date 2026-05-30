@@ -1205,7 +1205,13 @@ export default function Onboarding() {
       };
 
       await api.patch(`/auth/users/${user.id}`, payload);
-      if (setUser) setUser({ ...user, ...payload });
+      
+      const updatedUser = { ...user, ...payload, isOnboarded: true };
+      if (setUser) setUser(updatedUser);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+      }
+      
       setStep(4);
     } catch (err: any) {
       alert(getFriendlyErrorMessage(err, "Failed to save profile."));
