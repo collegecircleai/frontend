@@ -20,17 +20,25 @@ import ElegantParticles from '@/components/effects/ElegantParticles'
 import ComponentErrorBoundary from '@/components/effects/ErrorBoundary'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/context/AuthContext'
 
 export default function LandingPage() {
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const { user, isLoading } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isLoading && user) {
+      router.push('/dashboard')
+    }
+  }, [user, isLoading, router])
 
   // Hydration safety: ensure client-only effects only run after mount
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  const router = useRouter()
   const openOnboarding = () => router.push('/login')
 
   return (

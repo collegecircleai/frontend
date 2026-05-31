@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Moon, Sun, Linkedin, Instagram, Mail } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 import CCAILogo from "@/components/brand/CCAILogo";
 import DarkAurora from "@/components/effects/DarkAurora";
 import ElegantParticles from "@/components/effects/ElegantParticles";
@@ -15,6 +16,7 @@ const TARGET_DATE = new Date("2026-05-30T09:30:00.000Z").getTime();
 
 export default function LaunchPage() {
   const router = useRouter();
+  const { user, isLoading } = useAuth();
   
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -33,6 +35,12 @@ export default function LaunchPage() {
     "The premium learning experience awaits."
   ];
   const [phraseIndex, setPhraseIndex] = useState(0);
+
+  useEffect(() => {
+    if (!isLoading && user) {
+      router.push("/dashboard");
+    }
+  }, [user, isLoading, router]);
 
   useEffect(() => {
     setIsMounted(true);
