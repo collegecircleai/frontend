@@ -16,8 +16,7 @@ interface User {
 }
 
 export const getPostAuthRoute = (user: User | null) => {
-  const isOnboarded =
-    user?.isOnboarded === true || user?.isActive === true;
+  const isOnboarded = user?.isOnboarded === true || user?.isActive === true;
 
   return isOnboarded ? "/dashboard" : "/onboarding";
 };

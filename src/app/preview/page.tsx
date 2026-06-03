@@ -1,50 +1,50 @@
-'use client'
+"use client";
 
-import React from 'react'
+import React from "react";
 
 // Components
-import Header from '@/components/landing/Header'
-import Hero from '@/components/landing/Hero'
-import Reality from '@/components/landing/Reality'
-import HowItWorks from '@/components/landing/HowItWorks'
-import Features from '@/components/landing/Features'
-import VisualLearning from '@/components/landing/VisualLearning'
-import Practice from '@/components/landing/Practice'
-import Personalisation from '@/components/landing/Personalisation'
-import MasterySection from '@/components/landing/MasterySection'
-import FooterCTA from '@/components/landing/FooterCTA'
-import Footer from '@/components/landing/Footer'
-import OnboardingModal from '@/components/landing/OnboardingModal'
-import DarkAurora from '@/components/effects/DarkAurora'
-import ElegantParticles from '@/components/effects/ElegantParticles'
-import ComponentErrorBoundary from '@/components/effects/ErrorBoundary'
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { getPostAuthRoute, useAuth } from '@/context/AuthContext'
+import Header from "@/components/landing/Header";
+import Hero from "@/components/landing/Hero";
+import Reality from "@/components/landing/Reality";
+import HowItWorks from "@/components/landing/HowItWorks";
+import Features from "@/components/landing/Features";
+import VisualLearning from "@/components/landing/VisualLearning";
+import Practice from "@/components/landing/Practice";
+import Personalisation from "@/components/landing/Personalisation";
+import MasterySection from "@/components/landing/MasterySection";
+import FooterCTA from "@/components/landing/FooterCTA";
+import Footer from "@/components/landing/Footer";
+import OnboardingModal from "@/components/landing/OnboardingModal";
+import DarkAurora from "@/components/effects/DarkAurora";
+import ElegantParticles from "@/components/effects/ElegantParticles";
+import ComponentErrorBoundary from "@/components/effects/ErrorBoundary";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { getPostAuthRoute, useAuth } from "@/context/AuthContext";
 
 export default function LandingPage() {
-  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const { user, isLoading } = useAuth()
-  const router = useRouter()
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     if (!isLoading && user) {
-      router.replace(getPostAuthRoute(user))
+      router.replace(getPostAuthRoute(user));
     }
-  }, [user, isLoading, router])
+  }, [user, isLoading, router]);
 
   // Hydration safety: ensure client-only effects only run after mount
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
-  const openOnboarding = () => router.push('/login')
+  const openOnboarding = () => router.push("/login");
 
   return (
-    <div 
-      className="content-wrapper" 
-      style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}
+    <div
+      className="content-wrapper"
+      style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
     >
       {/* Background Effects: Wrapped for safety */}
       {mounted && (
@@ -58,7 +58,7 @@ export default function LandingPage() {
         <Header onGetStarted={openOnboarding} />
       </ComponentErrorBoundary>
 
-      <div style={{ marginTop: '80px' }}>
+      <div style={{ marginTop: "80px" }}>
         <ComponentErrorBoundary>
           <Hero onGetStarted={openOnboarding} />
         </ComponentErrorBoundary>
@@ -91,7 +91,6 @@ export default function LandingPage() {
           <MasterySection onGetStarted={openOnboarding} />
         </ComponentErrorBoundary>
 
-
         <ComponentErrorBoundary>
           <FooterCTA onGetStarted={openOnboarding} />
         </ComponentErrorBoundary>
@@ -102,11 +101,11 @@ export default function LandingPage() {
       </div>
 
       <ComponentErrorBoundary>
-        <OnboardingModal 
-          isOpen={isOnboardingOpen} 
-          onClose={() => setIsOnboardingOpen(false)} 
+        <OnboardingModal
+          isOpen={isOnboardingOpen}
+          onClose={() => setIsOnboardingOpen(false)}
         />
       </ComponentErrorBoundary>
     </div>
-  )
+  );
 }

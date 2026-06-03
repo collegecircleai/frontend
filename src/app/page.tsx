@@ -18,7 +18,7 @@ const TARGET_DATE = new Date("2026-05-30T09:30:00.000Z").getTime();
 export default function LaunchPage() {
   const router = useRouter();
   const { user, isLoading } = useAuth();
-  
+
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -27,13 +27,13 @@ export default function LaunchPage() {
   });
   const [isMounted, setIsMounted] = useState(false);
   const [isLaunching, setIsLaunching] = useState(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
   const hypePhrases = [
     "AI-DRIVEN COURSE CREATION...",
     "ADAPTIVE LEARNING PATHS...",
     "PERSONALIZED AI TUTORING...",
-    "The premium learning experience awaits."
+    "The premium learning experience awaits.",
   ];
   const [phraseIndex, setPhraseIndex] = useState(0);
 
@@ -45,21 +45,21 @@ export default function LaunchPage() {
 
   useEffect(() => {
     setIsMounted(true);
-    
+
     const textInterval = setInterval(() => {
-      setPhraseIndex(prev => (prev + 1) % hypePhrases.length);
+      setPhraseIndex((prev) => (prev + 1) % hypePhrases.length);
     }, 3500);
-    
+
     // Check and set initial theme
-    const savedTheme = localStorage.getItem('cc-ai-theme') as 'light' | 'dark';
+    const savedTheme = localStorage.getItem("cc-ai-theme") as "light" | "dark";
     if (savedTheme) {
       setTheme(savedTheme);
-      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.documentElement.setAttribute("data-theme", savedTheme);
     } else {
-      setTheme('light');
-      document.documentElement.setAttribute('data-theme', 'light');
+      setTheme("light");
+      document.documentElement.setAttribute("data-theme", "light");
     }
-    
+
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const difference = TARGET_DATE - now;
@@ -76,7 +76,9 @@ export default function LaunchPage() {
       } else {
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          hours: Math.floor(
+            (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+          ),
           minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
           seconds: Math.floor((difference % (1000 * 60)) / 1000),
         });
@@ -89,15 +91,16 @@ export default function LaunchPage() {
     };
   }, [router]);
 
-  if (!isMounted) return <div style={{ background: "var(--pearl)", minHeight: "100vh" }} />;
+  if (!isMounted)
+    return <div style={{ background: "var(--pearl)", minHeight: "100vh" }} />;
 
   const pad = (num: number) => num.toString().padStart(2, "0");
 
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
+    const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('cc-ai-theme', newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("cc-ai-theme", newTheme);
   };
 
   return (
@@ -244,17 +247,31 @@ export default function LaunchPage() {
         }
       `}</style>
       {/* Cinematic Backgrounds */}
-      <div style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none", opacity: isLaunching ? 0 : 1, transition: "opacity 2s ease" }}>
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 0,
+          pointerEvents: "none",
+          opacity: isLaunching ? 0 : 1,
+          transition: "opacity 2s ease",
+        }}
+      >
         {/* Dynamic Grid Overlay */}
-        <div style={{
-          position: "absolute", inset: 0,
-          backgroundImage: `linear-gradient(to right, var(--border-light) 1px, transparent 1px),
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: `linear-gradient(to right, var(--border-light) 1px, transparent 1px),
                             linear-gradient(to bottom, var(--border-light) 1px, transparent 1px)`,
-          backgroundSize: "4rem 4rem",
-          maskImage: "radial-gradient(circle at center, black 0%, transparent 80%)",
-          WebkitMaskImage: "radial-gradient(circle at center, black 0%, transparent 80%)",
-          opacity: theme === 'dark' ? 0.4 : 0.8
-        }} />
+            backgroundSize: "4rem 4rem",
+            maskImage:
+              "radial-gradient(circle at center, black 0%, transparent 80%)",
+            WebkitMaskImage:
+              "radial-gradient(circle at center, black 0%, transparent 80%)",
+            opacity: theme === "dark" ? 0.4 : 0.8,
+          }}
+        />
         <ComponentErrorBoundary>
           <DarkAurora />
           <ElegantParticles count={100} />
@@ -262,7 +279,7 @@ export default function LaunchPage() {
       </div>
 
       {/* Live Network Indicator */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
@@ -276,18 +293,27 @@ export default function LaunchPage() {
           zIndex: 50,
         }}
       >
-        <motion.div 
+        <motion.div
           animate={{ opacity: [1, 0.3, 1] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--jade, #00C896)", boxShadow: "0 0 10px var(--jade, #00C896)" }}
+          style={{
+            width: "6px",
+            height: "6px",
+            borderRadius: "50%",
+            background: "var(--jade, #00C896)",
+            boxShadow: "0 0 10px var(--jade, #00C896)",
+          }}
         />
-        <div style={{ 
-          fontFamily: "var(--font-mono, monospace)", 
-          fontSize: "10px", 
-          color: theme === 'dark' ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.4)", 
-          letterSpacing: "0.2em", 
-          textTransform: "uppercase" 
-        }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono, monospace)",
+            fontSize: "10px",
+            color:
+              theme === "dark" ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.4)",
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+          }}
+        >
           SYSTEM STANDBY
         </div>
       </motion.div>
@@ -295,24 +321,27 @@ export default function LaunchPage() {
       {/* Theme Toggle Button */}
       <motion.button
         onClick={toggleTheme}
-        whileHover={{ scale: 1.1, backgroundColor: 'rgba(139, 128, 249, 0.15)' }}
+        whileHover={{
+          scale: 1.1,
+          backgroundColor: "rgba(139, 128, 249, 0.15)",
+        }}
         whileTap={{ scale: 0.9 }}
         style={{
           position: "absolute",
           top: "clamp(20px, 4vw, 40px)",
           right: "clamp(20px, 4vw, 40px)",
-          backgroundColor: 'rgba(139, 128, 249, 0)',
-          border: '1px solid var(--border)',
-          borderRadius: '12px',
-          width: '36px',
-          height: '36px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'var(--ink)',
-          cursor: 'pointer',
+          backgroundColor: "rgba(139, 128, 249, 0)",
+          border: "1px solid var(--border)",
+          borderRadius: "12px",
+          width: "36px",
+          height: "36px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "var(--ink)",
+          cursor: "pointer",
           zIndex: 50,
-          transition: 'background-color 0.3s ease'
+          transition: "background-color 0.3s ease",
         }}
       >
         <AnimatePresence mode="wait">
@@ -323,7 +352,7 @@ export default function LaunchPage() {
             exit={{ y: -20, opacity: 0, rotate: 45 }}
             transition={{ duration: 0.2 }}
           >
-            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+            {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
           </motion.div>
         </AnimatePresence>
       </motion.button>
@@ -350,12 +379,16 @@ export default function LaunchPage() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 1 }}
-              style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "16px",
+              }}
             >
               <div className="launch-logo-container">
                 <CCAILogo size={80} />
               </div>
-
             </motion.div>
 
             {/* The Timer */}
@@ -363,12 +396,32 @@ export default function LaunchPage() {
               <TimeUnit value={pad(timeLeft.days)} label="Days" />
               <TimeUnit value={pad(timeLeft.hours)} label="Hours" />
               <TimeUnit value={pad(timeLeft.minutes)} label="Minutes" />
-              <TimeUnit value={pad(timeLeft.seconds)} label="Seconds" highlight />
+              <TimeUnit
+                value={pad(timeLeft.seconds)}
+                label="Seconds"
+                highlight
+              />
             </div>
 
             {/* Bottom Content Group (Hype, Progress, Buttons) */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
-              <div style={{ height: "48px", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "16px", marginBottom: "8px" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <div
+                style={{
+                  height: "48px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginTop: "16px",
+                  marginBottom: "8px",
+                }}
+              >
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={phraseIndex}
@@ -377,15 +430,31 @@ export default function LaunchPage() {
                     exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
                     transition={{ duration: 0.8 }}
                     style={{
-                      fontFamily: phraseIndex === hypePhrases.length - 1 ? "var(--font-display, serif)" : "var(--font-mono, monospace)",
-                      fontSize: phraseIndex === hypePhrases.length - 1 ? "clamp(20px, 4.5vw, 28px)" : "clamp(12px, 2.5vw, 16px)",
-                      letterSpacing: phraseIndex === hypePhrases.length - 1 ? "0.02em" : "0.2em",
+                      fontFamily:
+                        phraseIndex === hypePhrases.length - 1
+                          ? "var(--font-display, serif)"
+                          : "var(--font-mono, monospace)",
+                      fontSize:
+                        phraseIndex === hypePhrases.length - 1
+                          ? "clamp(20px, 4.5vw, 28px)"
+                          : "clamp(12px, 2.5vw, 16px)",
+                      letterSpacing:
+                        phraseIndex === hypePhrases.length - 1
+                          ? "0.02em"
+                          : "0.2em",
                       textAlign: "center",
                       maxWidth: "600px",
                       lineHeight: 1.4,
-                      color: phraseIndex === hypePhrases.length - 1 ? "var(--ink)" : "var(--mist)",
-                      fontWeight: phraseIndex === hypePhrases.length - 1 ? 500 : 600,
-                      fontStyle: phraseIndex === hypePhrases.length - 1 ? "italic" : "normal"
+                      color:
+                        phraseIndex === hypePhrases.length - 1
+                          ? "var(--ink)"
+                          : "var(--mist)",
+                      fontWeight:
+                        phraseIndex === hypePhrases.length - 1 ? 500 : 600,
+                      fontStyle:
+                        phraseIndex === hypePhrases.length - 1
+                          ? "italic"
+                          : "normal",
                     }}
                   >
                     {hypePhrases[phraseIndex]}
@@ -394,72 +463,149 @@ export default function LaunchPage() {
               </div>
 
               {/* Launch Progress Line */}
-              <div style={{ 
-                width: "100%", maxWidth: "200px", height: "2px", 
-                background: "var(--border-light)", borderRadius: "2px", 
-                overflow: "hidden", marginBottom: "32px", position: "relative" 
-              }}>
-                <motion.div 
+              <div
+                style={{
+                  width: "100%",
+                  maxWidth: "200px",
+                  height: "2px",
+                  background: "var(--border-light)",
+                  borderRadius: "2px",
+                  overflow: "hidden",
+                  marginBottom: "32px",
+                  position: "relative",
+                }}
+              >
+                <motion.div
                   initial={{ left: "-100%" }}
                   animate={{ left: "100%" }}
-                  transition={{ duration: 2.5, ease: "linear", repeat: Infinity }}
-                  style={{ 
-                    position: "absolute", top: 0, width: "50%", height: "100%", 
-                    background: "linear-gradient(90deg, transparent, var(--violet), transparent)", 
-                    boxShadow: "0 0 10px var(--violet)" 
+                  transition={{
+                    duration: 2.5,
+                    ease: "linear",
+                    repeat: Infinity,
+                  }}
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    width: "50%",
+                    height: "100%",
+                    background:
+                      "linear-gradient(90deg, transparent, var(--violet), transparent)",
+                    boxShadow: "0 0 10px var(--violet)",
                   }}
                 />
               </div>
 
-              <div className="launch-action-container" style={{ marginTop: "12px" }}>
-                <Link href="/preview" style={{ textDecoration: 'none', width: '100%', display: 'flex' }}>
+              <div
+                className="launch-action-container"
+                style={{ marginTop: "12px" }}
+              >
+                <Link
+                  href="/preview"
+                  style={{
+                    textDecoration: "none",
+                    width: "100%",
+                    display: "flex",
+                  }}
+                >
                   <motion.button
                     className="launch-button"
-                    whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(139, 128, 249, 0.4)" }}
+                    whileHover={{
+                      scale: 1.05,
+                      boxShadow: "0 0 30px rgba(139, 128, 249, 0.4)",
+                    }}
                     whileTap={{ scale: 0.95 }}
                     style={{
-                      background: theme === 'dark' ? 'var(--violet)' : 'var(--violet-pale)', 
-                      color: theme === 'dark' ? '#FFFFFF' : 'var(--violet)',
-                      border: theme === 'dark' ? 'none' : '1px solid rgba(139, 128, 249, 0.3)',
-                      cursor: 'pointer', backdropFilter: 'blur(12px)',
-                      transition: 'all 0.3s ease',
-                      boxShadow: theme === 'dark' ? "0 10px 25px rgba(139, 128, 249, 0.25)" : "0 10px 20px rgba(139, 128, 249, 0.15)",
-                      fontFamily: "var(--font-body, sans-serif)"
+                      background:
+                        theme === "dark"
+                          ? "var(--violet)"
+                          : "var(--violet-pale)",
+                      color: theme === "dark" ? "#FFFFFF" : "var(--violet)",
+                      border:
+                        theme === "dark"
+                          ? "none"
+                          : "1px solid rgba(139, 128, 249, 0.3)",
+                      cursor: "pointer",
+                      backdropFilter: "blur(12px)",
+                      transition: "all 0.3s ease",
+                      boxShadow:
+                        theme === "dark"
+                          ? "0 10px 25px rgba(139, 128, 249, 0.25)"
+                          : "0 10px 20px rgba(139, 128, 249, 0.15)",
+                      fontFamily: "var(--font-body, sans-serif)",
                     }}
                   >
                     Explore Platform Features
                   </motion.button>
                 </Link>
-                
+
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1.5, duration: 1, ease: "easeOut" }}
                   className="launch-social-pill"
                   style={{
-                    background: theme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)',
-                    border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
+                    background:
+                      theme === "dark"
+                        ? "rgba(255, 255, 255, 0.03)"
+                        : "rgba(0, 0, 0, 0.03)",
+                    border:
+                      theme === "dark"
+                        ? "1px solid rgba(255, 255, 255, 0.1)"
+                        : "1px solid rgba(0, 0, 0, 0.1)",
                   }}
                 >
-                  <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--ink)", paddingRight: "8px", whiteSpace: "nowrap" }}>
+                  <div
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: 700,
+                      color: "var(--ink)",
+                      paddingRight: "8px",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
                     Join Community
                   </div>
                   {[
-                    { href: "https://www.linkedin.com/company/collegecircleai/", icon: <Linkedin size={20} /> },
-                    { href: "https://www.instagram.com/college.circle.ai/", icon: <Instagram size={20} /> },
-                    { 
-                      href: "https://x.com/AICollegeCircle", 
+                    {
+                      href: "https://www.linkedin.com/company/collegecircleai/",
+                      icon: <Linkedin size={20} />,
+                    },
+                    {
+                      href: "https://www.instagram.com/college.circle.ai/",
+                      icon: <Instagram size={20} />,
+                    },
+                    {
+                      href: "https://x.com/AICollegeCircle",
                       icon: (
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
                           <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                         </svg>
-                      ) 
-                    }
+                      ),
+                    },
                   ].map((social, i) => (
-                    <Link key={i} href={social.href} target="_blank" rel="noopener noreferrer">
+                    <Link
+                      key={i}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <motion.div
-                        whileHover={{ scale: 1.2, color: "var(--violet)", y: -2 }}
-                        style={{ color: "var(--ink)", transition: "color 0.2s ease", cursor: "pointer", display: "flex" }}
+                        whileHover={{
+                          scale: 1.2,
+                          color: "var(--violet)",
+                          y: -2,
+                        }}
+                        style={{
+                          color: "var(--ink)",
+                          transition: "color 0.2s ease",
+                          cursor: "pointer",
+                          display: "flex",
+                        }}
                       >
                         {social.icon}
                       </motion.div>
@@ -468,7 +614,6 @@ export default function LaunchPage() {
                 </motion.div>
               </div>
             </div>
-
           </motion.div>
         )}
       </AnimatePresence>
@@ -476,27 +621,46 @@ export default function LaunchPage() {
   );
 }
 
-function TimeUnit({ value, label, highlight = false }: { value: string; label: string; highlight?: boolean }) {
+function TimeUnit({
+  value,
+  label,
+  highlight = false,
+}: {
+  value: string;
+  label: string;
+  highlight?: boolean;
+}) {
   return (
-    <motion.div 
+    <motion.div
       className="time-unit-card"
       whileHover={{ scale: 1.05, y: -5 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      style={{ 
-        background: highlight ? "rgba(0, 200, 150, 0.03)" : "rgba(255, 255, 255, 0.01)",
-        border: highlight ? "1px solid rgba(0, 200, 150, 0.3)" : "1px solid var(--border)",
-        boxShadow: highlight 
-          ? "0 20px 40px rgba(0,200,150,0.15), inset 0 0 20px rgba(0,200,150,0.05)" 
+      style={{
+        background: highlight
+          ? "rgba(0, 200, 150, 0.03)"
+          : "rgba(255, 255, 255, 0.01)",
+        border: highlight
+          ? "1px solid rgba(0, 200, 150, 0.3)"
+          : "1px solid var(--border)",
+        boxShadow: highlight
+          ? "0 20px 40px rgba(0,200,150,0.15), inset 0 0 20px rgba(0,200,150,0.05)"
           : "0 20px 40px rgba(0,0,0,0.2), inset 0 0 20px rgba(255,255,255,0.02)",
       }}
     >
       {/* Premium Glass Shimmer Reflection */}
-      <div style={{
-        position: "absolute", top: 0, left: "-50%", width: "200%", height: "100%",
-        background: "linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.08) 50%, transparent 60%)",
-        transform: "translateX(-100%)",
-        animation: "cardShimmer 6s infinite ease-in-out"
-      }} />
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: "-50%",
+          width: "200%",
+          height: "100%",
+          background:
+            "linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.08) 50%, transparent 60%)",
+          transform: "translateX(-100%)",
+          animation: "cardShimmer 6s infinite ease-in-out",
+        }}
+      />
       <style>{`
         @keyframes cardShimmer {
           0% { transform: translateX(-100%); }

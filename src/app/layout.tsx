@@ -7,7 +7,7 @@ import {
   DM_Mono,
   Noto_Sans_Devanagari,
 } from "next/font/google";
-
+import { Analytics } from '@vercel/analytics/next';
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-body",
@@ -84,6 +84,7 @@ export default function RootLayout({
             <SmoothScroll>{children}</SmoothScroll>
           </ComponentErrorBoundary>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
