@@ -92,8 +92,13 @@ function SetPasswordContent() {
           response.data?.data?.token ||
           response.data?.accessToken ||
           response.data?.token;
+        const refreshToken =
+          response.data?.data?.refreshToken || response.data?.refreshToken;
         if (accessToken && typeof window !== "undefined") {
           localStorage.setItem("token", accessToken);
+          if (refreshToken) {
+            localStorage.setItem("refreshToken", refreshToken);
+          }
         }
 
         setIsSuccess(true);
@@ -147,7 +152,7 @@ function SetPasswordContent() {
       {/* RIGHT: FORM */}
       <div className="sp-right-panel w-full lg:w-1/2 flex flex-col justify-center items-center py-12 relative overflow-hidden">
         {/* Precise Watermark Book (Matching Screenshot) */}
-        <div className="sp-watermark absolute -top-6 right-12 pointer-events-none opacity-[0.04] w-[220px] h-[220px] text-black">
+        <div className="sp-watermark absolute -top-6 right-12 pointer-events-none opacity-[0.04] w-55 h-55 text-black">
           <svg
             viewBox="0 0 24 24"
             fill="currentColor"

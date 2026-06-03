@@ -12,6 +12,7 @@ interface User {
   year?: number;
   course?: string;
   isOnboarded?: boolean;
+  isActive?: boolean;
 }
 
 interface AuthContextType {
@@ -59,6 +60,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(parsedUser);
           } catch (e) {
             // Invalid JSON in storage
+          }
+        }
+
+        if (storedToken && storedRefreshToken && !storedUser) {
+          try {
+            const meRes = await api.get("/auth/me");
+            const meData = meRes?.data?.data ?? meRes?.data;
+            const meUser = meData?.user ?? meData?.data?.user ?? meData;
+
+            if (meUser) {
+              setUser(meUser);
+              if (typeof window !== "undefined") {
+                localStorage.setItem("user", JSON.stringify(meUser));
+              }
+              return;
+            }
+          } catch (error) {
+            // Fall through to the normal loading completion path.
           }
         }
 
@@ -173,23 +192,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     const response = await api.post("/auth/login", { email, password });
     const data = response.data;
-    if (data?.success && data?.data?.user) {
-      const userData = data.data.user;
-      const accessToken = data.data.accessToken;
-      const refreshTokenValue = data.data.refreshToken;
+    const authData = data?.data ?? data;
+    const userData = authData?.user ?? authData?.data?.user;
+    const accessToken = authData?.accessToken ?? authData?.data?.accessToken;
+    const refreshTokenValue =
+      authData?.refreshToken ?? authData?.data?.refreshToken;
 
-      setUser(userData);
+    if (accessToken) {
       setToken(accessToken);
-      setRefreshToken(refreshTokenValue);
 
       if (typeof window !== "undefined") {
         localStorage.setItem("token", accessToken);
-        if (refreshTokenValue) {
-          localStorage.setItem("refreshToken", refreshTokenValue);
-        }
+      }
+    }
+
+    if (refreshTokenValue) {
+      setRefreshToken(refreshTokenValue);
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("refreshToken", refreshTokenValue);
+      }
+    }
+
+    if (userData) {
+      setUser(userData);
+
+      if (typeof window !== "undefined") {
         localStorage.setItem("user", JSON.stringify(userData));
       }
     }
+
     return data;
   };
 

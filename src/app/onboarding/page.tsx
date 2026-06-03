@@ -408,7 +408,9 @@ function Step1({
           >
             Full Legal Name
           </label>
-          <div style={{ position: "relative", width: isMobile ? "100%" : "400px" }}>
+          <div
+            style={{ position: "relative", width: isMobile ? "100%" : "400px" }}
+          >
             <input
               value={name}
               onChange={(e) => onNameChange(e.target.value)}
@@ -489,7 +491,10 @@ function Step2({
   isMobile: boolean;
 }) {
   const canContinue =
-    formData.college && formData.degree && (formData.degree !== "other" || formData.customDegree) && formData.department;
+    formData.college &&
+    formData.degree &&
+    (formData.degree !== "other" || formData.customDegree) &&
+    formData.department;
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -1174,7 +1179,8 @@ export default function Onboarding() {
       const payload = {
         name,
         college_name: formData.college,
-        degree: formData.degree === "other" ? formData.customDegree : formData.degree,
+        degree:
+          formData.degree === "other" ? formData.customDegree : formData.degree,
         department: formData.department,
         course: formData.department,
         year: parseInt(formData.year.replace(/[^0-9]/g, "")) || 1,
@@ -1184,13 +1190,18 @@ export default function Onboarding() {
       };
 
       await api.patch(`/auth/users/${user.id}`, payload);
-      
-      const updatedUser = { ...user, ...payload, isOnboarded: true };
+
+      const updatedUser = {
+        ...user,
+        ...payload,
+        isOnboarded: true,
+        isActive: true,
+      };
       if (setUser) setUser(updatedUser);
       if (typeof window !== "undefined") {
         localStorage.setItem("user", JSON.stringify(updatedUser));
       }
-      
+
       setStep(4);
     } catch (err: any) {
       alert(getFriendlyErrorMessage(err, "Failed to save profile."));
@@ -1216,12 +1227,38 @@ export default function Onboarding() {
       }}
     >
       <GlobalStyles />
-      
+
       {/* Mobile Premium Background Effects */}
       {isMobile && (
         <>
-          <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(77, 63, 255, 0.15) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(40px)', zIndex: 0 }} />
-          <div style={{ position: 'absolute', bottom: '10%', right: '-10%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(96, 252, 198, 0.1) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(60px)', zIndex: 0 }} />
+          <div
+            style={{
+              position: "absolute",
+              top: "-10%",
+              left: "-10%",
+              width: "300px",
+              height: "300px",
+              background:
+                "radial-gradient(circle, rgba(77, 63, 255, 0.15) 0%, transparent 70%)",
+              borderRadius: "50%",
+              filter: "blur(40px)",
+              zIndex: 0,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              bottom: "10%",
+              right: "-10%",
+              width: "400px",
+              height: "400px",
+              background:
+                "radial-gradient(circle, rgba(96, 252, 198, 0.1) 0%, transparent 70%)",
+              borderRadius: "50%",
+              filter: "blur(60px)",
+              zIndex: 0,
+            }}
+          />
         </>
       )}
 
@@ -1247,7 +1284,9 @@ export default function Onboarding() {
             padding: isMobile ? "0 24px" : "0 64px",
             flexShrink: 0,
             zIndex: 100,
-            backgroundColor: isMobile ? "rgba(255, 255, 255, 0.7)" : "transparent",
+            backgroundColor: isMobile
+              ? "rgba(255, 255, 255, 0.7)"
+              : "transparent",
             backdropFilter: isMobile ? "blur(20px)" : "none",
             WebkitBackdropFilter: isMobile ? "blur(20px)" : "none",
             borderBottom: isMobile ? `1px solid rgba(0,0,0,0.05)` : "none",
@@ -1342,7 +1381,7 @@ export default function Onboarding() {
               src={step === 4 ? "/Smile.png" : "/owl-mascot.png"}
               alt="Owl Mascot"
               animate={{ y: [-8, 8, -8] }}
-              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               style={{
                 width: "100%",
                 height: "auto",

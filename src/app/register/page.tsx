@@ -15,6 +15,12 @@ export default function Register() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const googleAuthPath = "/api/auth/google";
+
+  const handleGoogleAuth = () => {
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+    window.location.href = `${apiBase.replace(/\/+$/, "")}${googleAuthPath}`;
+  };
 
   React.useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -22,7 +28,6 @@ export default function Register() {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
-
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,6 +86,24 @@ export default function Register() {
     fontFamily: "DM Sans, sans-serif",
   };
 
+  const googleButtonStyle = {
+    width: "100%",
+    padding: "18px",
+    background: "#FFFFFF",
+    color: "#111827",
+    borderRadius: "14px",
+    fontSize: "16px",
+    fontWeight: 700,
+    border: "1px solid #E5E7EB",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "12px",
+    fontFamily: "DM Sans, sans-serif",
+    transition: "all 0.2s ease",
+  };
+
   return (
     <div className="min-h-screen flex bg-[#F8F5F2]">
       {/* LEFT: BRAND PANEL */}
@@ -88,8 +111,8 @@ export default function Register() {
         <BrandPanel />
       </div>
 
-       {/* RIGHT: FORM */}
-      <div 
+      {/* RIGHT: FORM */}
+      <div
         style={{
           padding: isMobile ? "48px 32px" : "48px 64px",
           display: "flex",
@@ -98,13 +121,12 @@ export default function Register() {
           alignItems: "center",
           position: "relative",
           overflow: "hidden",
-          flex: 1
+          flex: 1,
         }}
         className="w-full lg:w-1/2"
       >
-
         {/* Precise Watermark Book (Matching Screenshot) */}
-        <div className="absolute -top-6 right-12 pointer-events-none opacity-[0.04] w-[220px] h-[220px] text-black">
+        <div className="absolute -top-6 right-12 pointer-events-none opacity-[0.04] w-55 h-55 text-black">
           <svg
             viewBox="0 0 24 24"
             fill="currentColor"
@@ -122,18 +144,17 @@ export default function Register() {
           </svg>
         </div>
 
-         <div 
+        <div
           style={{
             position: "absolute",
             top: isMobile ? "24px" : "48px",
             left: isMobile ? "32px" : "32px",
-            zIndex: 20
+            zIndex: 20,
           }}
           className="lg:hidden"
         >
           <CCAILogo size={32} variant="light" />
         </div>
-
 
         <div className="max-w-md w-full px-8">
           <AnimatePresence mode="wait">
@@ -146,7 +167,7 @@ export default function Register() {
                 transition={{ duration: 0.5 }}
               >
                 <div style={{ marginBottom: "64px" }}>
-                   <h2
+                  <h2
                     className="serif"
                     style={{
                       fontSize: isMobile ? "32px" : "40px",
@@ -170,6 +191,70 @@ export default function Register() {
                 </div>
 
                 <form onSubmit={handleRegister} className="">
+                  <motion.button
+                    type="button"
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
+                    onClick={handleGoogleAuth}
+                    style={{ ...googleButtonStyle, marginBottom: "24px" }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = "#D1D5DB";
+                      e.currentTarget.style.boxShadow =
+                        "0 6px 18px rgba(17, 24, 39, 0.06)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = "#E5E7EB";
+                      e.currentTarget.style.boxShadow = "none";
+                    }}
+                  >
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill="#EA4335"
+                        d="M12 10.2v3.96h5.62c-.25 1.32-1.02 2.44-2.18 3.2v2.67h3.53c2.06-1.9 3.25-4.7 3.25-8.03 0-.78-.07-1.53-.2-2.2H12z"
+                      />
+                      <path
+                        fill="#34A853"
+                        d="M6.55 14.18l-.72.55-2.56 1.99C4.86 19.56 8.1 21.8 12 21.8c2.7 0 4.96-.89 6.62-2.42l-3.53-2.67c-.97.65-2.21 1.04-3.09 1.04-2.37 0-4.38-1.6-5.1-3.77z"
+                      />
+                      <path
+                        fill="#4A90E2"
+                        d="M3.27 7.86A9.82 9.82 0 0 0 2.2 12c0 1.34.32 2.6.97 3.72l4.35-3.37a5.86 5.86 0 0 1 0-1.71L3.27 7.86z"
+                      />
+                      <path
+                        fill="#FBBC05"
+                        d="M12 5.38c1.47 0 2.78.51 3.82 1.52l2.86-2.86C16.95 2.38 14.7 1.4 12 1.4 8.1 1.4 4.86 3.64 3.27 7.86l4.35 3.38c.72-2.17 2.73-3.86 5.1-3.86z"
+                      />
+                    </svg>
+                    Sign up with Google
+                  </motion.button>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      marginBottom: "32px",
+                      color: "#9CA3AF",
+                      fontFamily: "DM Sans, sans-serif",
+                      fontSize: "12px",
+                      letterSpacing: "0.12em",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    <span
+                      style={{ flex: 1, height: "1px", background: "#E5E7EB" }}
+                    />
+                    <span>or continue with email</span>
+                    <span
+                      style={{ flex: 1, height: "1px", background: "#E5E7EB" }}
+                    />
+                  </div>
+
                   {error && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
