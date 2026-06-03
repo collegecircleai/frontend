@@ -15,6 +15,13 @@ interface User {
   isActive?: boolean;
 }
 
+export const getPostAuthRoute = (user: User | null) => {
+  const isOnboarded =
+    user?.isOnboarded === true || user?.isActive === true;
+
+  return isOnboarded ? "/dashboard" : "/onboarding";
+};
+
 interface AuthContextType {
   user: User | null;
   setUser: (user: User | null) => void;
@@ -56,8 +63,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
         if (storedUser) {
           try {
-            const parsedUser = JSON.parse(storedUser);
-            setUser(parsedUser);
+            setUser(JSON.parse(storedUser));
           } catch (e) {
             // Invalid JSON in storage
           }

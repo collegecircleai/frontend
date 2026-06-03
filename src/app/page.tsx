@@ -10,6 +10,7 @@ import CCAILogo from "@/components/brand/CCAILogo";
 import DarkAurora from "@/components/effects/DarkAurora";
 import ElegantParticles from "@/components/effects/ElegantParticles";
 import ComponentErrorBoundary from "@/components/effects/ErrorBoundary";
+import { getPostAuthRoute } from "@/context/AuthContext";
 
 // LAUNCH DATE: May 30, 2026 at 3:00 PM IST (09:30 UTC)
 const TARGET_DATE = new Date("2026-05-30T09:30:00.000Z").getTime();
@@ -38,7 +39,7 @@ export default function LaunchPage() {
 
   useEffect(() => {
     if (!isLoading && user) {
-      router.push("/dashboard");
+      router.replace(getPostAuthRoute(user));
     }
   }, [user, isLoading, router]);
 

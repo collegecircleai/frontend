@@ -20,7 +20,7 @@ import ElegantParticles from '@/components/effects/ElegantParticles'
 import ComponentErrorBoundary from '@/components/effects/ErrorBoundary'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@/context/AuthContext'
+import { getPostAuthRoute, useAuth } from '@/context/AuthContext'
 
 export default function LandingPage() {
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false)
@@ -30,7 +30,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     if (!isLoading && user) {
-      router.push('/dashboard')
+      router.replace(getPostAuthRoute(user))
     }
   }, [user, isLoading, router])
 

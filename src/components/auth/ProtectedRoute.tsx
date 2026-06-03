@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/context/AuthContext";
+import { getPostAuthRoute, useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -15,6 +15,14 @@ export default function ProtectedRoute({
   useEffect(() => {
     if (!isLoading && !user) {
       router.replace("/login");
+      return;
+    }
+
+    if (!isLoading && user) {
+      const nextRoute = getPostAuthRoute(user);
+      if (nextRoute !== "/dashboard") {
+        router.replace(nextRoute);
+      }
     }
   }, [user, isLoading, router]);
 
@@ -30,6 +38,10 @@ export default function ProtectedRoute({
   }
 
   if (!user) {
+    return null;
+  }
+
+  if (user.isOnboarded === false || user.isActive === false) {
     return null;
   }
 

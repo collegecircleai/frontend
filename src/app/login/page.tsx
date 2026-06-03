@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "../../context/AuthContext";
+import { getPostAuthRoute, useAuth } from "../../context/AuthContext";
 import BrandPanel from "@/components/brand/BrandPanel";
 import CCAILogo from "@/components/brand/CCAILogo";
 import { Mail, Lock, ArrowRight, AlertCircle, Eye, EyeOff } from "lucide-react";
@@ -81,9 +81,7 @@ export default function Login() {
       "",
       `${window.location.pathname}${window.location.search}`,
     );
-
-    router.replace("/dashboard");
-  }, [router]);
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,11 +99,7 @@ export default function Login() {
         response?.success || authData?.success || Boolean(user) || hasTokens;
 
       if (isSuccessful) {
-        if (user?.isActive === false) {
-          router.replace("/onboarding");
-        } else {
-          router.replace("/dashboard");
-        }
+        router.replace(getPostAuthRoute(user ?? null));
       } else {
         setError(response?.message || authData?.message || "Failed to login.");
       }
@@ -120,7 +114,7 @@ export default function Login() {
     if (isLoading) return;
     if (!user) return;
 
-    router.replace(user.isActive === false ? "/onboarding" : "/dashboard");
+    router.replace(getPostAuthRoute(user));
   }, [isLoading, router, user]);
   const inputStyle = {
     width: "100%",
