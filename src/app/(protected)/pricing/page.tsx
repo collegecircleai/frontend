@@ -2,15 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Zap, Crown, Rocket, ShieldCheck, CreditCard } from "lucide-react";
+import { Zap, Crown, Rocket, ShieldCheck } from "lucide-react";
 import api, { getFriendlyErrorMessage } from "@/lib/api";
 import Script from "next/script";
 
 interface Package {
   id: string;
   name: string;
-  credits: number;
   amount: number;
+  premiumDays?: number;
   description: string;
 }
 
@@ -23,31 +23,30 @@ const PLAN_ICONS: Record<string, any> = {
 const FALLBACK_PACKAGES: Package[] = [
   {
     id: "pkg_1",
-    name: "Emergency Study pack",
-    credits: 20,
+    name: "Starter Premium",
     amount: 20,
-    description: "Perfect for getting started",
+    premiumDays: 7,
+    description: "Unlock premium access for 7 days.",
   },
   {
     id: "pkg_2",
-    name: "Assignment Rescue",
-    credits: 100,
+    name: "Monthly Premium",
     amount: 49,
-    description: "For regular users",
+    premiumDays: 30,
+    description: "Unlock premium access for 30 days.",
   },
   {
     id: "pkg_3",
-    name: "Exam Rescue",
-    credits: 500,
+    name: "Quarterly Premium",
     amount: 199,
-    description: "For power users",
+    premiumDays: 90,
+    description: "Unlock premium access for 90 days.",
   },
 ];
 
 export default function PricingPage() {
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentCredits, setCurrentCredits] = useState<number | null>(null);
   const [buying, setBuying] = useState<string | null>(null);
   const [toast, setToast] = useState<{
     msg: string;
@@ -70,19 +69,19 @@ export default function PricingPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [pkgRes, creditRes] = await Promise.all([
-          api.get("/payments/packages"),
-          api.get("/payments/credits"),
-        ]);
-
+        const pkgRes = await api.get("/payments/packages");
         const fetchedPackages = pkgRes.data?.data || pkgRes.data || [];
+
         setPackages(
           Array.isArray(fetchedPackages) && fetchedPackages.length > 0
-            ? fetchedPackages
+            ? fetchedPackages.map((pkg: any) => ({
+                id: pkg.id,
+                name: pkg.name,
+                amount: pkg.amount,
+                premiumDays: pkg.premiumDays ?? pkg.premium_days ?? pkg.days,
+                description: pkg.description || "Premium subscription access",
+              }))
             : FALLBACK_PACKAGES,
-        );
-        setCurrentCredits(
-          creditRes.data?.data?.credits ?? creditRes.data?.credits ?? 0,
         );
       } catch (err) {
         console.error("Pricing sync deferred:", err);
@@ -120,13 +119,8 @@ export default function PricingPage() {
         handler: async (response: any) => {
           // Success callback
           showToast(
-            "Payment successful. Credits will update shortly.",
+            `Premium activated for ${pkg.premiumDays ?? "your selected"} days.`,
             "success",
-          );
-          // Refresh credits
-          const creditRes = await api.get("/payments/credits");
-          setCurrentCredits(
-            creditRes.data?.data?.credits || creditRes.data?.credits || 0,
           );
         },
         prefill: {
@@ -227,36 +221,28 @@ export default function PricingPage() {
           }}
         >
           Get AI-powered notes, quizzes, and personalized roadmaps for any
-          course. Choose a credit pack that fits your study goals.
+          course. Choose a subscription plan that fits how long you want premium
+          access.
         </motion.p>
 
-        {/* Balance Badge */}
-        {currentCredits !== null && (
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              marginTop: 32,
-              padding: "8px 16px",
-              background: "rgba(77,63,255,0.06)",
-              borderRadius: 999,
-              border: "1px solid rgba(77,63,255,0.15)",
-            }}
-          >
-            <CreditCard size={16} color="#4D3FFF" />
-            <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 13,
-                fontWeight: 700,
-                color: "#4D3FFF",
-              }}
-            >
-              Your Balance: {currentCredits} Credits
-            </span>
-          </div>
-        )}
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 8,
+            marginTop: 24,
+            padding: "8px 16px",
+            background: "rgba(77,63,255,0.06)",
+            borderRadius: 999,
+            border: "1px solid rgba(77,63,255,0.15)",
+            color: "#4D3FFF",
+            fontFamily: "var(--font-mono)",
+            fontSize: 13,
+            fontWeight: 700,
+          }}
+        >
+          Time-based premium plans • no credits required
+        </div>
       </div>
 
       {/* Pricing Grid */}
@@ -391,7 +377,7 @@ export default function PricingPage() {
                     marginTop: 4,
                   }}
                 >
-                  {pkg.credits} Credits Included
+                  {pkg.premiumDays ?? 30} days of premium access
                 </p>
               </div>
 
@@ -405,11 +391,11 @@ export default function PricingPage() {
                 }}
               >
                 {[
-                  `${pkg.credits} AI Generations`,
-                  "Full Study Material Access",
-                  "Interactive Quizzes",
-                  "Priority Support",
-                  "Download as PDF",
+                  "Unlimited premium study sessions",
+                  "Priority AI study recommendations",
+                  "Interactive quizzes and roadmaps",
+                  "Download-ready notes and summaries",
+                  "Calendar-linked planning and reminders",
                 ].map((feature, fIdx) => (
                   <div
                     key={fIdx}

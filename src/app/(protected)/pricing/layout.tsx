@@ -19,7 +19,6 @@ import {
   Settings,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import api from "@/lib/api";
 import DarkAurora from "@/components/effects/DarkAurora";
 import ElegantParticles from "@/components/effects/ElegantParticles";
 import ComponentErrorBoundary from "@/components/effects/ErrorBoundary";
@@ -65,7 +64,7 @@ function CCAILogo({ collapsed = false }: { collapsed?: boolean }) {
               lineHeight: 1,
             }}
           >
-            CC{" "}&gt;AI
+            CC &gt;AI
           </div>
           <div
             style={{
@@ -96,7 +95,6 @@ const NAV_ITEMS = [
   { href: "/pricing", label: "Pricing", icon: CreditCard },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
-
 
 /* -- Mobile Bottom Nav Items (no Upload/Pricing) -- */
 const MOBILE_NAV_ITEMS = [
@@ -188,34 +186,7 @@ function Sidebar({
 }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const [credits, setCredits] = useState<number | null>(null);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-
-  useEffect(() => {
-    let mounted = true;
-
-    const loadCredits = async () => {
-      try {
-        const res = await api.get("/payments/credits");
-        const nextCredits = res.data?.data?.credits ?? res.data?.credits;
-        if (mounted && typeof nextCredits === "number") {
-          setCredits(nextCredits);
-        }
-      } catch {
-        if (mounted) {
-          setCredits(null);
-        }
-      }
-    };
-
-    if (user) {
-      void loadCredits();
-    }
-
-    return () => {
-      mounted = false;
-    };
-  }, [user]);
 
   const handleLogout = async () => {
     setIsLogoutModalOpen(true);
@@ -245,7 +216,8 @@ function Sidebar({
         borderRight: "1px solid var(--border-light)",
         backdropFilter: "blur(40px)",
         boxShadow: "20px 0 50px rgba(0,0,0,0.15)",
-        transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.25s ease",
+        transition:
+          "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.25s ease",
         overflowX: "hidden",
         overflowY: "auto",
       }}
@@ -253,7 +225,11 @@ function Sidebar({
       {/* Logo & Mobile Close */}
       <div
         style={{
-          padding: isMobile ? "0 8px 28px" : collapsed ? "4px 0 28px" : "4px 8px 28px",
+          padding: isMobile
+            ? "0 8px 28px"
+            : collapsed
+              ? "4px 0 28px"
+              : "4px 8px 28px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -273,7 +249,7 @@ function Sidebar({
               alignItems: "center",
               justifyContent: "center",
               color: "var(--logo-accent)",
-              cursor: "pointer"
+              cursor: "pointer",
             }}
           >
             <X size={20} />
@@ -386,34 +362,9 @@ function Sidebar({
               >
                 {user?.role || "student"}
               </div>
-              <div
-                style={{
-                  marginTop: 6,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "4px 8px",
-                  borderRadius: 999,
-                  background: "rgba(0, 200, 150, 0.12)",
-                  color: "var(--jade)",
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 10,
-                  fontWeight: 700,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Credits
-                <span style={{ color: "var(--ink)", letterSpacing: 0 }}>
-                  {credits ?? "--"}
-                </span>
-              </div>
-
             </div>
           )}
         </div>
-
       </div>
 
       <ConfirmModal
@@ -448,7 +399,6 @@ function MobileOverlay({
     />
   );
 }
-
 
 /* ── Pricing Layout ── */
 export default function PricingLayout({
@@ -554,8 +504,24 @@ export default function PricingLayout({
 
           {/* Mobile Top Left Logo */}
           {isMobile && (
-            <div style={{ zIndex: 10, paddingLeft: "4px", display: "flex", alignItems: "center", position: "absolute", left: "16px" }}>
-              <div style={{ transform: "scale(0.8)", transformOrigin: "left center" }}><CCAILogo collapsed={true} /></div>
+            <div
+              style={{
+                zIndex: 10,
+                paddingLeft: "4px",
+                display: "flex",
+                alignItems: "center",
+                position: "absolute",
+                left: "16px",
+              }}
+            >
+              <div
+                style={{
+                  transform: "scale(0.8)",
+                  transformOrigin: "left center",
+                }}
+              >
+                <CCAILogo collapsed={true} />
+              </div>
             </div>
           )}
 
@@ -582,7 +548,8 @@ export default function PricingLayout({
                 opacity: 0.8,
               }}
             >
-              <span>CC</span><span style={{ marginLeft: "3px" }}>&gt;AI</span>
+              <span>CC</span>
+              <span style={{ marginLeft: "3px" }}>&gt;AI</span>
             </div>
             <NetworkStatusDot />
             <div
@@ -603,7 +570,14 @@ export default function PricingLayout({
           <div style={{ flex: 1 }} />
 
           {/* Right Side Tools */}
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", zIndex: 10 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              zIndex: 10,
+            }}
+          >
             <ThemeSwitcher />
           </div>
         </div>

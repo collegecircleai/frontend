@@ -28,6 +28,7 @@ interface Classroom {
   lecture_no?: number;
   created_at: string;
   notes?: string;
+  summary_cache?: SummaryPayload | string | null;
 }
 
 interface SummaryQuizItem {
@@ -126,6 +127,17 @@ export default function ClassroomDetails() {
   const [summaryData, setSummaryData] = useState<SummaryPayload | null>(null);
   const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
   const [openQuizIndex, setOpenQuizIndex] = useState<number | null>(null);
+
+  const storedSummary =
+    session && session.summary_cache
+      ? typeof session.summary_cache === "string"
+        ? parseSummaryPayload(session.summary_cache)
+        : (session.summary_cache as SummaryPayload)
+      : null;
+
+  const hasStoredNotes = Boolean(storedSummary?.notes_markdown?.trim());
+  const hasTranscript = chunks.length > 0;
+  const showNotesPanel = Boolean(storedSummary || summaryData || summaryRaw);
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -515,7 +527,7 @@ export default function ClassroomDetails() {
         </div>
       </div>
 
-      {(summaryData || summaryRaw) && (
+      {(storedSummary || summaryData || summaryRaw) && (
         <div
           style={{
             marginBottom: 32,
@@ -562,7 +574,7 @@ export default function ClassroomDetails() {
                     fontWeight: 800,
                   }}
                 >
-                  {summaryData.quiz.length} quiz items
+                  {(storedSummary || summaryData)?.quiz.length || 0} quiz items
                 </span>
                 <span
                   style={{
@@ -580,7 +592,7 @@ export default function ClassroomDetails() {
             )}
           </div>
 
-          {summaryData ? (
+          {storedSummary || summaryData ? (
             <div style={{ padding: 26, display: "grid", gap: 24 }}>
               <section
                 style={{
@@ -591,7 +603,11 @@ export default function ClassroomDetails() {
                 }}
               >
                 <div
-                  style={{ fontWeight: 900, marginBottom: 14, color: "var(--ink)" }}
+                  style={{
+                    fontWeight: 900,
+                    marginBottom: 14,
+                    color: "var(--ink)",
+                  }}
                 >
                   Notes
                 </div>
@@ -672,11 +688,13 @@ export default function ClassroomDetails() {
                       <li style={{ marginBottom: 6 }}>{children}</li>
                     ),
                     strong: ({ children }) => (
-                      <strong style={{ color: "var(--ink)" }}>{children}</strong>
+                      <strong style={{ color: "var(--ink)" }}>
+                        {children}
+                      </strong>
                     ),
                   }}
                 >
-                  {summaryData.notes_markdown}
+                  {(storedSummary || summaryData)?.notes_markdown || ""}
                 </ReactMarkdown>
               </section>
 
@@ -689,12 +707,16 @@ export default function ClassroomDetails() {
                 }}
               >
                 <div
-                  style={{ fontWeight: 900, marginBottom: 16, color: "var(--ink)" }}
+                  style={{
+                    fontWeight: 900,
+                    marginBottom: 16,
+                    color: "var(--ink)",
+                  }}
                 >
                   Quiz
                 </div>
                 <div style={{ display: "grid", gap: 12 }}>
-                  {summaryData.quiz.map((item, index) => {
+                  {(storedSummary || summaryData)?.quiz.map((item, index) => {
                     const isOpen = openQuizIndex === index;
                     return (
                       <div
@@ -786,156 +808,161 @@ export default function ClassroomDetails() {
         </div>
       )}
 
-      {/* Transcript Section */}
-      <div
-        style={{
-          background: "var(--deep)",
-          borderRadius: 48,
-          border: "1px solid var(--border-light)",
-          padding: "60px",
-          boxShadow: "0 40px 100px rgba(0,0,0,0.03)",
-          position: "relative",
-          minHeight: 400,
-        }}
-      >
+      {!showNotesPanel && (
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: 48,
+            background: "var(--deep)",
+            borderRadius: 48,
+            border: "1px solid var(--border-light)",
+            padding: "60px",
+            boxShadow: "0 40px 100px rgba(0,0,0,0.03)",
+            position: "relative",
+            minHeight: 400,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <div
-              style={{
-                width: 56,
-                height: 56,
-                background: "rgba(0,200,150,0.08)",
-                color: "#00C896",
-                borderRadius: 18,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <FileText size={28} />
-            </div>
-            <div>
-              <h2
-                style={{
-                  fontSize: 24,
-                  fontWeight: 900,
-                  color: "var(--ink)",
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                Lecture Transcript
-              </h2>
-              <p
-                style={{
-                  color: "var(--mist)",
-                  fontSize: 14,
-                  fontWeight: 500,
-                  marginTop: 2,
-                }}
-              >
-                Real-time voice-to-text recording
-              </p>
-            </div>
-          </div>
-
           <div
             style={{
-              padding: "8px 16px",
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid var(--border-light)",
-              borderRadius: 12,
-              fontSize: 13,
-              fontWeight: 700,
-              color: "var(--ink)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: 48,
             }}
           >
-            {chunks.length} segments captured
-          </div>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
-          {chunks.length > 0 ? (
-            chunks.map((chunk, i) => (
-              <div
-                key={i}
-                style={{
-                  display: "flex",
-                  gap: 40,
-                  animation: "fadeIn 0.6s ease forwards",
-                  opacity: 0,
-                  animationDelay: `${i * 0.1}s`,
-                }}
-              >
-                <div
-                  style={{
-                    width: 90,
-                    flexShrink: 0,
-                    fontFamily: "var(--font-mono)",
-                    fontSize: 12,
-                    fontWeight: 800,
-                    color: "#4D3FFF",
-                    paddingTop: 6,
-                    opacity: 0.6,
-                    letterSpacing: "0.05em",
-                  }}
-                >
-                  {new Date(chunk.created_at).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                  })}
-                </div>
-                <div
-                  style={{
-                    flex: 1,
-                    fontSize: 20,
-                    color: "var(--ink)",
-                    lineHeight: 1.8,
-                    fontWeight: 500,
-                    borderLeft: "3px solid rgba(77,63,255,0.08)",
-                    paddingLeft: 40,
-                  }}
-                >
-                  {chunk.content}
-                </div>
-              </div>
-            ))
-          ) : (
-            <div style={{ textAlign: "center", padding: "80px 0" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
               <div
                 style={{
-                  width: 80,
-                  height: 80,
-                  background: "#F9FAFB",
-                  borderRadius: "50%",
+                  width: 56,
+                  height: 56,
+                  background: "rgba(0,200,150,0.08)",
+                  color: "#00C896",
+                  borderRadius: 18,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  margin: "0 auto 24px",
-                  color: "rgba(0,0,0,0.1)",
                 }}
               >
-                <Clock size={40} />
+                <FileText size={28} />
               </div>
-              <p
-                style={{ color: "var(--mist)", fontWeight: 600, fontSize: 18 }}
-              >
-                No transcript data found for this session.
-              </p>
-              <p style={{ color: "var(--mist)", fontSize: 14, marginTop: 8 }}>
-                The transcript may be processing or was not captured.
-              </p>
+              <div>
+                <h2
+                  style={{
+                    fontSize: 24,
+                    fontWeight: 900,
+                    color: "var(--ink)",
+                    letterSpacing: "-0.02em",
+                  }}
+                >
+                  Lecture Transcript
+                </h2>
+                <p
+                  style={{
+                    color: "var(--mist)",
+                    fontSize: 14,
+                    fontWeight: 500,
+                    marginTop: 2,
+                  }}
+                >
+                  Real-time voice-to-text recording
+                </p>
+              </div>
             </div>
-          )}
+
+            <div
+              style={{
+                padding: "8px 16px",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid var(--border-light)",
+                borderRadius: 12,
+                fontSize: 13,
+                fontWeight: 700,
+                color: "var(--ink)",
+              }}
+            >
+              {chunks.length} segments captured
+            </div>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
+            {chunks.length > 0 ? (
+              chunks.map((chunk, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    gap: 40,
+                    animation: "fadeIn 0.6s ease forwards",
+                    opacity: 0,
+                    animationDelay: `${i * 0.1}s`,
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 90,
+                      flexShrink: 0,
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 12,
+                      fontWeight: 800,
+                      color: "#4D3FFF",
+                      paddingTop: 6,
+                      opacity: 0.6,
+                      letterSpacing: "0.05em",
+                    }}
+                  >
+                    {new Date(chunk.created_at).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
+                  </div>
+                  <div
+                    style={{
+                      flex: 1,
+                      fontSize: 20,
+                      color: "var(--ink)",
+                      lineHeight: 1.8,
+                      fontWeight: 500,
+                      borderLeft: "3px solid rgba(77,63,255,0.08)",
+                      paddingLeft: 40,
+                    }}
+                  >
+                    {chunk.content}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div style={{ textAlign: "center", padding: "80px 0" }}>
+                <div
+                  style={{
+                    width: 80,
+                    height: 80,
+                    background: "#F9FAFB",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "0 auto 24px",
+                    color: "rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <Clock size={40} />
+                </div>
+                <p
+                  style={{
+                    color: "var(--mist)",
+                    fontWeight: 600,
+                    fontSize: 18,
+                  }}
+                >
+                  No transcript data found for this session.
+                </p>
+                <p style={{ color: "var(--mist)", fontSize: 14, marginTop: 8 }}>
+                  The transcript may be processing or was not captured.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       <style>{`
         @keyframes fadeIn {
