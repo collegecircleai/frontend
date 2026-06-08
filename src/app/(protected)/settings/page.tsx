@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { 
-  User, 
-  Mail, 
-  Shield, 
-  LogOut, 
+import {
+  User,
+  Mail,
+  Shield,
+  LogOut,
   Settings as SettingsIcon,
   CreditCard,
-  Smartphone,
+  Calendar,
   Edit2,
   Check,
   X as CloseIcon,
@@ -23,7 +23,7 @@ import ConfirmModal from "@/components/effects/ConfirmModal";
 export default function SettingsPage() {
   const { user, logout } = useAuth();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  
+
   // Profile Edit States
   const [isEditingName, setIsEditingName] = useState(false);
   const [name, setName] = useState(user?.name || "Scholar");
@@ -31,7 +31,7 @@ export default function SettingsPage() {
   const [role, setRole] = useState(user?.role || "student");
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [credits, setCredits] = useState<number | null>(null);
+  const [isConnectingCalendar, setIsConnectingCalendar] = useState(false);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -47,25 +47,6 @@ export default function SettingsPage() {
 
     if (savedPic) setProfilePic(savedPic);
     if (savedPic) setProfilePic(savedPic);
-  }, [user]);
-
-  useEffect(() => {
-    let mounted = true;
-    const loadCredits = async () => {
-      try {
-        const res = await api.get("/payments/credits");
-        const nextCredits = res.data?.data?.credits ?? res.data?.credits;
-        if (mounted && typeof nextCredits === "number") {
-          setCredits(nextCredits);
-        }
-      } catch (err) {
-        if (mounted) setCredits(null);
-      }
-    };
-    if (user) {
-      void loadCredits();
-    }
-    return () => { mounted = false; };
   }, [user]);
 
   const handleLogout = () => setIsLogoutModalOpen(true);
@@ -97,6 +78,27 @@ export default function SettingsPage() {
     setIsEditingName(false);
   };
 
+  const handleConnectCalendar = async () => {
+    if (!user) return;
+
+    try {
+      setIsConnectingCalendar(true);
+      const res = await api.get("/auth/calendar/connect");
+      const connectUrl = res.data?.data?.connectUrl || res.data?.connectUrl;
+
+      if (!connectUrl) {
+        throw new Error("Calendar connect URL was not returned by the server.");
+      }
+
+      window.open(connectUrl, "_blank", "noopener,noreferrer");
+    } catch (err) {
+      console.error("Calendar connect failed", err);
+      alert("Unable to connect Google Calendar right now. Please try again.");
+    } finally {
+      setIsConnectingCalendar(false);
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -111,23 +113,27 @@ export default function SettingsPage() {
   };
 
   return (
-    <div style={{ 
-      maxWidth: "1000px", 
-      margin: "0 auto", 
-      padding: "40px 24px",
-      fontFamily: "var(--font-body)"
-    }}>
+    <div
+      style={{
+        maxWidth: "1000px",
+        margin: "0 auto",
+        padding: "40px 24px",
+        fontFamily: "var(--font-body)",
+      }}
+    >
       {/* Header */}
       <div style={{ marginBottom: "40px" }}>
-        <h1 style={{ 
-          fontSize: "32px", 
-          fontWeight: 700, 
-          color: "var(--ink)", 
-          letterSpacing: "-0.03em",
-          display: "flex",
-          alignItems: "center",
-          gap: "12px"
-        }}>
+        <h1
+          style={{
+            fontSize: "32px",
+            fontWeight: 700,
+            color: "var(--ink)",
+            letterSpacing: "-0.03em",
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+          }}
+        >
           <SettingsIcon size={32} color="#4D3FFF" />
           Settings
         </h1>
@@ -136,46 +142,60 @@ export default function SettingsPage() {
         </p>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "24px" }}>
-        {/* Profile Card */}
-        <div style={{ 
-          background: "var(--pearl)", 
-          border: "1px solid var(--border-light)", 
-          borderRadius: "24px", 
-          padding: "32px",
-          display: "flex",
-          flexDirection: "column",
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
           gap: "24px",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.05)"
-        }}>
+        }}
+      >
+        {/* Profile Card */}
+        <div
+          style={{
+            background: "var(--pearl)",
+            border: "1px solid var(--border-light)",
+            borderRadius: "24px",
+            padding: "32px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "24px",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-            <div 
+            <div
               onClick={() => document.getElementById("profile-upload")?.click()}
-              style={{ 
-                width: 80, 
-                height: 80, 
-                borderRadius: "24px", 
-                background: profilePic ? `url(${profilePic}) center/cover no-repeat` : "linear-gradient(135deg, #4D3FFF, #00C896)",
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: "24px",
+                background: profilePic
+                  ? `url(${profilePic}) center/cover no-repeat`
+                  : "linear-gradient(135deg, #4D3FFF, #00C896)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 boxShadow: "0 8px 20px rgba(77, 63, 255, 0.3)",
                 cursor: "pointer",
                 position: "relative",
-                overflow: "hidden"
+                overflow: "hidden",
               }}
               onMouseEnter={(e) => {
-                const overlay = e.currentTarget.querySelector(".camera-overlay") as HTMLElement;
+                const overlay = e.currentTarget.querySelector(
+                  ".camera-overlay",
+                ) as HTMLElement;
                 if (overlay) overlay.style.opacity = "1";
               }}
               onMouseLeave={(e) => {
-                const overlay = e.currentTarget.querySelector(".camera-overlay") as HTMLElement;
+                const overlay = e.currentTarget.querySelector(
+                  ".camera-overlay",
+                ) as HTMLElement;
                 if (overlay) overlay.style.opacity = "0";
               }}
             >
               {!profilePic && <User size={36} color="white" />}
-              
-              <div 
+
+              <div
                 className="camera-overlay"
                 style={{
                   position: "absolute",
@@ -188,18 +208,25 @@ export default function SettingsPage() {
                   color: "white",
                   opacity: 0,
                   transition: "opacity 0.2s ease",
-                  backdropFilter: "blur(2px)"
+                  backdropFilter: "blur(2px)",
                 }}
               >
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
                   <Camera size={24} />
                   {profilePic && (
-                    <button 
+                    <button
                       onClick={handleRemovePic}
-                      style={{ 
-                        background: "rgba(255,107,122,0.2)", 
-                        border: "1px solid rgba(255,107,122,0.4)", 
-                        borderRadius: "8px", 
+                      style={{
+                        background: "rgba(255,107,122,0.2)",
+                        border: "1px solid rgba(255,107,122,0.4)",
+                        borderRadius: "8px",
                         padding: "4px 8px",
                         color: "#FF6B7A",
                         fontSize: "10px",
@@ -207,10 +234,16 @@ export default function SettingsPage() {
                         cursor: "pointer",
                         display: "flex",
                         alignItems: "center",
-                        gap: "4px"
+                        gap: "4px",
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,107,122,0.4)"}
-                      onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,107,122,0.2)"}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.background =
+                          "rgba(255,107,122,0.4)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.background =
+                          "rgba(255,107,122,0.2)")
+                      }
                     >
                       <Trash2 size={12} />
                       REMOVE
@@ -218,7 +251,7 @@ export default function SettingsPage() {
                   )}
                 </div>
               </div>
-              <input 
+              <input
                 id="profile-upload"
                 type="file"
                 accept="image/*"
@@ -228,139 +261,227 @@ export default function SettingsPage() {
             </div>
             <div style={{ flex: 1 }}>
               {isEditingName ? (
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <input 
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                >
+                  <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     autoFocus
-                    style={{ 
-                      background: "rgba(255,255,255,0.05)", 
-                      border: "1px solid #4D3FFF", 
-                      borderRadius: "6px", 
-                      color: "var(--ink)", 
-                      fontSize: "18px", 
+                    style={{
+                      background: "rgba(255,255,255,0.05)",
+                      border: "1px solid #4D3FFF",
+                      borderRadius: "6px",
+                      color: "var(--ink)",
+                      fontSize: "18px",
                       fontWeight: 700,
                       padding: "2px 8px",
                       width: "100%",
-                      outline: "none"
+                      outline: "none",
                     }}
                   />
-                  <button 
+                  <button
                     onClick={handleSaveName}
-                    style={{ background: "transparent", border: "none", color: "var(--jade)", cursor: "pointer", display: "flex" }}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "var(--jade)",
+                      cursor: "pointer",
+                      display: "flex",
+                    }}
                   >
                     <Check size={18} />
                   </button>
                 </div>
               ) : (
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <h2 style={{ fontSize: "20px", fontWeight: 700, color: "var(--ink)" }}>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                >
+                  <h2
+                    style={{
+                      fontSize: "20px",
+                      fontWeight: 700,
+                      color: "var(--ink)",
+                    }}
+                  >
                     {name}
                   </h2>
-                  <button 
+                  <button
                     onClick={() => setIsEditingName(true)}
-                    style={{ 
-                      background: "transparent", 
-                      border: "none", 
-                      color: "#4D3FFF", 
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "#4D3FFF",
                       cursor: "pointer",
                       opacity: 0.6,
                       display: "flex",
-                      padding: "4px"
+                      padding: "4px",
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.opacity = "1"}
-                    onMouseLeave={(e) => e.currentTarget.style.opacity = "0.6"}
+                    onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.opacity = "0.6")
+                    }
                   >
                     <Edit2 size={14} />
                   </button>
                 </div>
               )}
-              <p style={{ color: "var(--mist)", fontSize: "12px", marginTop: "4px", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600 }}>
+              <p
+                style={{
+                  color: "var(--mist)",
+                  fontSize: "12px",
+                  marginTop: "4px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                  fontWeight: 600,
+                }}
+              >
                 {role}
               </p>
-              
-              <div
+
+              <button
+                type="button"
+                onClick={handleConnectCalendar}
+                disabled={isConnectingCalendar}
                 style={{
                   marginTop: 10,
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: 6,
-                  padding: "4px 8px",
+                  gap: 8,
                   borderRadius: 999,
-                  background: "rgba(0, 200, 150, 0.12)",
-                  color: "var(--jade)",
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 10,
+                  border: "1px solid rgba(77, 63, 255, 0.18)",
+                  background: "rgba(77, 63, 255, 0.08)",
+                  color: "var(--violet)",
+                  padding: "8px 12px",
+                  fontSize: 12,
                   fontWeight: 700,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  whiteSpace: "nowrap",
+                  cursor: isConnectingCalendar ? "wait" : "pointer",
+                  transition: "all 0.2s ease",
                 }}
               >
-                Credits
-                <span style={{ color: "var(--ink)", letterSpacing: 0 }}>
-                  {credits ?? "--"}
-                </span>
-              </div>
+                <Calendar size={14} />
+                {isConnectingCalendar ? "Connecting..." : "Connect to Calendar"}
+              </button>
             </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "12px", color: "var(--mist)" }}>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                color: "var(--mist)",
+              }}
+            >
               <Mail size={18} />
-              <span style={{ fontSize: "14px" }}>{user?.email || "No email provided"}</span>
+              <span style={{ fontSize: "14px" }}>
+                {user?.email || "No email provided"}
+              </span>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "12px", color: "var(--mist)" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                color: "var(--mist)",
+              }}
+            >
               <Shield size={18} />
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1 }}>
-                <span style={{ fontSize: "14px", whiteSpace: "nowrap" }}>Role:</span>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  flex: 1,
+                }}
+              >
+                <span style={{ fontSize: "14px", whiteSpace: "nowrap" }}>
+                  Role:
+                </span>
                 {isEditingRole ? (
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1 }}>
-                    <input 
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      flex: 1,
+                    }}
+                  >
+                    <input
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
                       autoFocus
-                      style={{ 
-                        background: "rgba(255,255,255,0.05)", 
-                        border: "1px solid #4D3FFF", 
-                        borderRadius: "6px", 
-                        color: "var(--ink)", 
-                        fontSize: "13px", 
+                      style={{
+                        background: "rgba(255,255,255,0.05)",
+                        border: "1px solid #4D3FFF",
+                        borderRadius: "6px",
+                        color: "var(--ink)",
+                        fontSize: "13px",
                         padding: "2px 8px",
                         width: "100%",
-                        outline: "none"
+                        outline: "none",
                       }}
                     />
-                    <button 
+                    <button
                       onClick={handleSaveRole}
                       disabled={isSaving}
-                      style={{ background: "transparent", border: "none", color: "var(--jade)", cursor: "pointer", display: "flex" }}
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        color: "var(--jade)",
+                        cursor: "pointer",
+                        display: "flex",
+                      }}
                     >
                       <Check size={16} />
                     </button>
-                    <button 
-                      onClick={() => { setIsEditingRole(false); setRole(user?.role || "student"); }}
-                      style={{ background: "transparent", border: "none", color: "#FF6B7A", cursor: "pointer", display: "flex" }}
+                    <button
+                      onClick={() => {
+                        setIsEditingRole(false);
+                        setRole(user?.role || "student");
+                      }}
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        color: "#FF6B7A",
+                        cursor: "pointer",
+                        display: "flex",
+                      }}
                     >
                       <CloseIcon size={16} />
                     </button>
                   </div>
                 ) : (
                   <>
-                    <span style={{ fontSize: "14px", fontWeight: 600, color: "var(--ink)" }}>{role}</span>
-                    <button 
+                    <span
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        color: "var(--ink)",
+                      }}
+                    >
+                      {role}
+                    </span>
+                    <button
                       onClick={() => setIsEditingRole(true)}
-                      style={{ 
-                        background: "transparent", 
-                        border: "none", 
-                        color: "#4D3FFF", 
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        color: "#4D3FFF",
                         cursor: "pointer",
                         opacity: 0.6,
                         display: "flex",
-                        padding: "4px"
+                        padding: "4px",
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.opacity = "1"}
-                      onMouseLeave={(e) => e.currentTarget.style.opacity = "0.6"}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.opacity = "1")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.opacity = "0.6")
+                      }
                     >
                       <Edit2 size={14} />
                     </button>
@@ -370,49 +491,61 @@ export default function SettingsPage() {
             </div>
           </div>
         </div>
-
-
       </div>
-
 
       {/* Billing & Pricing */}
       <Link href="/pricing" style={{ textDecoration: "none" }}>
-        <div style={{ 
-          background: "var(--pearl)", 
-          border: "1px solid var(--border-light)", 
-          borderRadius: "24px", 
-          padding: "24px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          cursor: "pointer",
-          transition: "all 0.2s ease",
-          marginTop: "24px",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "translateY(-2px)";
-          e.currentTarget.style.boxShadow = "0 15px 30px rgba(77,63,255,0.1)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "translateY(0)";
-          e.currentTarget.style.boxShadow = "none";
-        }}
+        <div
+          style={{
+            background: "var(--pearl)",
+            border: "1px solid var(--border-light)",
+            borderRadius: "24px",
+            padding: "24px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+            marginTop: "24px",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-2px)";
+            e.currentTarget.style.boxShadow = "0 15px 30px rgba(77,63,255,0.1)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "none";
+          }}
         >
           <div>
-            <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--ink)" }}>Billing &amp; Pricing</h3>
-            <p style={{ color: "var(--mist)", fontSize: "14px", marginTop: "4px" }}>Manage your subscription, credits, and payment methods.</p>
+            <h3
+              style={{ fontSize: "16px", fontWeight: 700, color: "var(--ink)" }}
+            >
+              Billing &amp; Pricing
+            </h3>
+            <p
+              style={{
+                color: "var(--mist)",
+                fontSize: "14px",
+                marginTop: "4px",
+              }}
+            >
+              Manage your subscription plan and payment methods.
+            </p>
           </div>
-          <div style={{
-            width: 48,
-            height: 48,
-            borderRadius: "16px",
-            background: "rgba(77,63,255,0.08)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "var(--violet)",
-            flexShrink: 0,
-          }}>
+          <div
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: "16px",
+              background: "rgba(77,63,255,0.08)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "var(--violet)",
+              flexShrink: 0,
+            }}
+          >
             <CreditCard size={22} />
           </div>
         </div>
@@ -420,47 +553,72 @@ export default function SettingsPage() {
 
       {/* Danger Zone */}
       <div style={{ marginTop: "48px" }}>
-        <h2 style={{ fontSize: "14px", fontWeight: 600, color: "#FF6B7A", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "16px" }}>
+        <h2
+          style={{
+            fontSize: "14px",
+            fontWeight: 600,
+            color: "#FF6B7A",
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            marginBottom: "16px",
+          }}
+        >
           Danger Zone
         </h2>
 
         {/* Sign Out */}
-        <div style={{ 
-          background: "rgba(255, 107, 122, 0.05)", 
-          border: "1px solid rgba(255, 107, 122, 0.2)", 
-          borderRadius: "24px", 
-          padding: "24px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center"
-        }}>
+        <div
+          style={{
+            background: "rgba(255, 107, 122, 0.05)",
+            border: "1px solid rgba(255, 107, 122, 0.2)",
+            borderRadius: "24px",
+            padding: "24px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <div>
-            <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--ink)" }}>Sign Out</h3>
-            <p style={{ color: "var(--mist)", fontSize: "14px", marginTop: "4px" }}>Logout from your account on this device.</p>
+            <h3
+              style={{ fontSize: "16px", fontWeight: 700, color: "var(--ink)" }}
+            >
+              Sign Out
+            </h3>
+            <p
+              style={{
+                color: "var(--mist)",
+                fontSize: "14px",
+                marginTop: "4px",
+              }}
+            >
+              Logout from your account on this device.
+            </p>
           </div>
-          <button 
+          <button
             onClick={handleLogout}
-            style={{ 
-              background: "#FF6B7A", 
-              color: "white", 
-              border: "none", 
-              borderRadius: "16px", 
-              padding: "12px 24px", 
-              fontWeight: 700, 
+            style={{
+              background: "#FF6B7A",
+              color: "white",
+              border: "none",
+              borderRadius: "16px",
+              padding: "12px 24px",
+              fontWeight: 700,
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               gap: "8px",
               boxShadow: "0 10px 20px rgba(255, 107, 122, 0.2)",
-              transition: "all 0.2s ease"
+              transition: "all 0.2s ease",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = "0 15px 30px rgba(255, 107, 122, 0.3)";
+              e.currentTarget.style.boxShadow =
+                "0 15px 30px rgba(255, 107, 122, 0.3)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 10px 20px rgba(255, 107, 122, 0.2)";
+              e.currentTarget.style.boxShadow =
+                "0 10px 20px rgba(255, 107, 122, 0.2)";
             }}
           >
             <LogOut size={18} />
@@ -477,4 +635,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-
