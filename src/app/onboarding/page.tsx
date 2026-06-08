@@ -408,7 +408,9 @@ function Step1({
           >
             Full Legal Name
           </label>
-          <div style={{ position: "relative" }}>
+          <div
+            style={{ position: "relative", width: isMobile ? "100%" : "400px" }}
+          >
             <input
               value={name}
               onChange={(e) => onNameChange(e.target.value)}
@@ -489,7 +491,10 @@ function Step2({
   isMobile: boolean;
 }) {
   const canContinue =
-    formData.college && formData.degree && formData.department;
+    formData.college &&
+    formData.degree &&
+    (formData.degree !== "other" || formData.customDegree) &&
+    formData.department;
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -587,7 +592,29 @@ function Step2({
               <option value="bcom">B.Com</option>
               <option value="bsc">B.Sc</option>
               <option value="ba">B.A</option>
+              <option value="other">Other (Please specify)</option>
             </select>
+            {formData.degree === "other" && (
+              <input
+                value={formData.customDegree || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, customDegree: e.target.value })
+                }
+                placeholder="Type your degree here..."
+                style={{
+                  width: "100%",
+                  backgroundColor: "#fff",
+                  border: `1.5px solid ${COLORS.border}`,
+                  borderRadius: "12px",
+                  padding: "14px 18px",
+                  fontSize: "14px",
+                  fontFamily: FONTS.sans,
+                  color: COLORS.textMain,
+                  outline: "none",
+                  marginTop: "12px",
+                }}
+              />
+            )}
           </div>
           <div>
             <label
@@ -830,8 +857,8 @@ function Step3({
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "20px",
-                  padding: "20px 24px",
+                  gap: isMobile ? "12px" : "20px",
+                  padding: isMobile ? "16px" : "20px 24px",
                   borderRadius: "16px",
                   border: `1px solid ${formData.intent === intent.id ? COLORS.brandBlue : COLORS.border}`,
                   backgroundColor: "#fff",
@@ -933,9 +960,11 @@ function Step3({
         <div
           style={{
             display: "flex",
+            flexDirection: isMobile ? "column-reverse" : "row",
             alignItems: "center",
-            justifyContent: "space-between",
-            marginTop: "12px",
+            justifyContent: isMobile ? "center" : "space-between",
+            marginTop: "24px",
+            gap: isMobile ? "20px" : "0",
           }}
         >
           <button
@@ -958,6 +987,8 @@ function Step3({
             style={{
               display: "flex",
               alignItems: "center",
+              justifyContent: "center",
+              width: isMobile ? "100%" : "auto",
               gap: "12px",
               backgroundColor: COLORS.brandBlue,
               color: "#fff",
@@ -1096,27 +1127,6 @@ function Success({ isMobile }: { isMobile: boolean }) {
           INITIALIZATION COMPLETE
         </div>
       </div>
-      <div
-        style={{
-          position: "absolute",
-          bottom: "-20px",
-          left: "0",
-          width: "100%",
-          height: "400px",
-          opacity: 0.1,
-        }}
-      >
-        <img
-          src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=1600"
-          alt="Book"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            filter: "grayscale(100%)",
-          }}
-        />
-      </div>
     </div>
   );
 }
@@ -1133,6 +1143,7 @@ export default function Onboarding() {
   const [formData, setFormData] = useState({
     college: "",
     degree: "",
+    customDegree: "",
     department: "",
     year: "1st Year",
     semester: "02",
@@ -1168,7 +1179,8 @@ export default function Onboarding() {
       const payload = {
         name,
         college_name: formData.college,
-        degree: formData.degree,
+        degree:
+          formData.degree === "other" ? formData.customDegree : formData.degree,
         department: formData.department,
         course: formData.department,
         year: parseInt(formData.year.replace(/[^0-9]/g, "")) || 1,
@@ -1178,7 +1190,18 @@ export default function Onboarding() {
       };
 
       await api.patch(`/auth/users/${user.id}`, payload);
-      if (setUser) setUser({ ...user, ...payload });
+
+      const updatedUser = {
+        ...user,
+        ...payload,
+        isOnboarded: true,
+        isActive: true,
+      };
+      if (setUser) setUser(updatedUser);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+      }
+
       setStep(4);
     } catch (err: any) {
       alert(getFriendlyErrorMessage(err, "Failed to save profile."));
@@ -1196,13 +1219,49 @@ export default function Onboarding() {
         display: "flex",
         flexDirection: isMobile ? "column" : "row",
         width: "100vw",
-        minHeight: "100dvh",
-        backgroundColor: COLORS.contentBg,
+        height: "100dvh",
+        backgroundColor: isMobile ? "#FAFAFA" : COLORS.contentBg,
         fontFamily: FONTS.sans,
         overflow: "hidden",
+        position: "relative",
       }}
     >
       <GlobalStyles />
+
+      {/* Mobile Premium Background Effects */}
+      {isMobile && (
+        <>
+          <div
+            style={{
+              position: "absolute",
+              top: "-10%",
+              left: "-10%",
+              width: "300px",
+              height: "300px",
+              background:
+                "radial-gradient(circle, rgba(77, 63, 255, 0.15) 0%, transparent 70%)",
+              borderRadius: "50%",
+              filter: "blur(40px)",
+              zIndex: 0,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              bottom: "10%",
+              right: "-10%",
+              width: "400px",
+              height: "400px",
+              background:
+                "radial-gradient(circle, rgba(96, 252, 198, 0.1) 0%, transparent 70%)",
+              borderRadius: "50%",
+              filter: "blur(60px)",
+              zIndex: 0,
+            }}
+          />
+        </>
+      )}
+
       {step < 4 && <Sidebar step={step} isMobile={isMobile} />}
       <main
         style={{
@@ -1213,22 +1272,33 @@ export default function Onboarding() {
           position: "relative",
           overflowY: "auto",
           width: "100%",
+          zIndex: 1,
         }}
       >
         <header
           style={{
-            height: "96px",
+            height: isMobile ? "72px" : "96px",
             display: "flex",
             alignItems: "center",
             justifyContent: isMobile ? "center" : "space-between",
-            padding: isMobile ? "0" : "0 64px",
+            padding: isMobile ? "0 24px" : "0 64px",
             flexShrink: 0,
             zIndex: 100,
-            backgroundColor: isMobile ? "#fff" : "transparent",
-            borderBottom: isMobile ? `1px solid ${COLORS.border}` : "none",
+            backgroundColor: isMobile
+              ? "rgba(255, 255, 255, 0.7)"
+              : "transparent",
+            backdropFilter: isMobile ? "blur(20px)" : "none",
+            WebkitBackdropFilter: isMobile ? "blur(20px)" : "none",
+            borderBottom: isMobile ? `1px solid rgba(0,0,0,0.05)` : "none",
+            position: isMobile ? "sticky" : "static",
+            top: 0,
           }}
         >
-          <CCAILogo size={isMobile ? 24 : 28} variant="light" />
+          {isMobile ? (
+            <CCAILogo size={22} variant="light" />
+          ) : (
+            <div /> // Empty div to keep space-between layout for STUDENT PORTAL text
+          )}
           {!isMobile && step < 4 && (
             <div
               style={{
@@ -1240,7 +1310,7 @@ export default function Onboarding() {
                 textTransform: "uppercase",
               }}
             >
-              SCHOLARSHIP PORTAL
+              STUDENT PORTAL
             </div>
           )}
         </header>
@@ -1248,14 +1318,14 @@ export default function Onboarding() {
           style={{
             flex: 1,
             display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: isMobile ? "flex-start" : "center",
+            justifyContent: isMobile ? "center" : "flex-start",
             padding:
               step === 4
                 ? "0"
                 : isMobile
                   ? "40px 0 80px 0"
-                  : "0 64px 80px 64px",
+                  : "0 64px 80px 10vw",
             zIndex: 10,
           }}
         >
@@ -1294,6 +1364,33 @@ export default function Onboarding() {
             {step === 4 && <Success key="s4" isMobile={isMobile} />}
           </AnimatePresence>
         </div>
+
+        {/* Desktop mascot image */}
+        {!isMobile && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: "20px",
+              right: "40px",
+              width: "400px",
+              pointerEvents: "none",
+              zIndex: 0,
+            }}
+          >
+            <motion.img
+              src={step === 4 ? "/Smile.png" : "/owl-mascot.png"}
+              alt="Owl Mascot"
+              animate={{ y: [-8, 8, -8] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              style={{
+                width: "100%",
+                height: "auto",
+                objectFit: "contain",
+                filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.15))",
+              }}
+            />
+          </div>
+        )}
       </main>
     </div>
   );

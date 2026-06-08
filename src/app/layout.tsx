@@ -7,7 +7,7 @@ import {
   DM_Mono,
   Noto_Sans_Devanagari,
 } from "next/font/google";
-
+import { Analytics } from '@vercel/analytics/next';
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-body",
@@ -40,12 +40,9 @@ export const metadata: Metadata = {
   description:
     "Learning, Redefined. AI-powered personalised education platform built for students, by students.",
   icons: {
-    icon: [
-      { url: "/icon-light.svg", media: "(prefers-color-scheme: light)" },
-      { url: "/icon-dark.svg", media: "(prefers-color-scheme: dark)" },
-    ],
-    shortcut: "/icon-dark.svg",
-    apple: "/icon-dark.svg",
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
   },
 };
 
@@ -87,6 +84,7 @@ export default function RootLayout({
             <SmoothScroll>{children}</SmoothScroll>
           </ComponentErrorBoundary>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );

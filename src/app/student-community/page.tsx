@@ -17,20 +17,20 @@ export default function CommunityPage() {
   const [activeTierModal, setActiveTierModal] = useState<string | null>(null)
   const [activePathway, setActivePathway] = useState<'builder' | 'creator'>('builder')
 
-  
+
   useEffect(() => {
     setMounted(true)
   }, [])
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
-  
+
   useEffect(() => {
     const savedTheme = localStorage.getItem('cc-ai-theme') as 'light' | 'dark';
     if (savedTheme) {
       setTheme(savedTheme);
       document.documentElement.setAttribute('data-theme', savedTheme);
     }
-    
+
     // Sync theme if Header changes it
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -40,11 +40,11 @@ export default function CommunityPage() {
         }
       });
     });
-    
+
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     return () => observer.disconnect();
   }, [])
-  
+
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
@@ -53,7 +53,7 @@ export default function CommunityPage() {
   };
 
   const isDark = theme === 'dark';
-  
+
   const c = {
     bg: isDark ? '#0A0A1E' : '#F7F6F2',
     text: isDark ? '#FFFFFF' : '#1A1A1E',
@@ -106,8 +106,8 @@ export default function CommunityPage() {
   }
 
   return (
-    <div 
-      className="content-wrapper" 
+    <div
+      className="content-wrapper"
       style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: c.bg, color: c.text }}
     >
       {mounted && (
@@ -119,7 +119,7 @@ export default function CommunityPage() {
         </ComponentErrorBoundary>
       )}
 
-      
+
       {mounted && (
         <motion.button
           onClick={toggleTheme}
@@ -144,22 +144,22 @@ export default function CommunityPage() {
         <Header onGetStarted={() => window.location.href = '/login'} />
       </ComponentErrorBoundary>
 
-      <main style={{ flex: 1, marginTop: '120px', paddingBottom: '80px', position: 'relative', zIndex: 10 }}>
-        
+      <main style={{ flex: 1, marginTop: '120px', position: 'relative', zIndex: 10 }}>
+
         {/* HERO SECTION */}
-        <section style={{ 
-          padding: '0 5%', 
-          paddingTop: '20px', 
-          marginBottom: '100px', 
-          minHeight: 'calc(100vh - 120px)', 
-          display: 'flex', 
-          alignItems: 'center', 
+        <section style={{
+          padding: '0 5%',
+          paddingTop: '20px',
+          marginBottom: '100px',
+          minHeight: 'calc(100vh - 120px)',
+          display: 'flex',
+          alignItems: 'center',
           position: 'relative',
           backgroundPosition: 'center center',
           overflowX: 'hidden'
         }}>
           <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '40px', width: '100%', zIndex: 2 }}>
-            
+
             {/* Left Column */}
             <motion.div initial="hidden" animate="visible" variants={fadeInUp} style={{ flex: '1 1 500px', maxWidth: '750px' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 20px', background: c.border03, borderRadius: '100px', marginBottom: '24px', border: '1px solid rgba(255,255,255,0.1)' }}>
@@ -168,12 +168,11 @@ export default function CommunityPage() {
                   THE BUILDERS NETWORK
                 </span>
               </div>
-              
-              <h1 style={{ fontFamily: 'var(--font-body), system-ui, sans-serif', fontSize: 'clamp(40px, 5vw, 80px)', fontWeight: 800, color: c.text, lineHeight: 1.08, marginBottom: '24px', letterSpacing: '-0.02em' }}>
-                Build the future<br />
-                <span style={{ color: '#9B90FF' }}>student culture.</span>
+
+              <h1 style={{ fontFamily: 'Georgia, serif', fontSize: 'clamp(32px, 4.5vw, 72px)', fontWeight: 700, color: c.text, lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-0.02em' }}>
+                Build the future <span style={{ color: '#9B90FF', fontStyle: 'italic' }}>student ecosystem.</span>
               </h1>
-              
+
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(16px, 1.8vw, 20px)', color: c.text70, lineHeight: 1.6, marginBottom: '40px', maxWidth: '600px' }}>
                 Join India's AI-native network of builders, operators, creators, and innovators reshaping what it means to be a student.
               </p>
@@ -207,12 +206,12 @@ export default function CommunityPage() {
               {/* Stats */}
               <div style={{ display: 'flex', gap: 'clamp(24px, 5vw, 56px)', flexWrap: 'wrap' }}>
                 <div>
-                  <div style={{ fontSize: '36px', fontWeight: 800, color: c.text, fontFamily: 'var(--font-display)', marginBottom: '4px' }}>12K+</div>
-                  <div style={{ fontSize: '11px', color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.2em' }}>OPERATORS</div>
+                  <div style={{ fontSize: '36px', fontWeight: 800, color: c.text, fontFamily: 'var(--font-display)', marginBottom: '4px' }}>5K+</div>
+                  <div style={{ fontSize: '11px', color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.2em' }}>EXPLORERS</div>
                 </div>
                 <div>
                   <div style={{ fontSize: '36px', fontWeight: 800, color: c.text, fontFamily: 'var(--font-display)', marginBottom: '4px' }}>80+</div>
-                  <div style={{ fontSize: '11px', color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.2em' }}>CAMPUS NODES</div>
+                  <div style={{ fontSize: '11px', color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.2em' }}>CAMPUS AMBASSADORS</div>
                 </div>
                 <div>
                   <div style={{ fontSize: '36px', fontWeight: 800, color: c.text, fontFamily: 'var(--font-display)', marginBottom: '4px' }}>24</div>
@@ -233,11 +232,11 @@ export default function CommunityPage() {
                   .hero-badge-sub { font-size: 9px !important; }
                 }
               `}</style>
-              
+
               {/* Fake concentric circles behind */}
               <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 'clamp(300px, 150vw, 700px)', height: 'clamp(300px, 150vw, 700px)', borderRadius: '50%', border: `1px solid ${c.border08}`, pointerEvents: 'none' }} />
               <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 'clamp(200px, 100vw, 500px)', height: 'clamp(200px, 100vw, 500px)', borderRadius: '50%', border: `1px solid ${c.border15}`, pointerEvents: 'none' }} />
-              
+
               {/* Static Badges */}
               <div className="hero-badge hero-badge-1" style={{ position: 'absolute', top: '15%', left: '-5%', background: c.cardLight, backdropFilter: 'blur(20px)', border: `1px solid ${c.border08}`, padding: '16px 20px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '14px', zIndex: 10, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
                 <Zap size={18} color="#8B80F9" />
@@ -254,7 +253,7 @@ export default function CommunityPage() {
                   <div className="hero-badge-sub" style={{ fontSize: '10px', color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', fontWeight: 600 }}>OPEN • COHORT 02</div>
                 </div>
               </div>
-              
+
               <div className="hero-badge hero-badge-3" style={{ position: 'absolute', top: '40%', right: '-10%', background: c.cardLight, backdropFilter: 'blur(20px)', border: `1px solid ${c.border08}`, padding: '16px 20px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '14px', zIndex: 10, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
                 <Users size={18} color="#8B80F9" />
                 <div>
@@ -263,12 +262,12 @@ export default function CommunityPage() {
                 </div>
               </div>
 
-              <motion.img 
-                src="/owl-mascot.png" 
-                alt="Mascot" 
+              <motion.img
+                src="/owl-mascot.png"
+                alt="Mascot"
                 animate={{ y: [-8, 8, -8] }}
                 transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-                style={{ width: '100%', maxWidth: '800px', maxHeight: '85vh', objectFit: 'contain', zIndex: 5, position: 'relative', filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.6))' }} 
+                style={{ width: '100%', maxWidth: '800px', maxHeight: '85vh', objectFit: 'contain', zIndex: 5, position: 'relative', filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.6))' }}
               />
             </motion.div>
 
@@ -308,7 +307,7 @@ export default function CommunityPage() {
         {/* WHAT IS THE NETWORK SECTION */}
         <section style={{ padding: '0 5%', marginBottom: '120px' }}>
           <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: 'clamp(40px, 8vw, 80px)', alignItems: 'flex-start' }}>
-            
+
             {/* Left Side */}
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp} style={{ flex: '1 1 500px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
@@ -316,11 +315,11 @@ export default function CommunityPage() {
                 <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>WHAT IS THE NETWORK</span>
               </div>
               <h2 style={{ fontSize: 'clamp(40px, 5vw, 68px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '40px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
-                This isn't a club.<br/>
+                This isn't a club.<br />
                 <span style={{ color: '#9B90FF' }}>
-                  It's an operating<br/>
-                  network<br/>
-                  for AI-native<br/>
+                  It's an operating<br />
+                  network<br />
+                  for AI-native<br />
                   students.
                 </span>
               </h2>
@@ -337,7 +336,7 @@ export default function CommunityPage() {
                 { title: 'Startup Exposure', desc: 'Direct access to founders, VCs, and the Indian AI ecosystem.', icon: <Rocket size={16} color="#8B80F9" /> },
                 { title: 'Real Projects', desc: 'Work on shipped products — not toy demos, not case studies.', icon: <Code2 size={16} color="#8B80F9" /> },
                 { title: 'Mentorship', desc: '1:1 with operators who\'ve built in the AI space.', icon: <Compass size={16} color="#8B80F9" /> },
-                { title: 'Community Expansion', desc: 'Open campus nodes, run cohorts, lead culture.', icon: <Users size={16} color="#8B80F9" /> }
+                { title: 'Community Expansion', desc: 'Become campus ambassadors, run cohorts, lead culture.', icon: <Users size={16} color="#8B80F9" /> }
               ].map((card, i) => (
                 <motion.div key={i} variants={fadeInUp} style={{ background: c.cardLight, border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '24px', backdropFilter: 'blur(10px)', transition: 'transform 0.2s', cursor: 'default' }}>
                   <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: c.border03, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
@@ -366,61 +365,75 @@ export default function CommunityPage() {
                 Level up the network.
               </h2>
               <p style={{ color: c.text60, fontSize: '15px', maxWidth: '600px', lineHeight: 1.6 }}>
-                Explorer → Pathfinder → Builder → Ambassador Lead. Every level unlocks new opportunities — earned through contribution, not bought.
+                Explore → Build → Contribute → Lead → Scale → Expand → Impact. Every level unlocks new opportunities — earned through contribution, not bought.
               </p>
             </motion.div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '20px' }}>
+            <style>{`
+              .tier-scroll::-webkit-scrollbar { height: 8px; }
+              .tier-scroll::-webkit-scrollbar-track { background: transparent; }
+              .tier-scroll::-webkit-scrollbar-thumb { background: rgba(123, 107, 255, 0.2); border-radius: 10px; }
+              .tier-scroll::-webkit-scrollbar-thumb:hover { background: rgba(123, 107, 255, 0.5); }
+              @media (max-width: 768px) {
+                .progression-arrow svg { transform: rotate(0deg); }
+              }
+            `}</style>
+            <div className="tier-scroll" style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'stretch', gap: '16px', overflowX: 'auto', paddingBottom: '40px', scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch', margin: '0 -5%', padding: '0 5% 40px 5%' }}>
               {[
-                { lvl: '01', title: 'Explorer', subtitle: 'Enter the ecosystem.', desc: 'Curious students stepping in early. AI study systems, workshops, networking.', icon: <Compass size={20}/>, perks: ['AI Study Systems', 'Beginner Workshops', 'Networking Access', 'Roadmap Guidance'] },
-                { lvl: '02', title: 'Pathfinder', subtitle: 'Active inside the network.', desc: 'Earn your way deeper. Workshops, accountability, project communities.', icon: <Zap size={20}/>, perks: ['AI Workflow Workshops', 'Startup Systems', 'Accountability Groups', 'Collab Circles'] },
-                { lvl: '03', title: 'Builder', badge: 'BUILDERS NETWORK', subtitle: 'Build with the network.', desc: 'Contributors, not members. Ship projects, content & IP with founders.', icon: <Terminal size={20}/>, perks: ['AI Project Access', 'Creator Cohorts', 'Founder Access', 'IP & Content'] },
-                { lvl: '04', title: 'Ambassador Lead', subtitle: 'Operate the ecosystem.', desc: 'Run communities. Host workshops. Connect founders. Shape direction.', icon: <Crown size={20}/>, perks: ['Leadership Access', 'Founder Networking', 'Verified Identity', 'Ecosystem Strategy'] }
+                { lvl: '01', title: 'Explore', badge: undefined, subtitle: 'Discover what is possible.', desc: 'Most students enter college without a clear direction. Gain access to AI workshops, career guidance, and networking.', icon: <Compass size={20} />, perks: ['AI Workshops', 'Career Guidance', 'Networking Circles', 'Senior Mentorship'] },
+                { lvl: '02', title: 'Build', badge: undefined, subtitle: 'Learn by building.', desc: 'Builders don\'t just attend sessions. They create. Work on projects, startup experiments, and creator systems.', icon: <Terminal size={20} />, perks: ['AI Projects', 'Startup Experiments', 'Creator Systems', 'Collaborative Initiatives'] },
+                { lvl: '03', title: 'Contribute', badge: undefined, subtitle: 'Build things that matter.', desc: 'Active participants. Work on content systems, initiatives, and intellectual property alongside experts.', icon: <Zap size={20} />, perks: ['Community Initiatives', 'Founder Conversations', 'Industry Experts', 'Intellectual Property'] },
+                { lvl: '04', title: 'Lead', badge: undefined, subtitle: 'Become the network.', desc: 'Represent and grow the ecosystem. Help students discover opportunities, guide members, and build communities.', icon: <Crown size={20} />, perks: ['Official Ambassador Status', 'Free Subscription', '1000 AI Credits', 'Leadership Recognition'] },
+                { lvl: '05', title: 'Scale', badge: undefined, subtitle: 'Lead an entire university.', desc: 'Coordinate ecosystem growth across departments. Manage ambassadors, support expansion, and build the network.', icon: <Users size={20} />, perks: ['Full Premium Access', '3000 Credits', 'Founder Networking', 'Scale: 500–1000 Explorers'] },
+                { lvl: '06', title: 'Expand', badge: undefined, subtitle: 'Build a city-wide ecosystem.', desc: 'Connect colleges, ambassadors, contributors, and builders across an entire city. Your impact extends beyond a campus.', icon: <Network size={20} />, perks: ['Free Annual Premium', 'Revenue Sharing', 'Strategic Operator Access', 'Scale: Up to 10,000 Students'] },
+                { lvl: '07', title: 'Impact', badge: undefined, subtitle: 'Shape the future of the network.', desc: 'Country Ambassadors become strategic ecosystem partners helping scale the community nationally.', icon: <Trophy size={20} />, perks: ['Direct Founder Access', 'National Leadership', 'Strategic Planning Access', 'Premium Network'] }
               ].map((tier, i) => (
-                <motion.div key={i} onClick={() => setActiveTierModal(tier.lvl)} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ background: c.tierCardGradient, border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px 24px', position: 'relative', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}>
-                  
-                  {/* Top Bar (Level + Arrow) */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-                    <div style={{ fontSize: '10px', fontWeight: 700, color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em' }}>LV {tier.lvl}</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      {tier.badge && (
-                        <div style={{ background: 'rgba(123, 107, 255, 0.1)', color: '#9B90FF', padding: '4px 10px', borderRadius: '100px', fontSize: '9px', fontWeight: 800, letterSpacing: '0.1em', border: '1px solid rgba(123, 107, 255, 0.2)' }}>
-                          {tier.badge}
+                <React.Fragment key={i}>
+                  <motion.div onClick={() => setActiveTierModal(tier.lvl)} initial="hidden" whileInView="visible" whileHover={{ y: -5 }} viewport={{ once: true }} variants={fadeInUp} style={{ flex: '0 0 340px', scrollSnapAlign: 'center', background: c.tierCardGradient, border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px 24px', position: 'relative', display: 'flex', flexDirection: 'column', cursor: 'pointer', transition: 'transform 0.2s', boxShadow: isDark ? 'none' : '0 10px 40px rgba(0,0,0,0.03)' }}>
+
+                    {/* Top Bar (Level + Arrow) */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+                      <div style={{ fontSize: '10px', fontWeight: 700, color: c.text50, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em' }}>LV {tier.lvl}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        {tier.badge && (
+                          <div style={{ background: 'rgba(123, 107, 255, 0.1)', color: '#9B90FF', padding: '4px 10px', borderRadius: '100px', fontSize: '9px', fontWeight: 800, letterSpacing: '0.1em', border: '1px solid rgba(123, 107, 255, 0.2)' }}>
+                            {tier.badge}
+                          </div>
+                        )}
+                        <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: c.border03, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${c.border10}` }}>
+                          <ArrowRight size={12} color={c.text50} style={{ transform: 'rotate(-45deg)' }} />
                         </div>
-                      )}
-                      <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: c.border03, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
-                        <ArrowRight size={12} color="rgba(255,255,255,0.5)" style={{ transform: 'rotate(-45deg)' }} />
                       </div>
                     </div>
-                  </div>
 
-                  {/* Header */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                    <div style={{ color: '#9B90FF' }}>{tier.icon}</div>
-                    <h3 style={{ fontSize: '24px', fontWeight: 800, color: c.text, letterSpacing: '-0.02em' }}>{tier.title}</h3>
-                  </div>
+                    {/* Header */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                      <div style={{ color: '#9B90FF' }}>{tier.icon}</div>
+                      <h3 style={{ fontSize: '24px', fontWeight: 800, color: c.text, letterSpacing: '-0.02em' }}>{tier.title}</h3>
+                    </div>
 
-                  {/* Description */}
-                  <div style={{ fontSize: '13px', color: '#9B90FF', fontWeight: 600, marginBottom: '16px' }}>{tier.subtitle}</div>
-                  <p style={{ color: c.text50, fontSize: '13px', lineHeight: 1.6, marginBottom: '32px', minHeight: '60px' }}>{tier.desc}</p>
-                  
-                  <div style={{ height: '1px', background: c.border05, marginBottom: '32px', width: '100%' }} />
+                    {/* Description */}
+                    <div style={{ fontSize: '13px', color: '#9B90FF', fontWeight: 600, marginBottom: '16px' }}>{tier.subtitle}</div>
+                    <p style={{ color: c.text50, fontSize: '13px', lineHeight: 1.6, marginBottom: '32px', minHeight: '60px' }}>{tier.desc}</p>
 
-                  {/* Perks */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
-                    {tier.perks.map((perk, j) => (
-                      <div key={j} style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '13px', color: c.text, fontWeight: 500 }}>
-                        <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#7B6BFF', boxShadow: '0 0 8px #9B90FF' }} />
-                        {perk}
-                      </div>
-                    ))}
-                  </div>
+                    <div style={{ height: '1px', background: c.border05, marginBottom: '32px', width: '100%' }} />
 
-                  {/* Footer Action */}
-                  <div style={{ marginTop: '40px', fontSize: '12px', fontWeight: 600, color: c.text80, display: 'flex', alignItems: 'center' }}>
-                    Explore {tier.title} progression <ArrowRight size={12} style={{ marginLeft: '4px' }} />
-                  </div>
-                </motion.div>
+                    {/* Perks */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
+                      {tier.perks.map((perk, j) => (
+                        <div key={j} style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '13px', color: c.text, fontWeight: 500 }}>
+                          <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#7B6BFF', boxShadow: '0 0 8px #9B90FF' }} />
+                          {perk}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Footer Action */}
+                    <div style={{ marginTop: '40px', fontSize: '12px', fontWeight: 600, color: c.text80, display: 'flex', alignItems: 'center' }}>
+                      Explore {tier.title} progression <ArrowRight size={12} style={{ marginLeft: '4px' }} />
+                    </div>
+                  </motion.div>
+                </React.Fragment>
               ))}
             </div>
           </div>
@@ -434,22 +447,22 @@ export default function CommunityPage() {
               <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>ECOSYSTEM ACCESS</span>
               <div style={{ width: '32px', height: '1px', background: 'linear-gradient(270deg, transparent, #7B6BFF)' }} />
             </div>
-            
+
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '24px' }}>
               {/* Explorer Card */}
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden' }}>
                 <div style={{ fontSize: '10px', fontWeight: 700, color: '#00FF9D', fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '16px' }}>EARLY ECOSYSTEM ACCESS</div>
                 <h3 style={{ fontSize: '32px', fontWeight: 800, color: c.text, marginBottom: '8px' }}>Explorer Access</h3>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '24px' }}>
-                  <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>₹3000</span>
-                  <span style={{ fontSize: '24px', fontWeight: 800, color: '#00FF9D' }}>FREE RIGHT NOW</span>
+                  <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>$10</span>
+                  <span style={{ fontSize: '24px', fontWeight: 800, color: '#00FF9D' }}>FREE</span>
                 </div>
-                
+
                 <div style={{ background: 'rgba(0,255,157,0.1)', border: '1px solid rgba(0,255,157,0.2)', padding: '12px 16px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
                   <span style={{ color: '#00FF9D', fontSize: '13px', fontWeight: 600 }}>Curated ecosystem access</span>
                   <span style={{ color: '#00FF9D', fontSize: '14px', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>50 Seats Left</span>
                 </div>
-                
+
                 <button onClick={() => setActiveTierModal('01')} style={{ width: '100%', padding: '16px', background: c.border05, border: `1px solid ${c.border10}`, borderRadius: '100px', color: c.text, fontWeight: 600, fontSize: '15px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', transition: 'background 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.background = c.border10} onMouseLeave={(e) => e.currentTarget.style.background = c.border05}>
                   View Explorer Pathway <ArrowRight size={16} />
                 </button>
@@ -458,20 +471,20 @@ export default function CommunityPage() {
               {/* Builder Card */}
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ background: c.tierCardGradient, border: `1px solid ${c.border10}`, borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden', boxShadow: '0 20px 40px rgba(123, 107, 255, 0.1)' }}>
                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #7B6BFF, #9B90FF)' }} />
-                <div style={{ fontSize: '10px', fontWeight: 700, color: '#9B90FF', fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '16px' }}>SERIOUS BUILDERS + CREATORS</div>
-                <h3 style={{ fontSize: '32px', fontWeight: 800, color: c.text, marginBottom: '8px' }}>Builder Network</h3>
+                <div style={{ fontSize: '10px', fontWeight: 700, color: '#9B90FF', fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '16px' }}>OPERATE THE ECOSYSTEM</div>
+                <h3 style={{ fontSize: '32px', fontWeight: 800, color: c.text, marginBottom: '8px' }}>Ambassador Lead</h3>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '24px' }}>
-                  <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>₹5000</span>
-                  <span style={{ fontSize: '24px', fontWeight: 800, color: '#9B90FF' }}>FREE RIGHT NOW</span>
+                  <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>$30</span>
+                  <span style={{ fontSize: '24px', fontWeight: 800, color: '#9B90FF' }}>FREE</span>
                 </div>
-                
+
                 <div style={{ background: 'rgba(123, 107, 255, 0.1)', border: '1px solid rgba(123, 107, 255, 0.2)', padding: '12px 16px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
                   <span style={{ color: '#9B90FF', fontSize: '13px', fontWeight: 600 }}>Curated ecosystem access</span>
                   <span style={{ color: '#9B90FF', fontSize: '14px', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>25 Seats Left</span>
                 </div>
-                
-                <button onClick={() => setActiveTierModal('03')} style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #7B6BFF 0%, #9B90FF 100%)', border: 'none', borderRadius: '100px', color: '#fff', fontWeight: 600, fontSize: '15px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', boxShadow: '0 10px 20px rgba(123, 107, 255, 0.2)' }}>
-                  View Builder Pathway <ArrowRight size={16} />
+
+                <button onClick={() => setActiveTierModal('04')} style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #7B6BFF 0%, #9B90FF 100%)', border: 'none', borderRadius: '100px', color: '#fff', fontWeight: 600, fontSize: '15px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', boxShadow: '0 10px 20px rgba(123, 107, 255, 0.2)' }}>
+                  View Ambassador Pathway <ArrowRight size={16} />
                 </button>
               </motion.div>
             </div>
@@ -485,9 +498,9 @@ export default function CommunityPage() {
               <div style={{ width: '32px', height: '1px', background: 'linear-gradient(90deg, transparent, #7B6BFF)' }} />
               <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>THE EXPERIENCE</span>
             </div>
-            
+
             <h2 style={{ fontSize: 'clamp(40px, 5vw, 68px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
-              Not workshops.<br/>
+              Not workshops.<br />
               <span style={{ color: '#9B90FF' }}>Experiences.</span>
             </h2>
             <p style={{ color: c.text60, fontSize: '15px', lineHeight: 1.6, maxWidth: '400px', marginBottom: '120px' }}>
@@ -508,11 +521,11 @@ export default function CommunityPage() {
                 .experience-item { justify-content: flex-start !important; }
               }
             `}</style>
-            
+
             <div style={{ position: 'relative', padding: '0 0 40px 0' }}>
               {/* Vertical line */}
               <div className="experience-line" style={{ position: 'absolute', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, transparent, rgba(123, 107, 255, 0.3) 10%, rgba(123, 107, 255, 0.3) 90%, transparent)' }} />
-              
+
               {[
                 { step: '01', title: 'SHOCK', heading: "An AI moment they can't unsee.", desc: "We open with a live demo so visceral it rewires how students think about their next four years." },
                 { step: '02', title: 'DEMO', heading: "Live prompt engineering battles.", desc: "Resume roasting by AI. Productivity stack speedruns. Real builders, on stage, shipping." },
@@ -520,7 +533,7 @@ export default function CommunityPage() {
                 { step: '04', title: 'ONBOARD', heading: "Welcome to the network.", desc: "Discord invite. Cohort match. First mission within 48 hours. The community becomes the next chapter." }
               ].map((item, i) => (
                 <div key={i} className="experience-item" style={{ display: 'flex', justifyContent: i % 2 === 0 ? 'flex-start' : 'flex-end', position: 'relative', marginBottom: '80px' }}>
-                  
+
                   {/* Timeline Dot */}
                   <div className="experience-dot" style={{ position: 'absolute', top: '24px', transform: 'translate(-50%, -50%)', width: '28px', height: '28px', borderRadius: '50%', background: c.gradBase, border: '1px solid rgba(123,107,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
                     <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#9B90FF', boxShadow: '0 0 10px #7B6BFF' }} />
@@ -548,10 +561,10 @@ export default function CommunityPage() {
               <div style={{ width: '32px', height: '1px', background: 'linear-gradient(90deg, transparent, #7B6BFF)' }} />
               <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>WHY JOIN</span>
             </div>
-            
+
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '40px', alignItems: 'flex-end', marginBottom: '64px' }}>
               <h2 style={{ fontSize: 'clamp(36px, 4.5vw, 56px)', fontWeight: 800, color: c.text, lineHeight: 1.1, letterSpacing: '-0.02em', flex: '1 1 600px' }}>
-                Compounding leverage<br/>
+                Compounding leverage<br />
                 <span style={{ color: c.text30 }}>from day one.</span>
               </h2>
               <p style={{ color: c.text60, fontSize: '13px', maxWidth: '300px', marginBottom: '10px' }}>
@@ -560,9 +573,9 @@ export default function CommunityPage() {
             </div>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-              
+
               {/* Big Left Card */}
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} whileHover={{ y: -4 }} style={{ flex: '1 1 500px', background: isDark ? 'linear-gradient(180deg, rgba(20,15,25,0.8) 0%, rgba(30,20,50,0.4) 100%)' : 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(240,240,250,0.8) 100%)', border: `1px solid ${c.border08}`, borderRadius: '24px', padding: '40px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '320px', position: 'relative', overflow: 'hidden', backdropFilter: 'blur(20px)', transition: 'all 0.3s ease', boxShadow: '0 20px 40px rgba(0,0,0,0.03)' }}>
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} whileHover={{ y: -4 }} style={{ flex: '1 1 500px', background: isDark ? 'linear-gradient(180deg, rgba(20,15,25,0.8) 0%, rgba(30,20,50,0.4) 100%)' : 'linear-gradient(180deg, #F8F7FF 0%, #EBE6FF 100%)', border: `1px solid ${isDark ? c.border08 : 'rgba(139,128,249,0.15)'}`, borderRadius: '24px', padding: '40px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '320px', position: 'relative', overflow: 'hidden', backdropFilter: 'blur(20px)', transition: 'all 0.3s ease', boxShadow: isDark ? 'none' : '0 20px 40px rgba(139,128,249,0.08)' }}>
                 <div style={{ background: 'rgba(139,128,249,0.15)', width: '48px', height: '48px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
                   <Rocket size={24} color="#8B80F9" />
                 </div>
@@ -583,7 +596,7 @@ export default function CommunityPage() {
                   { title: 'Community Status', desc: 'Earned, never bought', icon: <Star size={18} /> },
                   { title: 'National Network', desc: '24 cities, 80 nodes', icon: <MapPin size={18} /> }
                 ].map((item, i) => (
-                  <motion.div key={i} variants={fadeInUp} whileHover={{ y: -4, borderColor: 'rgba(139,128,249,0.4)', boxShadow: '0 10px 30px rgba(139,128,249,0.08)' }} style={{ background: c.card, border: `1px solid ${c.border08}`, borderRadius: '24px', padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '130px', backdropFilter: 'blur(10px)', transition: 'all 0.3s ease', cursor: 'default' }}>
+                  <motion.div key={i} variants={fadeInUp} whileHover={{ y: -4, borderColor: 'rgba(139,128,249,0.4)', boxShadow: '0 10px 30px rgba(139,128,249,0.08)' }} style={{ background: isDark ? c.card : '#FFFFFF', border: `1px solid ${isDark ? c.border08 : 'rgba(0,0,0,0.04)'}`, borderRadius: '24px', padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '130px', backdropFilter: 'blur(10px)', transition: 'all 0.3s ease', cursor: 'default', boxShadow: isDark ? 'none' : '0 10px 20px rgba(0,0,0,0.02)' }}>
                     <div style={{ color: '#8B80F9', background: 'rgba(139,128,249,0.1)', width: '40px', height: '40px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {item.icon}
                     </div>
@@ -605,20 +618,20 @@ export default function CommunityPage() {
               <div style={{ width: '32px', height: '1px', background: 'linear-gradient(90deg, transparent, #7B6BFF)' }} />
               <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>XP PROGRESSION SYSTEM</span>
             </div>
-            
+
             <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ fontSize: 'clamp(40px, 5vw, 68px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '64px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
-              Every action compounds<br/>
+              Every action compounds<br />
               <span style={{ color: c.text30 }}>into access.</span>
             </motion.h2>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(16px, 4vw, 24px)' }}>
               {/* Left Panel: Scoring System */}
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ flex: '1 1 450px', background: isDark ? c.cardLight : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '40px', backdropFilter: 'blur(10px)' }}>
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ flex: '1 1 450px', background: isDark ? c.cardLight : '#FFFFFF', border: `1px solid ${isDark ? c.border05 : 'rgba(0,0,0,0.04)'}`, borderRadius: '24px', padding: '40px', backdropFilter: 'blur(10px)', boxShadow: isDark ? 'none' : '0 10px 30px rgba(0,0,0,0.02)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
                   <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>EXPERTISE POINTS (XP)</span>
                   <Trophy size={16} color="#E5C158" />
                 </div>
-                
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                   {[
                     { label: 'Project contribution', pts: '+50 XP' },
@@ -645,8 +658,8 @@ export default function CommunityPage() {
                   { title: 'Creator Ecosystems', desc: 'Collaborate with editors, designers, and storytellers to build massive internet leverage.', highlight: false },
                   { title: 'Micro-Group Networking', desc: 'Join small growth circles for extreme accountability and ecosystem bonding.', highlight: false }
                 ].map((item, i) => (
-                  <motion.div key={i} variants={fadeInUp} style={{ background: item.highlight ? 'linear-gradient(90deg, rgba(15,15,20,0.6) 0%, rgba(60,40,100,0.4) 100%)' : (isDark ? c.cardLight : '#F7F6F2'), border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '8px', backdropFilter: 'blur(10px)' }}>
-                    <div style={{ fontSize: '18px', fontWeight: 800, color: item.highlight ? '#9B90FF' : c.text }}>{item.title}</div>
+                  <motion.div key={i} variants={fadeInUp} style={{ background: item.highlight ? (isDark ? 'linear-gradient(90deg, rgba(15,15,20,0.6) 0%, rgba(60,40,100,0.4) 100%)' : 'linear-gradient(90deg, #FFFFFF 0%, rgba(139,128,249,0.1) 100%)') : (isDark ? c.cardLight : '#FFFFFF'), border: item.highlight && !isDark ? '1px solid rgba(139,128,249,0.2)' : `1px solid ${isDark ? c.border05 : 'rgba(0,0,0,0.04)'}`, borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '8px', backdropFilter: 'blur(10px)', boxShadow: isDark ? 'none' : '0 10px 20px rgba(0,0,0,0.02)' }}>
+                    <div style={{ fontSize: '18px', fontWeight: 800, color: item.highlight ? (isDark ? '#9B90FF' : '#7B6BFF') : c.text }}>{item.title}</div>
                     <div style={{ fontSize: '14px', fontWeight: 500, color: c.text60, lineHeight: 1.6 }}>{item.desc}</div>
                   </motion.div>
                 ))}
@@ -663,35 +676,47 @@ export default function CommunityPage() {
             <div style={{ width: '32px', height: '1px', background: 'linear-gradient(270deg, transparent, #7B6BFF)' }} />
           </div>
 
-          <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '80px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
-            People don't join<br/>
-            <span style={{ color: '#9B90FF' }}>clubs</span><br/>
-            anymore.<br/>
-            <span style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontWeight: 400, color: c.text40 }}>they join movements.</span>
+          <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ fontSize: 'clamp(36px, 4vw, 56px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
+            Build With People Who<br />
+            <span style={{ color: '#9B90FF' }}>Are Already Building.</span>
           </motion.h2>
+
+          <motion.p initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ fontSize: 'clamp(16px, 1.8vw, 20px)', color: c.text60, lineHeight: 1.6, maxWidth: '800px', margin: '0 auto 80px auto' }}>
+            Students from IITs, IIMs, BITS, NITs, Christ, Jain, PES, SRM, VIT and hundreds of campuses learning, building, contributing and growing together.
+          </motion.p>
 
           {/* Tweet Cards */}
           <div style={{ display: 'flex', gap: '16px', overflowX: 'auto', paddingBottom: '32px', maxWidth: '1400px', margin: '0 auto', WebkitOverflowScrolling: 'touch', scrollSnapType: 'x mandatory' }}>
             {[
               {
-                name: '@arjun.builds', role: 'AI OPERATOR • BANGALORE', icon: <Flame size={14} color="#fff" />, color: '#FF5C00',
-                text: "shipped my first agent in cohort 01. tomorrow we hack the campus LMS. wild week",
-                likes: '412', replies: '51', retweets: '34'
+                name: 'Priyanshu Sarangi', role: 'IIT BHUBANESWAR • BUILDER', icon: <Terminal size={14} color="#fff" />, color: '#FF5C00',
+                text: "Joined as an Explorer. Built my first AI workflow in 3 weeks. Today I'm collaborating with students from 8+ colleges on real projects.",
+                likes: '328', replies: '24', retweets: '12'
               },
               {
-                name: '@simrun.eth', role: 'CULTURE BUILDER • DELHI', icon: <Sparkles size={14} color="#fff" />, color: '#9B90FF',
-                text: "the reel hit 240k. operators are the new founders. this isn't a phase.",
-                likes: '1240', replies: '155', retweets: '103'
+                name: 'Ananya Sharma', role: 'IIM BANGALORE • CONTRIBUTOR', icon: <Users size={14} color="#fff" />, color: '#9B90FF',
+                text: "The biggest value wasn't the workshop. It was meeting founders, builders, and ambitious students who pushed me to think bigger.",
+                likes: '412', replies: '31', retweets: '18'
               },
               {
-                name: '@kabir.codes', role: 'CAMPUS NODE • PUNE', icon: <Moon size={14} color="#fff" />, color: '#7B6BFF',
-                text: "3am, discord on, three of us building. this is the network i was promised.",
-                likes: '380', replies: '47', retweets: '31'
+                name: 'Kabir Mehta', role: 'BITS PILANI • BUILDER', icon: <Zap size={14} color="#fff" />, color: '#7B6BFF',
+                text: "Built my portfolio, joined startup projects, and connected with mentors I would never have met through college alone.",
+                likes: '284', replies: '19', retweets: '8'
               },
               {
-                name: '@ananya.ai', role: 'AI OPERATOR • HYDERABAD', icon: <Zap size={14} color="#fff" />, color: '#FF3366',
-                text: "ran our first prompt battle today. 80 students showed. cohort is officially live.",
-                likes: '612', replies: '76', retweets: '51'
+                name: 'Simran Kaur', role: 'DELHI UNIVERSITY • AMBASSADOR', icon: <Crown size={14} color="#fff" />, color: '#FF3366',
+                text: "Managing my college community taught me leadership faster than any classroom ever could.",
+                likes: '501', replies: '42', retweets: '22'
+              },
+              {
+                name: 'Ritika Nair', role: 'CHRIST UNIVERSITY • UNIV. AMBASSADOR', icon: <Flame size={14} color="#fff" />, color: '#00FF9D',
+                text: "Started as an Explorer. Today I help coordinate students across departments and connect them to opportunities.",
+                likes: '391', replies: '28', retweets: '14'
+              },
+              {
+                name: 'Rahul Verma', role: 'NIT SURATHKAL • CONTRIBUTOR', icon: <Sparkles size={14} color="#fff" />, color: '#00C3FF',
+                text: "Working on ecosystem projects gave me real execution experience, not just certificates.",
+                likes: '347', replies: '21', retweets: '11'
               }
             ].map((tweet, i) => (
               <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeInUp} style={{ flex: '0 0 320px', scrollSnapAlign: 'start', background: c.card, border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '24px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -717,7 +742,7 @@ export default function CommunityPage() {
           </div>
 
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px', marginTop: '48px', maxWidth: '800px', margin: '48px auto 0' }}>
-            {['#builtbyoperators', '#cohort01', '#latenightbuilders', '#aithisweekend', '#campusnodes', '#thenetwork'].map((tag, i) => (
+            {['#buildersnetwork', '#studentecosystem', '#futurebuilders', '#aioperators', '#collegecircle', '#foundernetwork', '#contributors', '#explorers'].map((tag, i) => (
               <div key={i} style={{ padding: '8px 16px', background: c.border03, border: '1px solid rgba(255,255,255,0.05)', borderRadius: '100px', fontSize: '12px', color: c.text50, fontFamily: 'var(--font-mono)' }}>
                 {tag}
               </div>
@@ -725,42 +750,15 @@ export default function CommunityPage() {
           </motion.div>
         </section>
 
-        {/* APPLY SECTION */}
-        <section id="apply" style={{ padding: '120px 5%', marginBottom: '120px' }}>
-          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '32px' }}>
-              <div style={{ width: '32px', height: '1px', background: 'linear-gradient(90deg, transparent, #7B6BFF)' }} />
-              <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>APPLY</span>
-              <div style={{ width: '32px', height: '1px', background: 'linear-gradient(270deg, transparent, #7B6BFF)' }} />
-            </div>
-            
-            <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ textAlign: 'center', fontSize: 'clamp(40px, 5vw, 64px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '40px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
-              Ready to join<br/>
-              <span style={{ color: '#9B90FF' }}>the network?</span>
-            </motion.h2>
 
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ display: 'flex', justifyContent: 'center' }}>
-              <a 
-                href="https://docs.google.com/forms/d/e/1FAIpQLScuWSCu-8TwZPABvfl0LiOnVRDhUNjTmVV0PnRZnlYOwZLLkA/viewform" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                style={{ background: 'linear-gradient(135deg, #7B6BFF 0%, #9B90FF 100%)', border: 'none', color: '#fff', padding: '16px 40px', borderRadius: '100px', fontSize: '18px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', boxShadow: '0 10px 30px rgba(123, 107, 255, 0.4)', textDecoration: 'none', transition: 'transform 0.2s' }}
-                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-              >
-                Apply Now <ArrowRight size={20} />
-              </a>
-            </motion.div>
-          </div>
-        </section>
         {/* FINAL CTA SECTION */}
         <section style={{ position: 'relative', padding: '160px 5%', textAlign: 'center', background: `linear-gradient(180deg, ${c.gradBase} 0%, ${c.gradTop} 100%)`, overflow: 'hidden' }}>
           {/* Removed Subtle Grid Overlay */}
-          
+
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ position: 'relative', zIndex: 2 }}>
             <h2 style={{ fontSize: 'clamp(48px, 6vw, 80px)', fontWeight: 800, lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
-              <span style={{ color: c.text }}>India's AI-native</span><br/>
-              <span style={{ color: '#7B6BFF' }}>student culture</span><br/>
+              <span style={{ color: c.text }}>India's AI-native</span><br />
+              <span style={{ color: '#7B6BFF' }}>student ecosystem</span><br />
               <span style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontWeight: 400, color: c.text40 }}>starts here.</span>
             </h2>
             <p style={{ color: c.text50, fontSize: '15px', marginBottom: '48px', fontWeight: 500 }}>The future will not be built by average students.</p>
@@ -784,7 +782,7 @@ export default function CommunityPage() {
         {activeTierModal && (
           <div onClick={() => setActiveTierModal(null)} style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '5%', background: c.overlay, backdropFilter: 'blur(10px)' }}>
             <motion.div data-lenis-prevent="true" onClick={(e) => e.stopPropagation()} initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} style={{ width: '100%', maxWidth: '1200px', maxHeight: '90vh', overflowY: 'auto', overscrollBehavior: 'contain', background: isDark ? 'linear-gradient(180deg, rgba(20,15,30,1) 0%, rgba(10,10,15,1) 100%)' : '#FFFFFF', border: `1px solid ${c.border10}`, borderRadius: '24px', position: 'relative', padding: '64px', boxShadow: isDark ? '0 40px 100px rgba(0,0,0,0.5)' : '0 40px 100px rgba(0,0,0,0.1)' }}>
-              
+
               {/* Close button */}
               <button onClick={() => setActiveTierModal(null)} style={{ position: 'absolute', top: '32px', right: '32px', width: '40px', height: '40px', borderRadius: '50%', background: c.border05, border: `1px solid ${c.border10}`, color: c.text, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10 }}>
                 ✕
@@ -792,45 +790,61 @@ export default function CommunityPage() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
                 <div style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>ECOSYSTEM PROGRESSION MAP</div>
-                
-                {/* Pathway Toggle */}
-                <div style={{ display: 'flex', background: isDark ? c.border02 : '#F7F6F2', borderRadius: '100px', padding: '4px', border: `1px solid ${c.border05}` }}>
-                  <button onClick={() => setActivePathway('builder')} style={{ background: activePathway === 'builder' ? c.border05 : 'transparent', color: activePathway === 'builder' ? c.text : c.text50, border: 'none', padding: '8px 16px', borderRadius: '100px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Terminal size={14} /> Builder Track
-                  </button>
-                  <button onClick={() => setActivePathway('creator')} style={{ background: activePathway === 'creator' ? c.border05 : 'transparent', color: activePathway === 'creator' ? c.text : c.text50, border: 'none', padding: '8px 16px', borderRadius: '100px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Sparkles size={14} /> Creator Track
-                  </button>
-                </div>
               </div>
-              
+
               <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '16px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif', maxWidth: '800px' }}>
-                {activePathway === 'builder' ? 'Build systems.' : 'Build narratives.'} <span style={{ color: '#9B90FF' }}>{activePathway === 'builder' ? 'Build the future.' : 'Build the culture.'}</span>
+                Build systems. <span style={{ color: '#9B90FF' }}>Build the future.</span>
               </h2>
-              
+
               <p style={{ color: c.text50, fontSize: '15px', lineHeight: 1.6, maxWidth: '600px', marginBottom: '64px' }}>
-                {activePathway === 'builder' ? 'Explorer → Pathfinder → Builder → Ambassador Lead. For students who want to build systems, create projects, work with AI, and collaborate with founders.' : 'Explorer → Pathfinder → Creator → Culture Lead. For students interested in storytelling, content creation, editing, and internet culture.'}
+                Explore → Build → Contribute → Lead → Scale → Expand → Impact. Every level unlocks new opportunities — earned through contribution, not bought.
               </p>
 
               {/* Progress Steps */}
-              <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', marginBottom: '80px', padding: '0 40px' }}>
-                <div style={{ position: 'absolute', top: '24px', left: '40px', right: '40px', height: '1px', background: c.border10, zIndex: 1 }} />
-                {[
-                  { lvl: '01', name: 'Explorer', icon: <Compass size={20} />, active: activeTierModal === '01' },
-                  { lvl: '02', name: 'Pathfinder', icon: <Zap size={20} />, active: activeTierModal === '02' },
-                  { lvl: '03', name: activePathway === 'builder' ? 'Builder' : 'Creator', icon: activePathway === 'builder' ? <Terminal size={20} /> : <Sparkles size={20} />, active: activeTierModal === '03' },
-                  { lvl: '04', name: activePathway === 'builder' ? 'Ambassador Lead' : 'Culture Lead', icon: activePathway === 'builder' ? <Crown size={20} /> : <Trophy size={20} />, active: activeTierModal === '04' }
-                ].map((step, i) => (
-                  <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', zIndex: 2, cursor: 'pointer' }} onClick={() => setActiveTierModal(step.lvl)}>
-                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: step.active ? 'rgba(0,255,157,0.1)' : (isDark ? c.gradBase : '#FFFFFF'), border: step.active ? '2px solid #00FF9D' : `1px solid ${c.border10}`, color: step.active ? '#00FF9D' : c.text40, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: step.active ? '0 0 20px rgba(0,255,157,0.2)' : 'none' }}>
-                      {step.icon}
+              <style>{`
+                .modal-nav-scroll {
+                  overflow-x: auto;
+                  scrollbar-width: none;
+                  -ms-overflow-style: none;
+                  -webkit-overflow-scrolling: touch;
+                  margin-bottom: 80px;
+                  margin-left: -5%;
+                  margin-right: -5%;
+                  padding: 0 5%;
+                }
+                .modal-nav-scroll::-webkit-scrollbar { display: none; }
+                .modal-nav-inner {
+                  display: flex;
+                  justify-content: space-between;
+                  position: relative;
+                  min-width: 550px; /* Forces scroll on narrow mobile screens */
+                  margin: 0 auto;
+                  padding: 0 20px;
+                }
+              `}</style>
+              <div className="modal-nav-scroll">
+                <div className="modal-nav-inner">
+                  <div style={{ position: 'absolute', top: '24px', left: '40px', right: '40px', height: '1px', background: c.border10, zIndex: 1 }} />
+                  {[
+                    { lvl: '01', name: 'Explore', icon: <Compass size={16} />, active: activeTierModal === '01' },
+                    { lvl: '02', name: 'Build', icon: <Terminal size={16} />, active: activeTierModal === '02' },
+                    { lvl: '03', name: 'Contribute', icon: <Zap size={16} />, active: activeTierModal === '03' },
+                    { lvl: '04', name: 'Lead', icon: <Crown size={16} />, active: activeTierModal === '04' },
+                    { lvl: '05', name: 'Scale', icon: <Users size={16} />, active: activeTierModal === '05' },
+                    { lvl: '06', name: 'Expand', icon: <Network size={16} />, active: activeTierModal === '06' },
+                    { lvl: '07', name: 'Impact', icon: <Trophy size={16} />, active: activeTierModal === '07' }
+                  ].map((step, i) => (
+                    <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', zIndex: 2, cursor: 'pointer', flex: '0 0 auto', width: '60px' }} onClick={() => setActiveTierModal(step.lvl)}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: step.active ? 'rgba(0,255,157,0.1)' : (isDark ? c.gradBase : '#FFFFFF'), border: step.active ? '2px solid #00FF9D' : `1px solid ${c.border10}`, color: step.active ? '#00FF9D' : c.text40, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: step.active ? '0 0 20px rgba(0,255,157,0.2)' : 'none', transition: 'all 0.2s ease' }}>
+                        {step.icon}
+                      </div>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '9px', fontWeight: 700, color: step.active ? '#00FF9D' : c.text40, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '2px' }}>LV {step.lvl}</div>
+                        <div style={{ fontSize: '11px', fontWeight: 600, color: step.active ? c.text : c.text40 }}>{step.name}</div>
+                      </div>
                     </div>
-                    <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '10px', fontWeight: 700, color: step.active ? '#00FF9D' : c.text40, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '4px' }}>LV {step.lvl}</div>
-                      <div style={{ fontSize: '14px', fontWeight: 600, color: step.active ? c.text : c.text40 }}>{step.name}</div>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
               {/* Two Column Layout */}
@@ -838,144 +852,162 @@ export default function CommunityPage() {
                 const tierData = {
                   '01': {
                     color: '#00FF9D',
-                    title: 'Explorer',
-                    badge: 'ENTRY INTO THE ECOSYSTEM',
-                    quote: '"Most students consume. Explorers start exploring early."',
-                    desc: "You're already curious enough to step in. Explorer is not beginner mode — it's the realization that the future is moving faster than college.",
+                    title: 'Explore',
+                    badge: 'DISCOVER WHAT IS POSSIBLE',
+                    quote: '"Every journey starts here."',
+                    desc: "Most students enter college without a clear direction. Explorers gain access to AI workshops, career guidance, networking circles, senior mentorship, and future-focused learning systems that help them understand what opportunities exist beyond the classroom.",
                     icon: <Compass size={20} />,
                     unlocks: [
-                      { icon: <Compass size={16} />, title: 'AI Study Systems', desc: 'Smart revision, crash notes, PYQ systems, exam workflows.' },
-                      { icon: <Zap size={16} />, title: 'AI Exposure', desc: 'Beginner workshops, future careers, creator + startup ecosystem.' },
-                      { icon: <Users size={16} />, title: 'Networking Access', desc: 'Discussion rooms, campus circles, student growth groups.' },
-                      { icon: <Rocket size={16} />, title: 'Guidance Systems', desc: 'Roadmaps, mentorship, college survival, direction support.' }
+                      { icon: <Compass size={16} />, title: 'AI Workshops', desc: 'Learn the fundamentals.' },
+                      { icon: <Rocket size={16} />, title: 'Career Guidance', desc: 'Direction beyond college.' },
+                      { icon: <Users size={16} />, title: 'Networking Circles', desc: 'Meet ambitious peers.' },
+                      { icon: <Crown size={16} />, title: 'Senior Mentorship', desc: 'Learn from those ahead of you.' }
                     ],
                     xp: { current: 63, max: 150, text: '63 / 150 XP', pct: '42%' },
-                    nextTier: 'Pathfinder',
+                    nextTier: 'Build',
                     activities: [
                       { title: 'Attend a workshop', xp: '+20 XP' },
                       { title: 'Join a networking session', xp: '+15 XP' },
-                      { title: 'Upload notes / PYQ', xp: '+10 XP' },
                       { title: 'Community participation', xp: '+5 XP' }
                     ],
-                    promo: ['150 XP earned', '2 workshops attended', '1 networking session', 'Active participation']
+                    promo: ['150 XP earned', '2 workshops attended', '1 networking session']
                   },
                   '02': {
                     color: '#9B90FF',
-                    title: 'Pathfinder',
-                    badge: 'ACTIVE INSIDE THE ECOSYSTEM',
-                    quote: '"Progression is earned through contribution — never bought."',
-                    desc: "Pathfinders move from curiosity to involvement. You start showing up for the work, the people, and the ambition.",
-                    icon: <Zap size={20} />,
-                    unlocks: [
-                      { icon: <Compass size={16} />, title: 'AI Workflow Workshops', desc: 'Deeper systems for building with AI, not just using it.' },
-                      { icon: <Rocket size={16} />, title: 'Startup Systems', desc: 'How ambitious students think, ship, and operate.' },
-                      { icon: <Users size={16} />, title: 'Accountability Groups', desc: 'Small circles that compound your output weekly.' },
-                      { icon: <Sparkles size={16} />, title: 'Collaboration Circles', desc: 'Project communities & cross-campus build groups.' }
-                    ],
-                    xp: { current: 297, max: 500, text: '297 / 500 XP', pct: '59.4%' },
-                    nextTier: 'Builder',
-                    activities: [
-                      { title: 'Lead a session', xp: '+35 XP' },
-                      { title: 'Ship a mini-project', xp: '+40 XP' },
-                      { title: 'Bring active members', xp: '+25 XP' },
-                      { title: 'Cohort contribution', xp: '+20 XP' }
-                    ],
-                    promo: ['500 XP earned', '1 project shipped', 'Sustained weekly activity', 'Peer endorsement']
-                  },
-                  '03': activePathway === 'builder' ? {
-                    color: '#FFB800',
-                    title: 'Builder',
-                    badge: 'BUILD WITH THE NETWORK',
-                    quote: '"Builders ship. They do not wait for permission."',
-                    desc: "Contributors, not members. You are now shipping projects, writing content, and building IP alongside founders.",
+                    title: 'Build',
+                    badge: 'LEARN BY BUILDING',
+                    quote: '"Ideas become execution."',
+                    desc: "Builders don't just attend sessions. They create. Students begin working on AI projects, startup experiments, creator systems, portfolio projects, and collaborative initiatives with ambitious students across different colleges.",
                     icon: <Terminal size={20} />,
                     unlocks: [
-                      { icon: <Code2 size={16} />, title: 'AI Project Access', desc: 'Direct access to build AI tools with the community.' },
-                      { icon: <Users size={16} />, title: 'Creator Cohorts', desc: 'Intensive groups for content and personal branding.' },
-                      { icon: <Crown size={16} />, title: 'Founder Access', desc: 'Direct lines to startup founders and leaders.' },
-                      { icon: <Compass size={16} />, title: 'IP & Content', desc: 'Monetize and distribute your intellectual property.' }
+                      { icon: <Terminal size={16} />, title: 'AI Projects', desc: 'Build real-world tools.' },
+                      { icon: <Zap size={16} />, title: 'Startup Experiments', desc: 'Test and validate ideas.' },
+                      { icon: <Sparkles size={16} />, title: 'Creator Systems', desc: 'Learn to distribute.' },
+                      { icon: <Network size={16} />, title: 'Collaborative Initiatives', desc: 'Work with students across colleges.' }
                     ],
-                    xp: { current: 640, max: 1200, text: '640 / 1200 XP', pct: '53%' },
-                    nextTier: 'Ambassador Lead',
+                    xp: { current: 297, max: 500, text: '297 / 500 XP', pct: '59.4%' },
+                    nextTier: 'Contribute',
                     activities: [
-                      { title: 'Ship a major tool', xp: '+150 XP' },
-                      { title: 'Host a cohort', xp: '+100 XP' },
-                      { title: 'Publish viral IP', xp: '+80 XP' },
-                      { title: 'Connect a founder', xp: '+50 XP' }
+                      { title: 'Ship a project', xp: '+40 XP' },
+                      { title: 'Join a build group', xp: '+25 XP' },
+                      { title: 'Cohort contribution', xp: '+20 XP' }
                     ],
-                    promo: ['1200 XP earned', '3 projects shipped', 'Community endorsement', 'Founder referral']
-                  } : {
-                    color: '#FFB800',
-                    title: 'Creator',
-                    badge: 'SHAPE THE CULTURE',
-                    quote: '"Creators don\'t just consume culture, they design it."',
-                    desc: 'You are now shipping content, building internet systems, and telling stories that expand the network.',
-                    icon: <Sparkles size={20} />,
-                    unlocks: [
-                      { icon: <Sparkles size={16} />, title: 'Creator Cohorts', desc: 'Work with editors, designers, and storytellers.' },
-                      { icon: <Code2 size={16} />, title: 'AI Content Workflows', desc: 'Learn how to scale media with AI tools.' },
-                      { icon: <Crown size={16} />, title: 'Founder Access', desc: 'Direct lines to creators and operators.' },
-                      { icon: <Compass size={16} />, title: 'IP & Content', desc: 'Monetize and distribute your digital assets.' }
-                    ],
-                    xp: { current: 640, max: 1200, text: '640 / 1200 XP', pct: '53%' },
-                    nextTier: 'Culture Lead',
-                    activities: [
-                      { title: 'Ship viral content', xp: '+150 XP' },
-                      { title: 'Host a creator session', xp: '+100 XP' },
-                      { title: 'Launch ecosystem IP', xp: '+80 XP' },
-                      { title: 'Brand collaboration', xp: '+50 XP' }
-                    ],
-                    promo: ['1200 XP earned', '3 major pieces shipped', 'Community endorsement', 'Creator referral']
+                    promo: ['500 XP earned', '1 project shipped', 'Sustained activity']
                   },
-                  '04': activePathway === 'builder' ? {
+                  '03': {
+                    color: '#FFB800',
+                    title: 'Contribute',
+                    badge: 'BUILD THINGS THAT MATTER',
+                    quote: '"Your work starts creating impact."',
+                    desc: "Contributors become active participants inside the ecosystem. They work on content systems, community initiatives, startup experiments, and intellectual property projects while gaining access to founder conversations, industry experts, builders, and creators across India.",
+                    icon: <Zap size={20} />,
+                    unlocks: [
+                      { icon: <Shield size={16} />, title: 'Community Initiatives', desc: 'Take responsibility in the network.' },
+                      { icon: <Crown size={16} />, title: 'Founder Conversations', desc: 'Direct lines to startup founders.' },
+                      { icon: <Users size={16} />, title: 'Industry Experts', desc: 'Learn from top operators.' },
+                      { icon: <Code2 size={16} />, title: 'Intellectual Property', desc: 'Build and own assets.' }
+                    ],
+                    xp: { current: 640, max: 1200, text: '640 / 1200 XP', pct: '53%' },
+                    nextTier: 'Lead',
+                    activities: [
+                      { title: 'Launch ecosystem IP', xp: '+80 XP' },
+                      { title: 'Connect a founder', xp: '+50 XP' },
+                      { title: 'Active contribution', xp: '+25 XP' }
+                    ],
+                    promo: ['1200 XP earned', 'Major impact created', 'Community endorsement']
+                  },
+                  '04': {
                     color: '#FF3366',
-                    title: 'Ambassador Lead',
-                    badge: 'OPERATE THE ECOSYSTEM',
-                    quote: '"Leadership is taking responsibility for the network\'s growth."',
-                    desc: "You run communities, host massive workshops, and connect founders. You shape the strategic direction of the network.",
+                    title: 'Lead',
+                    badge: 'BECOME THE NETWORK',
+                    quote: '"Leadership is earned through contribution."',
+                    desc: "Ambassadors represent and grow the ecosystem inside their college. They help students discover opportunities, guide new members, organize workshops, and build communities.",
                     icon: <Crown size={20} />,
                     unlocks: [
-                      { icon: <Users size={16} />, title: 'Leadership Access', desc: 'Run campus nodes and city-wide chapters.' },
-                      { icon: <Network size={16} />, title: 'Founder Networking', desc: 'Exclusive closed-door founder dinners.' },
-                      { icon: <Shield size={16} />, title: 'Verified Identity', desc: 'Blue-tick equivalent within the ecosystem.' },
-                      { icon: <Compass size={16} />, title: 'Ecosystem Strategy', desc: 'Seat at the table for network decisions.' }
+                      { icon: <Shield size={16} />, title: 'Official Ambassador Status', desc: 'Physical badge included.' },
+                      { icon: <Crown size={16} />, title: 'Free Subscription', desc: 'Full College Circle access.' },
+                      { icon: <Zap size={16} />, title: '1000 AI Credits', desc: 'Power your workflows.' },
+                      { icon: <Users size={16} />, title: 'Leadership Recognition', desc: 'Official network status.' }
                     ],
                     xp: { current: 1850, max: 3000, text: '1850 / 3000 XP', pct: '61%' },
-                    nextTier: 'Ecosystem Partner',
+                    nextTier: 'Scale',
                     activities: [
-                      { title: 'Run a campus node', xp: '+500 XP' },
-                      { title: 'Host a city mixer', xp: '+300 XP' },
-                      { title: 'Bring a sponsor', xp: '+400 XP' },
-                      { title: 'Strategic advisory', xp: '+200 XP' }
+                      { title: 'Become campus ambassador', xp: '+500 XP' },
+                      { title: 'Organize a workshop', xp: '+300 XP' },
+                      { title: 'Guide new members', xp: '+200 XP' }
                     ],
-                    promo: ['3000 XP earned', 'Node successfully run', 'Ecosystem impact', 'Board approval']
-                  } : {
-                    color: '#FF3366',
-                    title: 'Culture Lead',
-                    badge: 'OPERATE THE NARRATIVE',
-                    quote: '"Leadership is taking responsibility for the network\'s story."',
-                    desc: 'You run creator ecosystems, manage the brand, and scale the internet presence of the network.',
+                    promo: ['3000 XP earned', 'Campus community built', 'Board approval']
+                  },
+                  '05': {
+                    color: '#FF0055',
+                    title: 'Scale',
+                    badge: 'LEAD AN ENTIRE UNIVERSITY',
+                    quote: '"You now build systems, not events."',
+                    desc: "University Ambassadors coordinate ecosystem growth across departments and colleges. They manage ambassadors, support expansion, and help build a thriving student network.",
+                    icon: <Users size={20} />,
+                    unlocks: [
+                      { icon: <Crown size={16} />, title: 'Full Premium Access', desc: 'Highest tier subscription.' },
+                      { icon: <Zap size={16} />, title: '3000 Credits', desc: 'Massive workflow limits.' },
+                      { icon: <Network size={16} />, title: 'Founder Networking', desc: 'Exclusive closed-door access.' },
+                      { icon: <Trophy size={16} />, title: 'Scale: 500–1000 Explorers', desc: 'University Leadership Status.' }
+                    ],
+                    xp: { current: 3500, max: 5000, text: '3500 / 5000 XP', pct: '70%' },
+                    nextTier: 'Expand',
+                    activities: [
+                      { title: 'Coordinate departments', xp: '+800 XP' },
+                      { title: 'Manage ambassadors', xp: '+600 XP' },
+                      { title: 'Support expansion', xp: '+500 XP' }
+                    ],
+                    promo: ['5000 XP earned', 'University node established', 'Network expansion']
+                  },
+                  '06': {
+                    color: '#B300FF',
+                    title: 'Expand',
+                    badge: 'BUILD A CITY-WIDE ECOSYSTEM',
+                    quote: '"Your impact extends beyond a campus."',
+                    desc: "District Ambassadors connect colleges, ambassadors, contributors, and builders across an entire city.",
+                    icon: <Network size={20} />,
+                    unlocks: [
+                      { icon: <Crown size={16} />, title: 'Free Annual Premium', desc: 'Complete ecosystem access.' },
+                      { icon: <Shield size={16} />, title: 'Revenue Sharing', desc: 'Up to 25% revenue opportunities.' },
+                      { icon: <Users size={16} />, title: 'Strategic Operator Access', desc: 'Work with core team.' },
+                      { icon: <Trophy size={16} />, title: 'Scale: Up to 10,000 Students', desc: 'City-Level Leadership.' }
+                    ],
+                    xp: { current: 6000, max: 10000, text: '6000 / 10000 XP', pct: '60%' },
+                    nextTier: 'Impact',
+                    activities: [
+                      { title: 'Connect city colleges', xp: '+1500 XP' },
+                      { title: 'Host a city mixer', xp: '+1000 XP' },
+                      { title: 'Drive revenue', xp: '+1200 XP' }
+                    ],
+                    promo: ['10000 XP earned', 'City ecosystem thriving', 'Core team integration']
+                  },
+                  '07': {
+                    color: '#00FFFF',
+                    title: 'Impact',
+                    badge: 'SHAPE THE FUTURE OF THE NETWORK',
+                    quote: '"Very few people reach this level."',
+                    desc: "Country Ambassadors become strategic ecosystem partners helping scale the community nationally. They guide leadership teams, expansion initiatives, partnerships, and growth strategies.",
                     icon: <Trophy size={20} />,
                     unlocks: [
-                      { icon: <Users size={16} />, title: 'Leadership Access', desc: 'Run city-wide creator groups.' },
-                      { icon: <Network size={16} />, title: 'Brand Networking', desc: 'Exclusive closed-door creator summits.' },
-                      { icon: <Shield size={16} />, title: 'Verified Identity', desc: 'Blue-tick equivalent within the ecosystem.' },
-                      { icon: <Compass size={16} />, title: 'Media Strategy', desc: 'Seat at the table for network narratives.' }
+                      { icon: <Crown size={16} />, title: 'Direct Founder Access', desc: 'Partner level communication.' },
+                      { icon: <Network size={16} />, title: 'Strategic Planning Access', desc: 'Guide network growth.' },
+                      { icon: <Users size={16} />, title: 'Premium Network', desc: 'Ecosystem Authority.' },
+                      { icon: <Trophy size={16} />, title: 'Scale: 1,00,000+ Students', desc: 'National Leadership.' }
                     ],
-                    xp: { current: 1850, max: 3000, text: '1850 / 3000 XP', pct: '61%' },
-                    nextTier: 'Ecosystem Partner',
+                    xp: { current: 15000, max: 20000, text: '15000 / 20000 XP', pct: '75%' },
+                    nextTier: 'MAX',
                     activities: [
-                      { title: 'Run a creator node', xp: '+500 XP' },
-                      { title: 'Host a city mixer', xp: '+300 XP' },
-                      { title: 'Bring a brand sponsor', xp: '+400 XP' },
-                      { title: 'Strategic advisory', xp: '+200 XP' }
+                      { title: 'Scale nationally', xp: '+5000 XP' },
+                      { title: 'Strategic partnerships', xp: '+4000 XP' },
+                      { title: 'Guide leadership', xp: '+3000 XP' }
                     ],
-                    promo: ['3000 XP earned', 'Node successfully run', 'Ecosystem impact', 'Board approval']
-                  }
+                    promo: ['20000 XP earned', 'National ecosystem shaped', 'Partner status achieved']
+                 }
                 }
 
                 const currentTier = activeTierModal ? tierData[activeTierModal as keyof typeof tierData] : tierData['01']
-                
+
                 return (
                   <motion.div key={activeTierModal} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }} style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', width: '100%' }}>
                     {/* Left Column */}
@@ -983,7 +1015,7 @@ export default function CommunityPage() {
                       {/* Info Card */}
                       <div style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px' }}>
                         <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '24px' }}>
-                          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: `rgba(${parseInt(currentTier.color.slice(1,3),16)},${parseInt(currentTier.color.slice(3,5),16)},${parseInt(currentTier.color.slice(5,7),16)},0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentTier.color }}>
+                          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: `rgba(${parseInt(currentTier.color.slice(1, 3), 16)},${parseInt(currentTier.color.slice(3, 5), 16)},${parseInt(currentTier.color.slice(5, 7), 16)},0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentTier.color }}>
                             {currentTier.icon}
                           </div>
                           <div>
@@ -996,13 +1028,13 @@ export default function CommunityPage() {
                       </div>
 
                       <div style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)', marginTop: '16px' }}>WHAT UNLOCKS</div>
-                      
+
                       {/* Grid */}
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                         {currentTier.unlocks.map((perk, i) => (
                           <div key={i} style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '20px', padding: '24px' }}>
                             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '16px' }}>
-                              <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: `rgba(${parseInt(currentTier.color.slice(1,3),16)},${parseInt(currentTier.color.slice(3,5),16)},${parseInt(currentTier.color.slice(5,7),16)},0.05)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentTier.color }}>
+                              <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: `rgba(${parseInt(currentTier.color.slice(1, 3), 16)},${parseInt(currentTier.color.slice(3, 5), 16)},${parseInt(currentTier.color.slice(5, 7), 16)},0.05)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentTier.color }}>
                                 {perk.icon}
                               </div>
                               <div style={{ fontSize: '14px', fontWeight: 700, color: c.text }}>{perk.title}</div>
@@ -1021,11 +1053,11 @@ export default function CommunityPage() {
                           <div style={{ fontSize: '10px', fontWeight: 700, color: c.text40, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em' }}>XP PROGRESSION</div>
                           <div style={{ fontSize: '10px', fontWeight: 700, color: currentTier.color, fontFamily: 'var(--font-mono)' }}>{currentTier.xp.text}</div>
                         </div>
-                        
+
                         <div style={{ height: '6px', background: c.border05, borderRadius: '3px', marginBottom: '12px', overflow: 'hidden' }}>
                           <div style={{ height: '100%', width: currentTier.xp.pct, background: `linear-gradient(90deg, ${currentTier.color} 0%, rgba(255,255,255,1) 100%)`, borderRadius: '3px' }} />
                         </div>
-                        
+
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px', fontSize: '12px', color: c.text50 }}>
                           <div>{currentTier.title}</div>
                           <div>Next: {currentTier.nextTier}</div>
@@ -1056,24 +1088,17 @@ export default function CommunityPage() {
                       </div>
 
                       {/* Action Card */}
-                      <div 
+                      <div
                         onClick={() => {
-                          setActiveTierModal(null);
-                          setTimeout(() => {
-                            if (lenis) {
-                              lenis.scrollTo('#apply', { offset: -50, duration: 1.5, easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
-                            } else {
-                              document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' });
-                            }
-                          }, 100);
+                          window.open('https://docs.google.com/forms/d/e/1FAIpQLScuWSCu-8TwZPABvfl0LiOnVRDhUNjTmVV0PnRZnlYOwZLLkA/viewform', '_blank');
                         }}
-                        style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '24px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', transition: 'background 0.2s' }} 
-                        onMouseEnter={(e) => e.currentTarget.style.background = c.border05} 
+                        style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '24px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', transition: 'background 0.2s' }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = c.border05}
                         onMouseLeave={(e) => e.currentTarget.style.background = c.border02}
                       >
                         <div>
                           <div style={{ fontSize: '10px', fontWeight: 700, color: c.text40, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '8px' }}>BEGIN JOURNEY</div>
-                          <div style={{ fontSize: '20px', fontWeight: 800, color: c.text }}>Claim {currentTier.title} Access</div>
+                          <div style={{ fontSize: '20px', fontWeight: 800, color: c.text }}>Claim Access</div>
                         </div>
                         <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: c.border05, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <ArrowRight size={16} color={currentTier.color} />

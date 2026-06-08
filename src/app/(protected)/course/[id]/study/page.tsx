@@ -920,8 +920,17 @@ function StudyPageInner() {
       nextCompletedTopics.add(completedTopicId);
       setCompletedTopics(nextCompletedTopics);
 
-      const nextUnitCompleted =
-        getContiguousCompletedCount(nextCompletedTopics);
+      let fullyCompletedUnits = 0;
+      for (const unit of course?.units || []) {
+        const unitTopicIds = unit.topics?.map((t) => String(t.topicId)) || [];
+        if (unitTopicIds.length > 0 && unitTopicIds.every((id) => nextCompletedTopics.has(id))) {
+          fullyCompletedUnits += 1;
+        } else {
+          break;
+        }
+      }
+      
+      const nextUnitCompleted = fullyCompletedUnits;
       setUnitCompleted(nextUnitCompleted);
       setCourse((prev) =>
         prev

@@ -29,8 +29,8 @@ export function middleware(request: NextRequest) {
 
   // Logic if the app is NOT YET launched
   if (!isLaunched) {
-    // Allow the Launch page (root), Preview Landing Page, and Committee Page
-    if (pathname !== '/' && pathname !== '/preview' && pathname !== '/committee') {
+    // Allow the Launch page (root), Preview Landing Page, and Student Community Page
+    if (pathname !== '/' && pathname !== '/preview' && pathname !== '/student-community') {
       return NextResponse.redirect(new URL('/', request.url));
     }
     return NextResponse.next();
