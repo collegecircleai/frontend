@@ -1,5 +1,6 @@
 import "./globals.css";
 import "katex/dist/katex.min.css";
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import {
   DM_Sans,
@@ -7,7 +8,7 @@ import {
   DM_Mono,
   Noto_Sans_Devanagari,
 } from "next/font/google";
-import { Analytics } from '@vercel/analytics/next';
+
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-body",
