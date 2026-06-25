@@ -14,14 +14,7 @@ interface User {
   isOnboarded?: boolean;
   premiumUptoDate?: string | null;
   isPremium?: boolean;
-  isActive?: boolean;
 }
-
-export const getPostAuthRoute = (user: User | null) => {
-  const isOnboarded = user?.isOnboarded === true || user?.isActive === true;
-
-  return isOnboarded ? "/dashboard" : "/onboarding";
-};
 
 interface AuthContextType {
   user: User | null;
@@ -64,27 +57,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
         if (storedUser) {
           try {
-            setUser(JSON.parse(storedUser));
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser);
           } catch (e) {
             // Invalid JSON in storage
-          }
-        }
-
-        if (storedToken && storedRefreshToken && !storedUser) {
-          try {
-            const meRes = await api.get("/auth/me");
-            const meData = meRes?.data?.data ?? meRes?.data;
-            const meUser = meData?.user ?? meData?.data?.user ?? meData;
-
-            if (meUser) {
-              setUser(meUser);
-              if (typeof window !== "undefined") {
-                localStorage.setItem("user", JSON.stringify(meUser));
-              }
-              return;
-            }
-          } catch (error) {
-            // Fall through to the normal loading completion path.
           }
         }
 
@@ -199,36 +175,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     const response = await api.post("/auth/login", { email, password });
     const data = response.data;
-    const authData = data?.data ?? data;
-    const userData = authData?.user ?? authData?.data?.user;
-    const accessToken = authData?.accessToken ?? authData?.data?.accessToken;
-    const refreshTokenValue =
-      authData?.refreshToken ?? authData?.data?.refreshToken;
+    if (data?.success && data?.data?.user) {
+      const userData = data.data.user;
+      const accessToken = data.data.accessToken;
+      const refreshTokenValue = data.data.refreshToken;
 
-    if (accessToken) {
+      setUser(userData);
       setToken(accessToken);
-
-      if (typeof window !== "undefined") {
-        localStorage.setItem("token", accessToken);
-      }
-    }
-
-    if (refreshTokenValue) {
       setRefreshToken(refreshTokenValue);
 
       if (typeof window !== "undefined") {
-        localStorage.setItem("refreshToken", refreshTokenValue);
-      }
-    }
-
-    if (userData) {
-      setUser(userData);
-
-      if (typeof window !== "undefined") {
+        localStorage.setItem("token", accessToken);
+        if (refreshTokenValue) {
+          localStorage.setItem("refreshToken", refreshTokenValue);
+        }
         localStorage.setItem("user", JSON.stringify(userData));
       }
     }
-
     return data;
   };
 
@@ -294,4 +257,11 @@ function parseJwt(token: string) {
   } catch (e) {
     return null;
   }
+}
+
+export function getPostAuthRoute(user: User | null): string {
+  if (!user) return "/login";
+  if (user.role === "admin") return "/admin";
+  if (!user.isOnboarded) return "/onboarding";
+  return "/dashboard";
 }

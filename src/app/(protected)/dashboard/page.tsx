@@ -78,84 +78,6 @@ interface Activity {
   timestamp: string;
 }
 
-/* ─────────────────────────────────────────
-   DUMMY DATA
-───────────────────────────────────────── */
-const DUMMY_COURSES: Course[] = [
-  {
-    id: "1",
-    name: "Data Structures",
-    department: "Computer Science",
-    semester: "2",
-    unitCount: 8,
-    progress: 65,
-  },
-  {
-    id: "2",
-    name: "Algorithms",
-    department: "Computer Science",
-    semester: "2",
-    unitCount: 6,
-    progress: 45,
-  },
-  {
-    id: "3",
-    name: "Database Systems",
-    department: "Computer Science",
-    semester: "3",
-    unitCount: 7,
-    progress: 30,
-  },
-];
-
-const DUMMY_ANALYTICS: AnalyticsSummary = {
-  completedTopics: 24,
-  avgScore: 78,
-  streak: 12,
-};
-
-const DUMMY_SESSION: RecentSession = {
-  courseId: "1",
-  topicId: "topic-1",
-  courseName: "Data Structures",
-  topicName: "Binary Trees & Traversal",
-  unitName: "Unit 3",
-  progress: 65,
-};
-
-const DUMMY_WEAK_TOPICS: WeakTopic[] = [
-  { topic: "Graph Algorithms", score: 52, unit: "Unit 5" },
-  { topic: "Dynamic Programming", score: 61, unit: "Unit 7" },
-  { topic: "Recursion", score: 58, unit: "Unit 2" },
-];
-
-const DUMMY_ACTIVITY: Activity[] = [
-  {
-    action: "complete",
-    topic: "Sorting Algorithms",
-    timestamp: new Date(Date.now() - 2 * 60000).toISOString(),
-  },
-  {
-    action: "quiz",
-    topic: "Binary Search",
-    timestamp: new Date(Date.now() - 15 * 60000).toISOString(),
-  },
-  {
-    action: "complete",
-    topic: "Linked Lists",
-    timestamp: new Date(Date.now() - 1 * 3600000).toISOString(),
-  },
-  {
-    action: "quiz",
-    topic: "Tree Traversal",
-    timestamp: new Date(Date.now() - 4 * 3600000).toISOString(),
-  },
-  {
-    action: "complete",
-    topic: "Hash Tables",
-    timestamp: new Date(Date.now() - 1 * 86400000).toISOString(),
-  },
-];
 
 /* ─────────────────────────────────────────
    HELPERS
@@ -1292,7 +1214,17 @@ export default function DashboardPage() {
               overflow: "hidden",
             }}
           >
-            {activity.slice(0, 5).map((a, i) => (
+            {(() => {
+              const seen = new Set<string>();
+              return activity.filter((a) => {
+                const displayLabel = activityLabel(a);
+                if (seen.has(displayLabel)) return false;
+                seen.add(displayLabel);
+                return true;
+              });
+            })()
+              .slice(0, 5)
+              .map((a, i, deduplicatedArr) => (
               <div
                 key={i}
                 style={{
@@ -1301,7 +1233,7 @@ export default function DashboardPage() {
                   gap: 14,
                   padding: "14px 20px",
                   borderBottom:
-                    i < Math.min(activity.length, 5) - 1
+                    i < deduplicatedArr.length - 1
                       ? "1px solid rgba(9,9,15,0.06)"
                       : "none",
                 }}
