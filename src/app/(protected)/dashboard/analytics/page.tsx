@@ -148,32 +148,6 @@ function fillWeeklyData(backendWeekly: WeeklyEntry[]): WeeklyEntry[] {
   return result;
 }
 
-/** Scale bloom data down to reflect actual completed topics instead of total generated notes */
-function scaleBloomData(rawBloom: BloomDatum[], completedTopics: number): BloomDatum[] {
-  if (completedTopics === 0) {
-    return rawBloom.map(b => ({ ...b, count: 0, percentage: 0 }));
-  }
-  
-  const totalInflated = rawBloom.reduce((sum, b) => sum + b.count, 0);
-  const estimatedActualQuestions = completedTopics * 5; // ~5 questions per completed quiz
-  
-  if (totalInflated > 0 && totalInflated > estimatedActualQuestions) {
-    const scale = estimatedActualQuestions / totalInflated;
-    const scaled = rawBloom.map(b => ({
-      ...b,
-      count: Math.round(b.count * scale),
-    }));
-    
-    // Recalculate percentages based on the scaled counts
-    const newTotal = scaled.reduce((sum, b) => sum + b.count, 0) || 1;
-    return scaled.map(b => ({
-      ...b,
-      percentage: Math.round((b.count / newTotal) * 100),
-    }));
-  }
-  
-  return rawBloom;
-}
 
 /** Score color based on thresholds */
 function scoreColor(score: number): string {
@@ -519,9 +493,7 @@ export default function AnalyticsPage() {
         setScores(Array.isArray(payload?.scores) ? payload.scores : []);
         setWeakTopics(Array.isArray(payload?.weakTopics) ? payload.weakTopics : []);
         setStrongTopics(Array.isArray(payload?.strongTopics) ? payload.strongTopics : []);
-        const rawBloom = Array.isArray(payload?.bloomData) ? payload.bloomData : [];
-        const completedTopics = payload?.summary?.completedTopics || 0;
-        setBloomData(scaleBloomData(rawBloom, completedTopics));
+        setBloomData(Array.isArray(payload?.bloomData) ? payload.bloomData : []);
         setCourseProgress(Array.isArray(payload?.courseProgress) ? payload.courseProgress : []);
 
         setPersona(payload?.persona ?? null);
