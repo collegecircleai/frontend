@@ -34,6 +34,7 @@ import api, { getFriendlyErrorMessage } from "@/lib/api";
 ───────────────────────────────────────── */
 interface AnalyticsSummary {
   totalTopics: number;
+  completedTopics?: number;
   avgScore: number;
   bestUnit: string;
   streak: number;
@@ -113,88 +114,6 @@ interface PersonalisationSettings {
 }
 
 /* ─────────────────────────────────────────
-   DUMMY DATA
-───────────────────────────────────────── */
-const DUMMY_SUMMARY: AnalyticsSummary = {
-  totalTopics: 156,
-  avgScore: 78,
-  bestUnit: "Data Structures",
-  streak: 12,
-};
-
-const DUMMY_WEEKLY: WeeklyEntry[] = [
-  { day: "Mon", topicsStudied: 5, quizzesDone: 2 },
-  { day: "Tue", topicsStudied: 8, quizzesDone: 3 },
-  { day: "Wed", topicsStudied: 4, quizzesDone: 1 },
-  { day: "Thu", topicsStudied: 10, quizzesDone: 4 },
-  { day: "Fri", topicsStudied: 7, quizzesDone: 2 },
-  { day: "Sat", topicsStudied: 12, quizzesDone: 5 },
-  { day: "Sun", topicsStudied: 6, quizzesDone: 2 },
-];
-
-const DUMMY_SCORES: ScoreEntry[] = [
-  { date: "2024-04-01", topic: "Arrays", score: 72 },
-  { date: "2024-04-02", topic: "Linked Lists", score: 80 },
-  { date: "2024-04-03", topic: "Trees", score: 75 },
-  { date: "2024-04-04", topic: "Graphs", score: 68 },
-  { date: "2024-04-05", topic: "Sorting", score: 82 },
-  { date: "2024-04-06", topic: "DP", score: 65 },
-  { date: "2024-04-07", topic: "Hashing", score: 88 },
-];
-
-const DUMMY_WEAK_TOPICS: WeakTopic[] = [
-  {
-    topic: "Graph Algorithms",
-    unit: "Unit 5",
-    score: 52,
-    courseId: "1",
-    topicId: "topic-5",
-  },
-  {
-    topic: "Dynamic Programming",
-    unit: "Unit 7",
-    score: 61,
-    courseId: "1",
-    topicId: "topic-7",
-  },
-  {
-    topic: "Recursion",
-    unit: "Unit 2",
-    score: 58,
-    courseId: "1",
-    topicId: "topic-2",
-  },
-  {
-    topic: "AVL Trees",
-    unit: "Unit 4",
-    score: 64,
-    courseId: "1",
-    topicId: "topic-4",
-  },
-];
-
-const DUMMY_COURSE_PROGRESS: CourseCompletion[] = [
-  {
-    courseId: "1",
-    courseName: "Data Structures",
-    completedTopics: 24,
-    totalTopics: 32,
-  },
-  {
-    courseId: "2",
-    courseName: "Algorithms",
-    completedTopics: 18,
-    totalTopics: 28,
-  },
-  {
-    courseId: "3",
-    courseName: "Database Systems",
-    completedTopics: 12,
-    totalTopics: 35,
-  },
-];
-
-/* ─────────────────────────────────────────
    HELPERS
 ───────────────────────────────────────── */
 
@@ -205,6 +124,28 @@ function safeGet<T>(fn: () => T, fallback: T): T {
   } catch {
     return fallback;
   }
+}
+
+/** Format backend weekly data into exactly 7 days ending today */
+function fillWeeklyData(backendWeekly: WeeklyEntry[]): WeeklyEntry[] {
+  const result: WeeklyEntry[] = [];
+  const daysMap = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const dayStr = d.toISOString().slice(0, 10);
+    const dayName = daysMap[d.getDay()];
+    
+    const backendEntry = backendWeekly.find(w => w.day === dayStr || w.day === dayName);
+    
+    result.push({
+      day: dayName,
+      topicsStudied: backendEntry ? backendEntry.topicsStudied : 0,
+      quizzesDone: backendEntry ? backendEntry.quizzesDone : 0,
+    });
+  }
+  return result;
 }
 
 /** Score color based on thresholds */
@@ -529,6 +470,14 @@ export default function AnalyticsPage() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  const EMPTY_SUMMARY: AnalyticsSummary = {
+    totalTopics: 0,
+    completedTopics: 0,
+    avgScore: 0,
+    bestUnit: "—",
+    streak: 0,
+  };
+
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
@@ -538,66 +487,23 @@ export default function AnalyticsPage() {
           {},
         );
 
-        setSummary(payload?.summary ?? DUMMY_SUMMARY);
-        setWeekly(
-          Array.isArray(payload?.weekly) && payload.weekly.length
-            ? payload.weekly
-            : DUMMY_WEEKLY,
-        );
-        setScores(
-          Array.isArray(payload?.scores) && payload.scores.length
-            ? payload.scores
-            : DUMMY_SCORES,
-        );
-        setWeakTopics(
-          Array.isArray(payload?.weakTopics) && payload.weakTopics.length
-            ? payload.weakTopics
-            : DUMMY_WEAK_TOPICS,
-        );
-        setStrongTopics(
-          Array.isArray(payload?.strongTopics) ? payload.strongTopics : [],
-        );
-        setBloomData(
-          Array.isArray(payload?.bloomData) ? payload.bloomData : [],
-        );
-        setCourseProgress(
-          Array.isArray(payload?.courseProgress) &&
-            payload.courseProgress.length
-            ? payload.courseProgress
-            : DUMMY_COURSE_PROGRESS,
-        );
+        setSummary(payload?.summary ?? EMPTY_SUMMARY);
+        setWeekly(fillWeeklyData(Array.isArray(payload?.weekly) ? payload.weekly : []));
+        setScores(Array.isArray(payload?.scores) ? payload.scores : []);
+        setWeakTopics(Array.isArray(payload?.weakTopics) ? payload.weakTopics : []);
+        setStrongTopics(Array.isArray(payload?.strongTopics) ? payload.strongTopics : []);
+        setBloomData(Array.isArray(payload?.bloomData) ? payload.bloomData : []);
+        setCourseProgress(Array.isArray(payload?.courseProgress) ? payload.courseProgress : []);
 
-        try {
-          const raw = localStorage.getItem("cc-learning-insights");
-          const insights = raw ? JSON.parse(raw) : {};
-          setStrongTopics(
-            Array.isArray(insights.strongTopics)
-              ? insights.strongTopics
-              : Array.isArray(payload?.strongTopics)
-                ? payload.strongTopics
-                : [],
-          );
-          setPersona(insights.persona ?? payload?.persona ?? null);
-          if (
-            Array.isArray(insights.weakTopics) &&
-            insights.weakTopics.length
-          ) {
-            setWeakTopics(insights.weakTopics);
-          }
-          if (Array.isArray(insights.bloomData) && insights.bloomData.length) {
-            setBloomData(insights.bloomData);
-          }
-        } catch {
-          setPersona(payload?.persona ?? null);
-        }
+        setPersona(payload?.persona ?? null);
       } catch {
-        // RESILIENT FALLBACK: Load dummy data if server fails
-        setSummary(DUMMY_SUMMARY);
-        setWeekly(DUMMY_WEEKLY);
-        setScores(DUMMY_SCORES);
-        setWeakTopics(DUMMY_WEAK_TOPICS);
-        setCourseProgress(DUMMY_COURSE_PROGRESS);
-        console.warn("Analytics server unreachable. Loading fallback data.");
+        // Fallback to empty if server fails
+        setSummary(EMPTY_SUMMARY);
+        setWeekly(fillWeeklyData([]));
+        setScores([]);
+        setWeakTopics([]);
+        setCourseProgress([]);
+        console.warn("Analytics server unreachable. Loading empty data.");
       } finally {
         setLoading(false);
       }
@@ -754,8 +660,8 @@ export default function AnalyticsPage() {
         }}
       >
         <StatCard
-          label="Total Topics"
-          value={summary ? String(summary.totalTopics) : "—"}
+          label="Completed Topics"
+          value={summary ? String(summary.completedTopics ?? 0) : "—"}
           icon={BookOpen}
           delay={0}
         />

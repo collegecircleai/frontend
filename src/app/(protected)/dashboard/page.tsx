@@ -541,26 +541,7 @@ export default function DashboardPage() {
             : [],
         );
 
-        try {
-          const raw = localStorage.getItem("cc-learning-insights");
-          const insights = raw ? JSON.parse(raw) : {};
-          setStrongTopics(
-            Array.isArray(insights.strongTopics)
-              ? insights.strongTopics
-              : Array.isArray(analyticsPayload?.strongTopics)
-                ? analyticsPayload.strongTopics
-                : [],
-          );
-          setPersona(insights.persona ?? analyticsPayload?.persona ?? null);
-          if (
-            Array.isArray(insights.weakTopics) &&
-            insights.weakTopics.length
-          ) {
-            setWeakTopics(insights.weakTopics);
-          }
-        } catch {
-          setPersona(analyticsPayload?.persona ?? null);
-        }
+        setPersona(analyticsPayload?.persona ?? null);
         // setSession(sessionData);
       } catch {
         setError("Unable to load dashboard. Please try again.");

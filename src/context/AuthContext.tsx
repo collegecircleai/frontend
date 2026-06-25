@@ -12,6 +12,8 @@ interface User {
   year?: number;
   course?: string;
   isOnboarded?: boolean;
+  premiumUptoDate?: string | null;
+  isPremium?: boolean;
   isActive?: boolean;
 }
 

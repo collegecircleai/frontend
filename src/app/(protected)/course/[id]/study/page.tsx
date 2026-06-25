@@ -732,26 +732,7 @@ function StudyPageInner() {
           analysis: params.analysis ?? undefined,
         });
 
-        try {
-          const raw = localStorage.getItem("cc-learning-insights");
-          const parsed = raw ? JSON.parse(raw) : {};
-          const nextStore = {
-            ...parsed,
-            persona: nextPersona,
-            strongTopics: strongTopicEntry
-              ? nextStrongTopics
-              : (parsed.strongTopics ?? []),
-            weakTopics: weakTopicEntry
-              ? nextWeakTopics
-              : (parsed.weakTopics ?? []),
-          };
-          localStorage.setItem(
-            "cc-learning-insights",
-            JSON.stringify(nextStore),
-          );
-        } catch {
-          // local persistence is best-effort only
-        }
+
       } catch {
         // analytics should never block the study flow
       }
