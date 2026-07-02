@@ -84,7 +84,7 @@ export default function TextNotesPage() {
       style={{
         display: "flex",
         flexDirection: "column",
-        height: "100vh",
+        height: "calc(100vh - 72px)", // Adjusts for dashboard top navbar
         background: "var(--pearl)",
         position: "relative",
       }}
@@ -201,6 +201,9 @@ export default function TextNotesPage() {
           padding: "12px 24px",
           borderBottom: "1px solid var(--border-light)",
           background: "var(--pearl)",
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
         }}
       >
         <div className="editor-header-left" style={{ display: "flex", alignItems: "center", gap: 12 }}>
