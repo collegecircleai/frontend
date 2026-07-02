@@ -2,32 +2,45 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Loader2, PenSquare, Save } from "lucide-react";
+import dynamic from "next/dynamic";
+import { Loader2, ArrowLeft, MoreHorizontal, Clock, Star } from "lucide-react";
 import api, { getFriendlyErrorMessage } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
+import "react-quill/dist/quill.snow.css";
+
+// ReactQuill requires document/window to exist, so it must be dynamically imported with SSR disabled
+const ReactQuill = dynamic(() => import("react-quill"), {
+  ssr: false,
+  loading: () => (
+    <div style={{ padding: "40px", textAlign: "center", color: "var(--mist)" }}>
+      Loading editor...
+    </div>
+  ),
+});
 
 export default function TextNotesPage() {
   const router = useRouter();
-  const [sessionName, setSessionName] = useState("");
-  const [subject, setSubject] = useState("");
-  const [professor, setProfessor] = useState("");
-  const [lectureNo, setLectureNo] = useState("1");
+  const { user } = useAuth();
+  const [sessionName, setSessionName] = useState("Untitled Lecture");
   const [notes, setNotes] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const [toast, setToast] = useState<{
-    msg: string;
-    type: "error" | "success";
-  } | null>(null);
 
-  const showToast = (msg: string, type: "error" | "success" = "error") => {
+  // Settings State
+  const [showSettings, setShowSettings] = useState(false);
+  const [subject, setSubject] = useState("General Notes");
+  const [professor, setProfessor] = useState("Unknown");
+  const [lectureNo, setLectureNo] = useState("1");
+  const [isStarred, setIsStarred] = useState(false);
+  const [toast, setToast] = useState<{ msg: string; type: "info" | "error" | "success" } | null>(null);
+
+  const showToast = (msg: string, type: "info" | "error" | "success" = "info") => {
     setToast({ msg, type });
-    setTimeout(() => setToast(null), 4000);
+    setTimeout(() => setToast(null), 3000);
   };
 
   const handleSave = async () => {
-    if (!sessionName.trim() || !subject.trim() || !notes.trim()) {
-      showToast(
-        "Please enter a session name, subject, and notes before saving.",
-      );
+    if (!notes.trim()) {
+      showToast("Please write some notes before saving.", "error");
       return;
     }
 
@@ -35,8 +48,8 @@ export default function TextNotesPage() {
       setIsSaving(true);
 
       await api.post("/classrooms", {
-        name: sessionName.trim(),
-        subject: subject.trim(),
+        name: sessionName.trim() || "Untitled Lecture",
+        subject: subject.trim() || "General Notes",
         professor: professor.trim() || "Unknown",
         lecture_no: Number(lectureNo) || 1,
         summary_cache: {
@@ -45,238 +58,332 @@ export default function TextNotesPage() {
         },
       });
 
-      showToast("Notes saved successfully.", "success");
-      setTimeout(() => router.push("/classroom"), 500);
+      router.push("/classroom");
     } catch (err) {
       console.error("Failed to save notes:", err);
-      showToast(
-        getFriendlyErrorMessage(err, "Unable to save your notes right now."),
-      );
+      showToast(getFriendlyErrorMessage(err, "Unable to save your notes right now."), "error");
     } finally {
       setIsSaving(false);
     }
   };
 
+  const modules = {
+    toolbar: [
+      [{ font: [] }],
+      [{ size: ["small", false, "large", "huge"] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ color: [] }, { background: [] }],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ align: [] }],
+      ["clean"],
+    ],
+  };
+
   return (
     <div
       style={{
-        maxWidth: 980,
-        margin: "0 auto",
-        minHeight: "calc(100vh - 120px)",
-        padding: "40px 20px 56px",
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        background: "var(--pearl)",
+        position: "relative",
       }}
     >
+      {/* Toast Notification */}
       {toast && (
-        <div
-          style={{
-            position: "fixed",
-            top: 24,
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 10000,
-            background: toast.type === "error" ? "#FF4D5A" : "#14122A",
-            color: "#fff",
-            padding: "12px 18px",
-            borderRadius: 16,
-            fontWeight: 700,
-            boxShadow: "0 20px 40px rgba(0,0,0,0.15)",
-          }}
-        >
+        <div style={{
+          position: "fixed",
+          top: 24,
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 9999,
+          background: toast.type === "error" ? "#EF4444" : "var(--ink)",
+          color: toast.type === "error" ? "#fff" : "var(--pearl)",
+          padding: "12px 24px",
+          borderRadius: 999,
+          fontSize: 14,
+          fontWeight: 600,
+          boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+          animation: "slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+          display: "flex",
+          alignItems: "center",
+          gap: 8
+        }}>
+          {toast.type === "info" && <Clock size={16} />}
           {toast.msg}
         </div>
       )}
 
-      <div
+      {/* Document Settings Modal */}
+      {showSettings && (
+        <div style={{
+          position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+          background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)", zIndex: 1000,
+          display: "flex", alignItems: "center", justifyContent: "center"
+        }}>
+          <div style={{
+            background: "var(--deep)", borderRadius: 20, padding: 32,
+            width: 400, border: "1px solid var(--border-light)",
+            boxShadow: "0 20px 50px rgba(0,0,0,0.1)"
+          }}>
+            <h3 style={{ marginTop: 0, marginBottom: 8, color: "var(--ink)", fontSize: 20, fontWeight: 800 }}>
+              Document Details
+            </h3>
+            <p style={{ margin: "0 0 24px 0", color: "var(--mist)", fontSize: 13 }}>
+              These details will be saved with your lecture notes.
+            </p>
+            
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <label style={{ fontSize: 12, fontWeight: 700, color: "var(--mist)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                Subject
+                <input 
+                  value={subject} 
+                  onChange={e => setSubject(e.target.value)} 
+                  style={{ 
+                    width: "100%", padding: "12px 16px", marginTop: 8, borderRadius: 12, 
+                    border: "1px solid var(--border-light)", background: "var(--pearl)", 
+                    color: "var(--ink)", fontSize: 15, fontWeight: 600, outline: "none" 
+                  }} 
+                />
+              </label>
+              
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <label style={{ fontSize: 12, fontWeight: 700, color: "var(--mist)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                  Professor
+                  <input 
+                    value={professor} 
+                    onChange={e => setProfessor(e.target.value)} 
+                    style={{ 
+                      width: "100%", padding: "12px 16px", marginTop: 8, borderRadius: 12, 
+                      border: "1px solid var(--border-light)", background: "var(--pearl)", 
+                      color: "var(--ink)", fontSize: 15, fontWeight: 600, outline: "none" 
+                    }} 
+                  />
+                </label>
+
+                <label style={{ fontSize: 12, fontWeight: 700, color: "var(--mist)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                  Lecture No.
+                  <input 
+                    type="number" 
+                    value={lectureNo} 
+                    onChange={e => setLectureNo(e.target.value)} 
+                    style={{ 
+                      width: "100%", padding: "12px 16px", marginTop: 8, borderRadius: 12, 
+                      border: "1px solid var(--border-light)", background: "var(--pearl)", 
+                      color: "var(--ink)", fontSize: 15, fontWeight: 600, outline: "none" 
+                    }} 
+                  />
+                </label>
+              </div>
+            </div>
+            
+            <button 
+              onClick={() => setShowSettings(false)} 
+              style={{
+                width: "100%", marginTop: 32, padding: 14, borderRadius: 12,
+                background: "var(--violet)", color: "#fff", border: "none", 
+                fontWeight: 800, fontSize: 15, cursor: "pointer"
+              }}
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Top Header */}
+      <header
         style={{
           display: "flex",
           alignItems: "center",
-          gap: 16,
-          marginBottom: 24,
+          justifyContent: "space-between",
+          padding: "12px 24px",
+          borderBottom: "1px solid var(--border-light)",
+          background: "var(--pearl)",
         }}
       >
-        <button
-          type="button"
-          onClick={() => router.back()}
-          style={{
-            width: 46,
-            height: 46,
-            borderRadius: 14,
-            background: "var(--deep)",
-            border: "1px solid var(--border-light)",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "var(--ink)",
-          }}
-        >
-          <ArrowLeft size={18} />
-        </button>
-        <div>
-          <p
-            style={{
-              textTransform: "uppercase",
-              letterSpacing: "0.16em",
-              color: "var(--mist)",
-              fontSize: 12,
-              margin: 0,
-            }}
-          >
-            Classroom
-          </p>
-          <h1
-            style={{
-              fontSize: 30,
-              fontWeight: 900,
-              color: "var(--ink)",
-              margin: "6px 0 0",
-            }}
-          >
-            Write Notes
-          </h1>
-        </div>
-      </div>
-
-      <div
-        style={{
-          background: "var(--deep)",
-          borderRadius: 32,
-          border: "1px solid var(--border-light)",
-          boxShadow: "0 30px 60px rgba(0,0,0,0.04)",
-          padding: 24,
-        }}
-      >
-        <div style={{ display: "grid", gap: 16, marginBottom: 20 }}>
-          <div
-            style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}
-          >
-            <label style={styles.label}>
-              Lecture Title
-              <input
-                value={sessionName}
-                onChange={(e) => setSessionName(e.target.value)}
-                style={styles.input}
-                placeholder="Week 4: Algorithms"
-              />
-            </label>
-            <label style={styles.label}>
-              Subject
-              <input
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                style={styles.input}
-                placeholder="Computer Science"
-              />
-            </label>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1.3fr 0.7fr",
-              gap: 16,
-            }}
-          >
-            <label style={styles.label}>
-              Professor
-              <input
-                value={professor}
-                onChange={(e) => setProfessor(e.target.value)}
-                style={styles.input}
-                placeholder="Dr. Smith"
-              />
-            </label>
-            <label style={styles.label}>
-              Lecture No.
-              <input
-                type="number"
-                value={lectureNo}
-                onChange={(e) => setLectureNo(e.target.value)}
-                style={styles.input}
-              />
-            </label>
-          </div>
-        </div>
-
-        <label style={styles.label}>
-          Notes
-          <textarea
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            placeholder="Write your lecture notes here..."
-            style={{
-              ...styles.input,
-              minHeight: 220,
-              resize: "vertical",
-              fontWeight: 500,
-              lineHeight: 1.6,
-            }}
-          />
-        </label>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: 12,
-            marginTop: 18,
-            flexWrap: "wrap",
-          }}
-        >
-          <p style={{ color: "var(--mist)", fontSize: 13, margin: 0 }}>
-            This saves your notes through the existing classroom creation
-            endpoint.
-          </p>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <button
-            type="button"
+            onClick={() => router.back()}
+            style={{
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              color: "var(--mist)",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <ArrowLeft size={18} />
+          </button>
+          
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              fontSize: 14,
+              color: "var(--ink)",
+            }}
+          >
+            <span style={{ color: "var(--violet)", fontWeight: 600 }}>{subject || "Subject"}</span>
+            <span style={{ color: "var(--mist)", opacity: 0.5 }}>/</span>
+            <input
+              value={sessionName}
+              onChange={(e) => setSessionName(e.target.value)}
+              style={{
+                border: "none",
+                outline: "none",
+                fontWeight: 600,
+                fontSize: 14,
+                width: 150,
+                background: "transparent",
+                color: "var(--ink)",
+              }}
+            />
+          </div>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <button
             onClick={handleSave}
             disabled={isSaving}
             style={{
-              background: "linear-gradient(135deg, #4D3FFF, #6C5BFF)",
+              background: "var(--jade)", // Green upgrade-like button
               color: "#fff",
-              borderRadius: 18,
-              padding: "14px 18px",
               border: "none",
+              padding: "6px 16px",
+              borderRadius: 6,
+              fontSize: 13,
+              fontWeight: 600,
               cursor: isSaving ? "not-allowed" : "pointer",
               display: "flex",
               alignItems: "center",
-              gap: 10,
-              fontWeight: 800,
+              gap: 6,
             }}
           >
-            {isSaving ? <Loader2 className="spin" /> : <Save size={16} />}
-            {isSaving ? "Saving..." : "Save Notes"}
+            {isSaving ? <Loader2 size={14} className="spin" /> : "Save Document"}
+          </button>
+          <div
+            style={{
+              padding: "6px 14px",
+              borderRadius: 999,
+              background: "var(--border-light)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "var(--mist)",
+              fontSize: 13,
+              fontWeight: 700,
+            }}
+          >
+            {user?.name || "Me"}
+          </div>
+          <button 
+            onClick={() => showToast("Document versions are autosaved dynamically.", "info")}
+            style={{ background: "transparent", border: "none", color: "var(--mist)", cursor: "pointer" }}
+            title="Version History"
+          >
+            <Clock size={18} />
+          </button>
+          <button 
+            onClick={() => setIsStarred(!isStarred)}
+            style={{ background: "transparent", border: "none", color: isStarred ? "#F5A623" : "var(--mist)", cursor: "pointer" }}
+            title="Star Document"
+          >
+            <Star size={18} fill={isStarred ? "#F5A623" : "none"} />
+          </button>
+          <button 
+            onClick={() => setShowSettings(true)}
+            style={{ background: "transparent", border: "none", color: "var(--mist)", cursor: "pointer" }}
+            title="Document Settings"
+          >
+            <MoreHorizontal size={18} />
           </button>
         </div>
+      </header>
+
+      {/* Editor Area */}
+      <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+        <ReactQuill
+          theme="snow"
+          value={notes}
+          onChange={setNotes}
+          modules={modules}
+          placeholder="Start typing your notes here..."
+          style={{ height: "100%", display: "flex", flexDirection: "column", color: "var(--ink)" }}
+          className="custom-quill-editor"
+        />
       </div>
 
       <style>{`
         .spin { animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        
+        @keyframes slideDown {
+          from { opacity: 0; transform: translate(-50%, -20px); }
+          to { opacity: 1; transform: translate(-50%, 0); }
+        }
+        
+        /* Custom overrides for ReactQuill to match the theme */
+        .custom-quill-editor .ql-toolbar {
+          border: none !important;
+          border-bottom: 1px solid var(--border-light) !important;
+          background: var(--deep) !important;
+          padding: 12px 24px !important;
+        }
+
+        .custom-quill-editor .ql-toolbar .ql-stroke {
+          stroke: var(--mist) !important;
+        }
+
+        .custom-quill-editor .ql-toolbar .ql-fill {
+          fill: var(--mist) !important;
+        }
+
+        .custom-quill-editor .ql-toolbar .ql-picker {
+          color: var(--mist) !important;
+        }
+        
+        /* Dropdown lists styling */
+        .custom-quill-editor .ql-picker-options {
+          background-color: var(--deep) !important;
+          border: 1px solid var(--border-light) !important;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .custom-quill-editor .ql-picker-item {
+          color: var(--ink) !important;
+        }
+
+        .custom-quill-editor .ql-picker-item:hover,
+        .custom-quill-editor .ql-picker-item.ql-selected {
+          color: var(--violet) !important;
+          background-color: rgba(77, 63, 255, 0.05) !important;
+        }
+
+        .custom-quill-editor .ql-container {
+          border: none !important;
+          font-family: inherit !important;
+          font-size: 15px !important;
+          flex: 1;
+          overflow-y: auto;
+          background: var(--pearl) !important;
+        }
+        
+        .custom-quill-editor .ql-editor {
+          padding: 40px 60px !important;
+          max-width: 900px;
+          margin: 0 auto;
+          line-height: 1.7;
+          color: var(--ink);
+        }
+
+        .custom-quill-editor .ql-editor.ql-blank::before {
+          color: var(--mist) !important;
+          opacity: 0.6;
+        }
       `}</style>
     </div>
   );
 }
-
-const styles = {
-  label: {
-    display: "grid",
-    gap: 8,
-    fontSize: 12,
-    color: "#4D3FFF",
-    textTransform: "uppercase" as const,
-    letterSpacing: "0.12em",
-    fontWeight: 800,
-  },
-  input: {
-    width: "100%",
-    borderRadius: 18,
-    border: "1px solid var(--border-light)",
-    background: "rgba(255,255,255,0.04)",
-    padding: "14px 16px",
-    fontSize: 15,
-    fontWeight: 600,
-    color: "var(--ink)",
-    outline: "none",
-  },
-};

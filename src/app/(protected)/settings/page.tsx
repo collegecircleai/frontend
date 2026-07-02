@@ -9,7 +9,6 @@ import {
   LogOut,
   Settings as SettingsIcon,
   CreditCard,
-  Calendar,
   Edit2,
   Check,
   X as CloseIcon,
@@ -31,7 +30,6 @@ export default function SettingsPage() {
   const [role, setRole] = useState(user?.role || "student");
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [isConnectingCalendar, setIsConnectingCalendar] = useState(false);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -76,27 +74,6 @@ export default function SettingsPage() {
   const handleSaveName = () => {
     localStorage.setItem("cc_ai_user_name", name);
     setIsEditingName(false);
-  };
-
-  const handleConnectCalendar = async () => {
-    if (!user) return;
-
-    try {
-      setIsConnectingCalendar(true);
-      const res = await api.get("/auth/calendar/connect");
-      const connectUrl = res.data?.data?.connectUrl || res.data?.connectUrl;
-
-      if (!connectUrl) {
-        throw new Error("Calendar connect URL was not returned by the server.");
-      }
-
-      window.open(connectUrl, "_blank", "noopener,noreferrer");
-    } catch (err) {
-      console.error("Calendar connect failed", err);
-      alert("Unable to connect Google Calendar right now. Please try again.");
-    } finally {
-      setIsConnectingCalendar(false);
-    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -338,30 +315,6 @@ export default function SettingsPage() {
               >
                 {role}
               </p>
-
-              <button
-                type="button"
-                onClick={handleConnectCalendar}
-                disabled={isConnectingCalendar}
-                style={{
-                  marginTop: 10,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 8,
-                  borderRadius: 999,
-                  border: "1px solid rgba(77, 63, 255, 0.18)",
-                  background: "rgba(77, 63, 255, 0.08)",
-                  color: "var(--violet)",
-                  padding: "8px 12px",
-                  fontSize: 12,
-                  fontWeight: 700,
-                  cursor: isConnectingCalendar ? "wait" : "pointer",
-                  transition: "all 0.2s ease",
-                }}
-              >
-                <Calendar size={14} />
-                {isConnectingCalendar ? "Connecting..." : "Connect to Calendar"}
-              </button>
             </div>
           </div>
 

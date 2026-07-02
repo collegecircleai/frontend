@@ -611,91 +611,113 @@ export default function ClassroomDetails() {
                 >
                   Notes
                 </div>
-                <ReactMarkdown
-                  components={{
-                    h1: ({ children }) => (
-                      <h1
+                {(() => {
+                  const content = (storedSummary || summaryData)?.notes_markdown || "";
+                  // Check if it's HTML from Quill editor
+                  const isHtml = /<[a-z][\s\S]*>/i.test(content);
+
+                  if (isHtml) {
+                    return (
+                      <div
+                        className="html-notes-content"
+                        dangerouslySetInnerHTML={{ __html: content }}
                         style={{
-                          fontSize: 28,
-                          margin: "0 0 12px",
-                          color: "var(--ink)",
-                          fontWeight: 900,
-                        }}
-                      >
-                        {children}
-                      </h1>
-                    ),
-                    h2: ({ children }) => (
-                      <h2
-                        style={{
-                          fontSize: 22,
-                          margin: "20px 0 10px",
-                          color: "var(--ink)",
-                          fontWeight: 900,
-                        }}
-                      >
-                        {children}
-                      </h2>
-                    ),
-                    h3: ({ children }) => (
-                      <h3
-                        style={{
-                          fontSize: 18,
-                          margin: "18px 0 10px",
-                          color: "var(--ink)",
-                          fontWeight: 800,
-                        }}
-                      >
-                        {children}
-                      </h3>
-                    ),
-                    p: ({ children }) => (
-                      <p
-                        style={{
-                          margin: "0 0 12px",
-                          lineHeight: 1.8,
                           color: "var(--mist)",
-                        }}
-                      >
-                        {children}
-                      </p>
-                    ),
-                    ul: ({ children }) => (
-                      <ul
-                        style={{
-                          margin: "0 0 12px 20px",
-                          padding: 0,
                           lineHeight: 1.8,
-                          color: "var(--mist)",
+                          fontSize: 15,
                         }}
-                      >
-                        {children}
-                      </ul>
-                    ),
-                    ol: ({ children }) => (
-                      <ol
-                        style={{
-                          margin: "0 0 12px 20px",
-                          padding: 0,
-                          lineHeight: 1.8,
-                          color: "var(--mist)",
-                        }}
-                      >
-                        {children}
-                      </ol>
-                    ),
-                    li: ({ children }) => (
-                      <li style={{ marginBottom: 6 }}>{children}</li>
-                    ),
-                    strong: ({ children }) => (
-                      <strong style={{ color: "var(--ink)" }}>
-                        {children}
-                      </strong>
-                    ),
-                  }}
-                >
-                  {(storedSummary || summaryData)?.notes_markdown || ""}
-                </ReactMarkdown>
+                      />
+                    );
+                  }
+
+                  return (
+                    <ReactMarkdown
+                      components={{
+                        h1: ({ children }) => (
+                          <h1
+                            style={{
+                              fontSize: 28,
+                              margin: "0 0 12px",
+                              color: "var(--ink)",
+                              fontWeight: 900,
+                            }}
+                          >
+                            {children}
+                          </h1>
+                        ),
+                        h2: ({ children }) => (
+                          <h2
+                            style={{
+                              fontSize: 22,
+                              margin: "20px 0 10px",
+                              color: "var(--ink)",
+                              fontWeight: 900,
+                            }}
+                          >
+                            {children}
+                          </h2>
+                        ),
+                        h3: ({ children }) => (
+                          <h3
+                            style={{
+                              fontSize: 18,
+                              margin: "18px 0 10px",
+                              color: "var(--ink)",
+                              fontWeight: 800,
+                            }}
+                          >
+                            {children}
+                          </h3>
+                        ),
+                        p: ({ children }) => (
+                          <p
+                            style={{
+                              margin: "0 0 12px",
+                              lineHeight: 1.8,
+                              color: "var(--mist)",
+                            }}
+                          >
+                            {children}
+                          </p>
+                        ),
+                        ul: ({ children }) => (
+                          <ul
+                            style={{
+                              margin: "0 0 12px 20px",
+                              padding: 0,
+                              lineHeight: 1.8,
+                              color: "var(--mist)",
+                            }}
+                          >
+                            {children}
+                          </ul>
+                        ),
+                        ol: ({ children }) => (
+                          <ol
+                            style={{
+                              margin: "0 0 12px 20px",
+                              padding: 0,
+                              lineHeight: 1.8,
+                              color: "var(--mist)",
+                            }}
+                          >
+                            {children}
+                          </ol>
+                        ),
+                        li: ({ children }) => (
+                          <li style={{ marginBottom: 6 }}>{children}</li>
+                        ),
+                        strong: ({ children }) => (
+                          <strong style={{ color: "var(--ink)" }}>
+                            {children}
+                          </strong>
+                        ),
+                      }}
+                    >
+                      {content}
+                    </ReactMarkdown>
+                  );
+                })()}
               </section>
 
               <section
@@ -971,6 +993,47 @@ export default function ClassroomDetails() {
         }
         .spin-icon {
           animation: spin 1s linear infinite;
+        }
+
+        /* HTML Notes Renderer Styles */
+        .html-notes-content p {
+          margin: 0 0 12px;
+        }
+        .html-notes-content ul, .html-notes-content ol {
+          margin: 0 0 12px 20px;
+          padding: 0;
+          list-style: inherit;
+        }
+        .html-notes-content li {
+          margin-bottom: 6px;
+        }
+        .html-notes-content strong {
+          color: var(--ink);
+          font-weight: bold;
+        }
+        .html-notes-content h1 {
+          font-size: 28px;
+          margin: 0 0 12px;
+          color: var(--ink);
+          font-weight: 900;
+        }
+        .html-notes-content h2 {
+          font-size: 22px;
+          margin: 20px 0 10px;
+          color: var(--ink);
+          font-weight: 900;
+        }
+        .html-notes-content h3 {
+          font-size: 18px;
+          margin: 18px 0 10px;
+          color: var(--ink);
+          font-weight: 800;
+        }
+        .html-notes-content em {
+          font-style: italic;
+        }
+        .html-notes-content u {
+          text-decoration: underline;
         }
       `}</style>
     </div>

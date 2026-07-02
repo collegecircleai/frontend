@@ -164,7 +164,7 @@ export default function AdminSystemPage() {
                 </div>
                 <div style={{ width: "60px" }}>
                   <div style={{ fontSize: "9px", color: "#8B849E", letterSpacing: "0.05em", marginBottom: "4px", textTransform: "uppercase" }}>Uptime</div>
-                  <div style={{ fontSize: "13px", fontWeight: 600, color: "#FFFFFF" }}>99.91%</div>
+                  <div style={{ fontSize: "13px", fontWeight: 600, color: "#ffffffff" }}>99.91%</div>
                 </div>
               </div>
             </div>
