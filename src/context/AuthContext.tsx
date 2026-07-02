@@ -14,6 +14,7 @@ interface User {
   isOnboarded?: boolean;
   premiumUptoDate?: string | null;
   isPremium?: boolean;
+  isActive?: boolean;
 }
 
 interface AuthContextType {
