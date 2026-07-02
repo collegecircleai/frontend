@@ -8,8 +8,8 @@ import api, { getFriendlyErrorMessage } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import "react-quill/dist/quill.snow.css";
 
-// ReactQuill requires document/window to exist, so it must be dynamically imported with SSR disabled
-const ReactQuill = dynamic(() => import("react-quill"), {
+// ReactQuill requires document/window to exist, so we dynamically import our wrapper
+const QuillEditor = dynamic(() => import("@/components/classroom/QuillEditor"), {
   ssr: false,
   loading: () => (
     <div style={{ padding: "40px", textAlign: "center", color: "var(--mist)" }}>
@@ -65,18 +65,6 @@ export default function TextNotesPage() {
     } finally {
       setIsSaving(false);
     }
-  };
-
-  const modules = {
-    toolbar: [
-      [{ font: [] }],
-      [{ size: ["small", false, "large", "huge"] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ color: [] }, { background: [] }],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ align: [] }],
-      ["clean"],
-    ],
   };
 
   return (
@@ -316,14 +304,10 @@ export default function TextNotesPage() {
         data-lenis-prevent="true"
         style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, overflow: "hidden" }}
       >
-        <ReactQuill
-          theme="snow"
+        <QuillEditor
           value={notes}
           onChange={setNotes}
-          modules={modules}
           placeholder="Start typing your notes here..."
-          style={{ height: "100%", display: "flex", flexDirection: "column", color: "var(--ink)", minHeight: 0 }}
-          className="custom-quill-editor"
         />
       </div>
 
@@ -382,8 +366,8 @@ export default function TextNotesPage() {
 
         .custom-quill-editor .ql-container {
           border: none !important;
-          font-family: inherit !important;
-          font-size: 15px !important;
+          font-family: "Times New Roman", Times, serif !important;
+          font-size: 17px !important;
           flex: 1;
           min-height: 0 !important; /* Critical for flexbox scrolling */
           overflow: hidden !important;
@@ -396,9 +380,57 @@ export default function TextNotesPage() {
           margin: 0 auto;
           line-height: 1.7;
           color: var(--ink);
+          font-family: "Times New Roman", Times, serif !important;
           height: 100% !important;
           overflow-y: auto !important;
         }
+
+        .custom-quill-editor .ql-picker.ql-font {
+          width: 140px !important;
+        }
+
+        /* 10 Font Types: Dropdown Labels & Actual Text Rendering */
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-label[data-value="arial"]::before,
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-item[data-value="arial"]::before { content: 'Arial' !important; font-family: 'Arial', sans-serif !important; }
+        .custom-quill-editor .ql-font-arial { font-family: 'Arial', sans-serif !important; }
+
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-label[data-value="comic-sans"]::before,
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-item[data-value="comic-sans"]::before { content: 'Comic Sans MS' !important; font-family: 'Comic Sans MS', cursive !important; }
+        .custom-quill-editor .ql-font-comic-sans { font-family: 'Comic Sans MS', cursive !important; }
+
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-label[data-value="courier-new"]::before,
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-item[data-value="courier-new"]::before { content: 'Courier New' !important; font-family: 'Courier New', monospace !important; }
+        .custom-quill-editor .ql-font-courier-new { font-family: 'Courier New', monospace !important; }
+
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-label[data-value="georgia"]::before,
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-item[data-value="georgia"]::before { content: 'Georgia' !important; font-family: 'Georgia', serif !important; }
+        .custom-quill-editor .ql-font-georgia { font-family: 'Georgia', serif !important; }
+
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-label[data-value="helvetica"]::before,
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-item[data-value="helvetica"]::before { content: 'Helvetica' !important; font-family: 'Helvetica', sans-serif !important; }
+        .custom-quill-editor .ql-font-helvetica { font-family: 'Helvetica', sans-serif !important; }
+
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-label[data-value="impact"]::before,
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-item[data-value="impact"]::before { content: 'Impact' !important; font-family: 'Impact', sans-serif !important; }
+        .custom-quill-editor .ql-font-impact { font-family: 'Impact', sans-serif !important; }
+
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-label[data-value="tahoma"]::before,
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-item[data-value="tahoma"]::before { content: 'Tahoma' !important; font-family: 'Tahoma', sans-serif !important; }
+        .custom-quill-editor .ql-font-tahoma { font-family: 'Tahoma', sans-serif !important; }
+
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-label[data-value="times-new-roman"]::before,
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-item[data-value="times-new-roman"]::before,
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-label:not([data-value])::before,
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-item:not([data-value])::before { content: 'Times New Roman' !important; font-family: 'Times New Roman', Times, serif !important; }
+        .custom-quill-editor .ql-font-times-new-roman { font-family: 'Times New Roman', Times, serif !important; }
+
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-label[data-value="trebuchet"]::before,
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-item[data-value="trebuchet"]::before { content: 'Trebuchet MS' !important; font-family: 'Trebuchet MS', sans-serif !important; }
+        .custom-quill-editor .ql-font-trebuchet { font-family: 'Trebuchet MS', sans-serif !important; }
+
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-label[data-value="verdana"]::before,
+        .custom-quill-editor .ql-picker.ql-font .ql-picker-item[data-value="verdana"]::before { content: 'Verdana' !important; font-family: 'Verdana', sans-serif !important; }
+        .custom-quill-editor .ql-font-verdana { font-family: 'Verdana', sans-serif !important; }
 
         /* Fix for copy-pasted code snippets in Dark Mode */
         .custom-quill-editor .ql-editor code,
