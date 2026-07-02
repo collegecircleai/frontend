@@ -400,6 +400,34 @@ export default function TextNotesPage() {
           overflow-y: auto !important;
         }
 
+        /* Fix for copy-pasted code snippets in Dark Mode */
+        .custom-quill-editor .ql-editor code,
+        .custom-quill-editor .ql-editor pre {
+          background-color: rgba(120, 120, 150, 0.15) !important;
+          color: var(--logo-accent, var(--ink)) !important;
+          border-radius: 4px;
+          padding: 2px 6px;
+          font-family: var(--font-mono), monospace !important;
+          font-size: 0.9em;
+        }
+
+        .custom-quill-editor .ql-editor pre {
+          padding: 16px;
+          overflow-x: auto;
+          display: block;
+        }
+
+        .custom-quill-editor .ql-editor blockquote {
+          border-left: 4px solid var(--violet);
+          padding-left: 16px;
+          color: var(--mist);
+          font-style: italic;
+          background: rgba(77, 63, 255, 0.05);
+          padding: 8px 16px;
+          border-radius: 0 8px 8px 0;
+          margin-left: 0;
+        }
+
         .custom-quill-editor .ql-editor.ql-blank::before {
           color: var(--mist) !important;
           opacity: 0.6;
