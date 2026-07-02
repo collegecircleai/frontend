@@ -116,12 +116,12 @@ export default function TextNotesPage() {
 
       {/* Document Settings Modal */}
       {showSettings && (
-        <div style={{
+        <div className="settings-modal-overlay" style={{
           position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
           background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)", zIndex: 1000,
           display: "flex", alignItems: "center", justifyContent: "center"
         }}>
-          <div style={{
+          <div className="settings-modal-content" style={{
             background: "var(--deep)", borderRadius: 20, padding: 32,
             width: 400, border: "1px solid var(--border-light)",
             boxShadow: "0 20px 50px rgba(0,0,0,0.1)"
@@ -193,6 +193,7 @@ export default function TextNotesPage() {
 
       {/* Top Header */}
       <header
+        className="editor-header"
         style={{
           display: "flex",
           alignItems: "center",
@@ -202,7 +203,7 @@ export default function TextNotesPage() {
           background: "var(--pearl)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <div className="editor-header-left" style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <button
             onClick={() => router.back()}
             style={{
@@ -218,6 +219,7 @@ export default function TextNotesPage() {
           </button>
           
           <div
+            className="breadcrumb-container"
             style={{
               display: "flex",
               alignItems: "center",
@@ -226,9 +228,10 @@ export default function TextNotesPage() {
               color: "var(--ink)",
             }}
           >
-            <span style={{ color: "var(--violet)", fontWeight: 600 }}>{subject || "Subject"}</span>
-            <span style={{ color: "var(--mist)", opacity: 0.5 }}>/</span>
+            <span className="breadcrumb-text" style={{ color: "var(--violet)", fontWeight: 600 }}>{subject || "Subject"}</span>
+            <span className="breadcrumb-divider" style={{ color: "var(--mist)", opacity: 0.5 }}>/</span>
             <input
+              className="title-input"
               value={sessionName}
               onChange={(e) => setSessionName(e.target.value)}
               style={{
@@ -244,8 +247,9 @@ export default function TextNotesPage() {
           </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        <div className="editor-header-right" style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <button
+            className="save-btn"
             onClick={handleSave}
             disabled={isSaving}
             style={{
@@ -382,6 +386,44 @@ export default function TextNotesPage() {
         .custom-quill-editor .ql-editor.ql-blank::before {
           color: var(--mist) !important;
           opacity: 0.6;
+        }
+
+        /* Mobile Responsive Overrides */
+        @media (max-width: 768px) {
+          .editor-header {
+            padding: 12px 16px !important;
+            flex-direction: column;
+            gap: 16px;
+            align-items: stretch !important;
+          }
+          .editor-header-left, .editor-header-right {
+            justify-content: space-between;
+            width: 100%;
+          }
+          .breadcrumb-container {
+            flex: 1;
+          }
+          .title-input {
+            width: 120px !important;
+          }
+          .settings-modal-content {
+            width: 90% !important;
+            padding: 20px !important;
+          }
+          .custom-quill-editor .ql-toolbar {
+            padding: 8px 12px !important;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            justify-content: center;
+          }
+          .custom-quill-editor .ql-editor {
+            padding: 20px !important;
+            font-size: 16px !important; /* Prevents iOS auto-zoom */
+          }
+          .save-btn {
+            padding: 6px 12px !important;
+          }
         }
       `}</style>
     </div>
