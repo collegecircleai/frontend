@@ -84,9 +84,10 @@ export default function TextNotesPage() {
       style={{
         display: "flex",
         flexDirection: "column",
-        height: "calc(100vh - 72px)", // Adjusts for dashboard top navbar
+        height: "calc(100vh - 64px)", // Matches the fixed 64px dashboard top navbar
         background: "var(--pearl)",
         position: "relative",
+        overflow: "hidden",
       }}
     >
       {/* Toast Notification */}
@@ -311,14 +312,17 @@ export default function TextNotesPage() {
       </header>
 
       {/* Editor Area */}
-      <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+      <div 
+        data-lenis-prevent="true"
+        style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, overflow: "hidden" }}
+      >
         <ReactQuill
           theme="snow"
           value={notes}
           onChange={setNotes}
           modules={modules}
           placeholder="Start typing your notes here..."
-          style={{ height: "100%", display: "flex", flexDirection: "column", color: "var(--ink)" }}
+          style={{ height: "100%", display: "flex", flexDirection: "column", color: "var(--ink)", minHeight: 0 }}
           className="custom-quill-editor"
         />
       </div>
@@ -333,6 +337,13 @@ export default function TextNotesPage() {
         }
         
         /* Custom overrides for ReactQuill to match the theme */
+        .custom-quill-editor {
+          display: flex !important;
+          flex-direction: column !important;
+          height: 100% !important;
+          min-height: 0 !important;
+        }
+
         .custom-quill-editor .ql-toolbar {
           border: none !important;
           border-bottom: 1px solid var(--border-light) !important;
@@ -374,7 +385,8 @@ export default function TextNotesPage() {
           font-family: inherit !important;
           font-size: 15px !important;
           flex: 1;
-          overflow-y: auto;
+          min-height: 0 !important; /* Critical for flexbox scrolling */
+          overflow: hidden !important;
           background: var(--pearl) !important;
         }
         
@@ -384,6 +396,8 @@ export default function TextNotesPage() {
           margin: 0 auto;
           line-height: 1.7;
           color: var(--ink);
+          height: 100% !important;
+          overflow-y: auto !important;
         }
 
         .custom-quill-editor .ql-editor.ql-blank::before {
