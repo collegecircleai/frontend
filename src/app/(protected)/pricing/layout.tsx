@@ -563,7 +563,7 @@ export default function PricingLayout({
                 whiteSpace: "nowrap",
               }}
             >
-              Pricing
+              Recharge
             </div>
           </div>
 
