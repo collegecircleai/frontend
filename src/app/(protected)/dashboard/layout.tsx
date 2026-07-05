@@ -270,16 +270,7 @@ function Sidebar({
           />
         ))}
 
-        {/* Admin — only if role === 'admin' */}
-        {user?.role === "admin" && (
-          <NavLink
-            href="/admin"
-            label="Admin"
-            icon={Shield}
-            active={pathname?.startsWith("/admin")}
-            collapsed={collapsed}
-          />
-        )}
+        {/* Admin button removed for maximum stealth (Option 3). Access via URL /admin */}
       </nav>
 
       {/* Divider */}
