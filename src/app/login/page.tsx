@@ -8,11 +8,12 @@ import { getPostAuthRoute, useAuth } from "../../context/AuthContext";
 import BrandPanel from "@/components/brand/BrandPanel";
 import CCAILogo from "@/components/brand/CCAILogo";
 import { Mail, Lock, ArrowRight, AlertCircle, Eye, EyeOff } from "lucide-react";
-import { getFriendlyErrorMessage } from "@/lib/api";
+import api, { getFriendlyErrorMessage } from "@/lib/api";
 import { useEffect } from "react";
 export default function Login() {
   const router = useRouter();
-  const { login, user, isLoading } = useAuth();
+  const { login, user, isLoading, setToken, setRefreshToken, setUser } =
+    useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -58,30 +59,54 @@ export default function Login() {
       return;
     }
 
+    const searchParams = new URLSearchParams(window.location.search);
     const hash = window.location.hash.replace(/^#/, "");
-    if (!hash) {
-      return;
-    }
-
     const hashParams = new URLSearchParams(hash);
-    const accessToken = hashParams.get("accessToken");
-    const refreshToken = hashParams.get("refreshToken");
+    const accessToken =
+      hashParams.get("accessToken") || searchParams.get("accessToken");
+    const refreshToken =
+      hashParams.get("refreshToken") || searchParams.get("refreshToken");
 
     if (!accessToken) {
       return;
     }
 
-    localStorage.setItem("token", accessToken);
-    if (refreshToken) {
-      localStorage.setItem("refreshToken", refreshToken);
-    }
+    const syncGoogleSession = async () => {
+      localStorage.setItem("token", accessToken);
+      if (refreshToken) {
+        localStorage.setItem("refreshToken", refreshToken);
+      }
 
-    window.history.replaceState(
-      null,
-      "",
-      `${window.location.pathname}${window.location.search}`,
-    );
-  }, []);
+      setToken(accessToken);
+      if (refreshToken) {
+        setRefreshToken(refreshToken);
+      }
+
+      try {
+        const meResponse = await api.get("/auth/me");
+        const meData = meResponse?.data?.data ?? meResponse?.data;
+        const meUser = meData?.user ?? meData?.data?.user ?? meData;
+
+        if (meUser) {
+          setUser(meUser);
+          localStorage.setItem("user", JSON.stringify(meUser));
+          router.replace(getPostAuthRoute(meUser));
+        }
+      } catch {
+        setError(
+          "Google sign-in completed, but the session could not be loaded.",
+        );
+      } finally {
+        window.history.replaceState(
+          null,
+          "",
+          `${window.location.pathname}${window.location.search}`,
+        );
+      }
+    };
+
+    void syncGoogleSession();
+  }, [router, setRefreshToken, setToken, setUser]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
