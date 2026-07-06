@@ -19,7 +19,6 @@ import {
   Settings,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import api from "@/lib/api";
 import DarkAurora from "@/components/effects/DarkAurora";
 import ElegantParticles from "@/components/effects/ElegantParticles";
 import ComponentErrorBoundary from "@/components/effects/ErrorBoundary";
@@ -65,7 +64,7 @@ function CCAILogo({ collapsed = false }: { collapsed?: boolean }) {
               lineHeight: 1,
             }}
           >
-            CC{" "}&gt;AI
+            CC &gt;AI
           </div>
           <div
             style={{
@@ -77,7 +76,7 @@ function CCAILogo({ collapsed = false }: { collapsed?: boolean }) {
               marginTop: "3px",
             }}
           >
-            Gurukul Digital
+            Student Intelligence
           </div>
         </div>
       )}
@@ -90,19 +89,18 @@ const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: Home },
   { href: "/course", label: "My Courses", icon: BookOpen },
   { href: "/upload", label: "Upload", icon: Upload },
-  { href: "/assignment-solver", label: "Assg Solver", icon: Zap },
+  { href: "/assignment-solver", label: "Research Studio", icon: Zap },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/classroom", label: "Live Classroom", icon: Mic },
   { href: "/pricing", label: "Pricing", icon: CreditCard },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
-
 /* -- Mobile Bottom Nav Items (no Upload/Pricing) -- */
 const MOBILE_NAV_ITEMS = [
   { href: "/dashboard", label: "Home", icon: Home },
   { href: "/course", label: "Courses", icon: BookOpen },
-  { href: "/assignment-solver", label: "Solver", icon: Zap },
+  { href: "/assignment-solver", label: "Research Studio", icon: Zap },
   { href: "/classroom", label: "Live", icon: Mic },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/settings", label: "Settings", icon: Settings },
@@ -188,35 +186,7 @@ function Sidebar({
 }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const router = useRouter();
-  const [credits, setCredits] = useState<number | null>(null);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-
-  useEffect(() => {
-    let mounted = true;
-
-    const loadCredits = async () => {
-      try {
-        const res = await api.get("/payments/credits");
-        const nextCredits = res.data?.data?.credits ?? res.data?.credits;
-        if (mounted && typeof nextCredits === "number") {
-          setCredits(nextCredits);
-        }
-      } catch {
-        if (mounted) {
-          setCredits(null);
-        }
-      }
-    };
-
-    if (user) {
-      void loadCredits();
-    }
-
-    return () => {
-      mounted = false;
-    };
-  }, [user]);
 
   const handleLogout = async () => {
     setIsLogoutModalOpen(true);
@@ -392,30 +362,6 @@ function Sidebar({
               >
                 {user?.role || "student"}
               </div>
-              <div
-                style={{
-                  marginTop: 6,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "4px 8px",
-                  borderRadius: 999,
-                  background: "rgba(0, 200, 150, 0.12)",
-                  color: "var(--jade)",
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 10,
-                  fontWeight: 700,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Credits
-                <span style={{ color: "var(--ink)", letterSpacing: 0 }}>
-                  {credits ?? "--"}
-                </span>
-              </div>
-
             </div>
           )}
         </div>
@@ -453,7 +399,6 @@ function MobileOverlay({
     />
   );
 }
-
 
 /* ── Course Layout ── */
 export default function CourseLayout({
@@ -560,8 +505,24 @@ export default function CourseLayout({
 
           {/* Mobile Top Left Logo */}
           {isMobile && (
-            <div style={{ zIndex: 10, paddingLeft: "4px", display: "flex", alignItems: "center", position: "absolute", left: "16px" }}>
-              <div style={{ transform: "scale(0.8)", transformOrigin: "left center" }}><CCAILogo collapsed={true} /></div>
+            <div
+              style={{
+                zIndex: 10,
+                paddingLeft: "4px",
+                display: "flex",
+                alignItems: "center",
+                position: "absolute",
+                left: "16px",
+              }}
+            >
+              <div
+                style={{
+                  transform: "scale(0.8)",
+                  transformOrigin: "left center",
+                }}
+              >
+                <CCAILogo collapsed={true} />
+              </div>
             </div>
           )}
 
@@ -588,7 +549,8 @@ export default function CourseLayout({
                 opacity: 0.8,
               }}
             >
-              <span>CC</span><span style={{ marginLeft: "3px" }}>&gt;AI</span>
+              <span>CC</span>
+              <span style={{ marginLeft: "3px" }}>&gt;AI</span>
             </div>
             <NetworkStatusDot />
             <div
@@ -626,7 +588,9 @@ export default function CourseLayout({
 
         {/* Page content */}
         <SwipeWrapper>
-          <div style={{ padding: isMobile ? "16px 16px 88px 16px" : "0px" }}>{children}</div>
+          <div style={{ padding: isMobile ? "16px 16px 88px 16px" : "0px" }}>
+            {children}
+          </div>
         </SwipeWrapper>
       </div>
     </div>

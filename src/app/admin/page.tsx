@@ -1,437 +1,523 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useAuth } from "@/context/AuthContext";
-import { redirect } from "next/navigation";
-import api, { getFriendlyErrorMessage } from "@/lib/api";
-import {
-  Users,
-  BookOpen,
-  Zap,
-  Database,
-  Activity,
-  Search,
-  ChevronLeft,
+import { useState, useEffect } from "react";
+import { 
+  Bell, 
+  Clock, 
+  RefreshCcw, 
+  Search, 
+  Filter, 
+  SortDesc, 
+  ChevronLeft, 
   ChevronRight,
-  ShieldAlert,
-  CheckCircle2,
-  XCircle,
   MoreVertical,
-  Cpu,
-  Mail,
+  X
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import api from "@/lib/api";
 
-// Design System Tokens
-const COLORS = {
-  bg: "#0D0D1A",
-  card: "#14122A",
-  accent: "#4D3FFF",
-  text: "#FFFFFF",
-  textMuted: "#94A3B8",
-  jade: "#10B981",
-  yellow: "#F59E0B",
-  red: "#EF4444",
+type Activity = {
+  title: string;
+  meta: string;
+  color: string;
 };
 
-export default function AdminDashboard() {
-  const { user, isLoading: authLoading } = useAuth();
-  const [stats, setStats] = useState<any>(null);
-  const [users, setUsers] = useState<any[]>([]);
-  const [aiActivity, setAiActivity] = useState<any[]>([]);
-  const [health, setHealth] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [totalUsers, setTotalUsers] = useState(0);
+type UserType = {
+  id: string;
+  name: string;
+  email: string;
+  college: string;
+  joined: string;
+  courses: number;
+  avgSession: string;
+  lastLogin: string;
+  status: string;
+  semester?: string;
+  major?: string;
+  gpa?: string;
+  queries?: number;
+  streak?: string;
+  activities?: Activity[];
+};
 
-  // RBAC Protection
-  useEffect(() => {
-    if (!authLoading && (!user || user.role !== "admin")) {
-      redirect("/dashboard");
-    }
-  }, [user, authLoading]);
+// Mock data to perfectly match the screenshot UI until real data replaces it
+const MOCK_USERS: UserType[] = [
+  { id: "1", name: "Priya Sharma", email: "priya.s@university.edu", college: "Stanford University", joined: "2023-08-15", courses: 12, avgSession: "42m 15s", lastLogin: "2h ago", status: "ACTIVE" },
+  { id: "2", name: "Rohan Mehta", email: "rohan.m@iit.edu", college: "IIT Delhi", joined: "2023-09-02", courses: 8, avgSession: "1h 12m", lastLogin: "Just now", status: "ACTIVE" },
+  { id: "3", name: "Anjali Nair", email: "anjali.n@mit.edu", college: "MIT", joined: "2023-01-12", courses: 4, avgSession: "18m 04s", lastLogin: "14 days ago", status: "INACTIVE" },
+  { 
+    id: "4", name: "Karan Singh", email: "ks.admin@iitb.ac.in", college: "IIT Bombay", joined: "2023-11-20", 
+    courses: 11, avgSession: "42 m", lastLogin: "1h ago", status: "ACTIVE",
+    semester: "8th Semester", major: "Computer Science", gpa: "9.82 / 10.0", queries: 342, streak: "04 d",
+    activities: [
+      { title: "Logged in via SSO", meta: "14:22:12 - IP 192.168.1.1", color: "#B2A3FF" },
+      { title: "Completed Quiz: AI Ethics", meta: "12:05:44 - Score: 98%", color: "#00D28E" },
+      { title: "Document Upload: Thesis_v2.pdf", meta: "Yesterday - 18:40:02", color: "#8B849E" },
+      { title: "Shared Course: Deep Learning", meta: "Yesterday - 15:20:10", color: "#8B849E" },
+      { title: "Resource Access Denied", meta: "Admin permission needed", color: "#FF6B6B" }
+    ]
+  },
+  { id: "5", name: "Divya Iyer", email: "divya.i@harvard.edu", college: "Harvard University", joined: "2024-05-10", courses: 1, avgSession: "12m 45s", lastLogin: "12h ago", status: "NEW" },
+  { id: "6", name: "Arjun Patel", email: "arjun.p@blocked.com", college: "University of Waterloo", joined: "2022-12-05", courses: 32, avgSession: "0s", lastLogin: "90 days ago", status: "BLOCKED" },
+];
 
-  const fetchData = async () => {
-    try {
-      setErrorMessage(null);
-      const [statsRes, usersRes, activityRes, healthRes] = await Promise.all([
-        api.get("/admin/stats"),
-        api.get(`/admin/users?page=${page}&search=${search}`),
-        api.get("/admin/ai-activity"),
-        api.get("/admin/health"),
-      ]);
-
-      if (statsRes.data.success) setStats(statsRes.data.data);
-      if (usersRes.data.success) {
-        setUsers(usersRes.data.data.users);
-        setTotalUsers(usersRes.data.data.total);
-      }
-      if (activityRes.data.success) setAiActivity(activityRes.data.data);
-      if (healthRes.data.success) setHealth(healthRes.data.data);
-    } catch (err) {
-      console.error("Failed to fetch admin data", err);
-      setErrorMessage(
-        getFriendlyErrorMessage(err, "Unable to load admin data right now."),
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+export default function AdminUsersPage() {
+  const [users, setUsers] = useState<UserType[]>(MOCK_USERS);
+  const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (user?.role === "admin") {
-      fetchData();
-    }
-  }, [user, page, search]);
-
-  const handleBlockUser = async (id: string) => {
-    try {
-      const res = await api.post(`/admin/users/${id}/block`);
-      if (res.data.success) {
-        setUsers(
-          users.map((u) =>
-            u.user_id === id ? { ...u, is_active: res.data.data.is_active } : u,
-          ),
-        );
+    const fetchUsers = async () => {
+      try {
+        setIsLoading(true);
+        const response = await api.get("/auth/users");
+        if (response.data?.data?.items) {
+          const backendUsers = response.data.data.items.map((u: any) => ({
+            id: u.id,
+            name: u.name,
+            email: u.email,
+            college: u.college_id || "N/A",
+            joined: new Date(u.created_at).toISOString().split("T")[0],
+            courses: 0, // Fallback until backend supports
+            avgSession: "--", 
+            lastLogin: "--", 
+            status: u.is_active ? "ACTIVE" : "INACTIVE",
+            semester: u.semester || "--",
+            major: u.course || "--",
+            gpa: "--",
+            queries: 0,
+            streak: "0 d",
+            activities: []
+          }));
+          setUsers(backendUsers);
+        }
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      console.error("Failed to toggle block status", err);
-      setErrorMessage(
-        getFriendlyErrorMessage(err, "Unable to update user status."),
-      );
+    };
+    fetchUsers();
+  }, []);
+
+  // Handle clicking outside sidebar to close
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedUser(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const getStatusPill = (status: string) => {
+    switch (status) {
+      case "ACTIVE":
+        return <span style={{ padding: "4px 10px", borderRadius: "100px", fontSize: "10px", fontWeight: 700, backgroundColor: "rgba(0, 210, 142, 0.1)", color: "#00D28E", letterSpacing: "0.05em" }}>ACTIVE</span>;
+      case "INACTIVE":
+        return <span style={{ padding: "4px 10px", borderRadius: "100px", fontSize: "10px", fontWeight: 700, backgroundColor: "rgba(139, 132, 158, 0.1)", color: "#8B849E", letterSpacing: "0.05em" }}>INACTIVE</span>;
+      case "NEW":
+        return <span style={{ padding: "4px 10px", borderRadius: "100px", fontSize: "10px", fontWeight: 700, backgroundColor: "rgba(123, 112, 255, 0.15)", color: "#B2A3FF", letterSpacing: "0.05em" }}>NEW</span>;
+      case "BLOCKED":
+        return <span style={{ padding: "4px 10px", borderRadius: "100px", fontSize: "10px", fontWeight: 700, backgroundColor: "rgba(255, 77, 77, 0.1)", color: "#FF6B6B", letterSpacing: "0.05em" }}>BLOCKED</span>;
+      default:
+        return <span>{status}</span>;
     }
   };
-
-  if (authLoading || user?.role !== "admin") {
-    return (
-      <div className="min-h-screen bg-[#0D0D1A] flex items-center justify-center text-white font-['DM_Sans']">
-        <div className="animate-pulse flex flex-col items-center gap-4">
-          <ShieldAlert className="w-12 h-12 text-[#4D3FFF]" />
-          <p className="text-lg font-medium">Authorizing Admin Access...</p>
-        </div>
-      </div>
-    );
-  }
-
-  const creditUsagePercent = stats
-    ? (stats.apiCreditsUsed / stats.apiCreditsLimit) * 100
-    : 0;
-  const creditBarColor =
-    creditUsagePercent > 80
-      ? COLORS.red
-      : creditUsagePercent > 50
-        ? COLORS.yellow
-        : COLORS.jade;
 
   return (
-    <div className="min-h-screen bg-[#0D0D1A] text-white font-['DM_Sans'] p-6 md:p-10">
-      {errorMessage && (
-        <div className="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-100">
-          {errorMessage}
-        </div>
-      )}
-      {/* Header */}
-      <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <h1 className="text-4xl font-['Playfair_Display'] font-bold mb-2">
-            Command Center
-          </h1>
-          <p className="text-slate-400">
-            Welcome back, Admin. System operations are currently nominal.
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-            <input
-              type="text"
-              placeholder="Search users..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="bg-[#14122A] border border-white/10 rounded-full py-2 pl-10 pr-4 w-64 focus:outline-none focus:border-[#4D3FFF] transition-colors"
-            />
+    <div style={{ position: "relative", minHeight: "100%", display: "flex", overflow: "hidden" }}>
+      {/* Main Content Area */}
+      <div style={{ 
+        flex: 1, 
+        padding: "48px 56px", 
+        maxWidth: "1200px",
+        transition: "margin-right 0.3s ease",
+        marginRight: selectedUser ? "400px" : "0" // Push content when sidebar opens
+      }}>
+        
+        {/* Header section */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "32px" }}>
+          <div>
+            <h1 style={{ fontSize: "28px", fontWeight: 600, color: "#FFFFFF", fontFamily: "var(--font-display)", marginBottom: "8px" }}>
+              All Users
+            </h1>
+            <p style={{ fontSize: "13px", color: "#8B849E" }}>
+              User database and management
+            </p>
           </div>
-          <button className="bg-[#4D3FFF] hover:bg-[#4D3FFF]/80 px-6 py-2 rounded-full transition-all font-medium">
-            System Export
-          </button>
+          
+          <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+            <button style={{ background: "none", border: "none", color: "#E2DCEF", cursor: "pointer", display: "flex", alignItems: "center" }}>
+              <Bell size={18} />
+            </button>
+            <button style={{ background: "none", border: "none", color: "#E2DCEF", cursor: "pointer", display: "flex", alignItems: "center" }}>
+              <Clock size={18} />
+            </button>
+            <button style={{ 
+              background: "rgba(255,255,255,0.05)", 
+              border: "1px solid rgba(255,255,255,0.1)", 
+              color: "#E2DCEF", 
+              padding: "8px 16px", 
+              borderRadius: "6px",
+              fontSize: "13px",
+              fontWeight: 500,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px"
+            }}>
+              Refresh
+            </button>
+            <button style={{ 
+              background: "#D4C9FF", 
+              border: "none", 
+              color: "#0B0A10", 
+              padding: "8px 24px", 
+              borderRadius: "6px",
+              fontSize: "13px",
+              fontWeight: 600,
+              cursor: "pointer"
+            }}>
+              Export
+            </button>
+          </div>
         </div>
-      </header>
 
-      {/* Stats Row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-10">
-        <StatCard
-          title="Total Users"
-          value={stats?.totalUsers || 0}
-          icon={<Users className="w-5 h-5" />}
-          trend="+12% from last month"
-        />
-        <StatCard
-          title="New Users Today"
-          value={stats?.newUsersToday || 0}
-          icon={<Zap className="w-5 h-5" />}
-          trend="Real-time growth"
-        />
-        <StatCard
-          title="Courses Uploaded"
-          value={stats?.totalCourses || 0}
-          icon={<BookOpen className="w-5 h-5" />}
-          trend="8 pending review"
-        />
-        <StatCard
-          title="AI Generations"
-          value={stats?.aiGenerationsToday || 0}
-          icon={<Activity className="w-5 h-5" />}
-          trend="Last 24 hours"
-        />
-        <div className="bg-[#14122A] p-6 rounded-2xl border border-white/5 relative overflow-hidden group">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-slate-400 text-sm font-medium uppercase tracking-wider">
-              API Credit Usage
-            </h3>
-            <div
-              className={`p-2 rounded-lg bg-white/5 ${creditUsagePercent > 80 ? "animate-pulse" : ""}`}
-            >
-              <Cpu className={`w-5 h-5`} style={{ color: creditBarColor }} />
-            </div>
-          </div>
-          <div className="text-2xl font-bold mb-4">
-            {creditUsagePercent.toFixed(1)}%
-          </div>
-          <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${creditUsagePercent}%` }}
-              className="h-full rounded-full"
-              style={{ backgroundColor: creditBarColor }}
+        {/* Toolbar (Search & Filters) */}
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "24px" }}>
+          <div style={{ 
+            display: "flex", 
+            alignItems: "center", 
+            background: "#13111C", 
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: "8px",
+            padding: "0 16px",
+            width: "400px",
+            height: "40px"
+          }}>
+            <Search size={16} color="#8B849E" />
+            <input 
+              type="text" 
+              placeholder="Search user ID, email, or name..." 
+              style={{ 
+                background: "transparent", 
+                border: "none", 
+                color: "#FFFFFF", 
+                outline: "none", 
+                marginLeft: "12px",
+                width: "100%",
+                fontSize: "13px"
+              }} 
             />
           </div>
-          <p className="text-[10px] text-slate-500 mt-2">
-            {stats?.apiCreditsUsed} / {stats?.apiCreditsLimit} tokens used
-          </p>
-          {creditUsagePercent > 80 && (
-            <div className="absolute top-0 right-0 p-1">
-              <ShieldAlert className="w-4 h-4 text-red-500 animate-bounce" />
-            </div>
-          )}
+          
+          <div style={{ display: "flex", gap: "12px" }}>
+            <button style={{ 
+              background: "#13111C", 
+              border: "1px solid rgba(255,255,255,0.08)", 
+              color: "#E2DCEF", 
+              padding: "0 16px", 
+              height: "40px",
+              borderRadius: "8px",
+              fontSize: "13px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px"
+            }}>
+              <Filter size={14} /> Filters
+            </button>
+            <button style={{ 
+              background: "#13111C", 
+              border: "1px solid rgba(255,255,255,0.08)", 
+              color: "#E2DCEF", 
+              padding: "0 16px", 
+              height: "40px",
+              borderRadius: "8px",
+              fontSize: "13px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px"
+            }}>
+              <SortDesc size={14} /> Sort by: Joined
+            </button>
+          </div>
+        </div>
+
+        {/* Main Table */}
+        <div style={{ 
+          background: "#1A1825", 
+          borderRadius: "12px", 
+          overflow: "hidden",
+          border: "1px solid rgba(255,255,255,0.05)"
+        }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", textAlign: "left" }}>
+                <th style={{ padding: "16px 24px", fontSize: "10px", fontWeight: 600, color: "#8B849E", letterSpacing: "0.1em", textTransform: "uppercase" }}>User</th>
+                <th style={{ padding: "16px 24px", fontSize: "10px", fontWeight: 600, color: "#8B849E", letterSpacing: "0.1em", textTransform: "uppercase" }}>College</th>
+                <th style={{ padding: "16px 24px", fontSize: "10px", fontWeight: 600, color: "#8B849E", letterSpacing: "0.1em", textTransform: "uppercase" }}>Joined</th>
+                <th style={{ padding: "16px 24px", fontSize: "10px", fontWeight: 600, color: "#8B849E", letterSpacing: "0.1em", textTransform: "uppercase", textAlign: "center" }}>Courses</th>
+                <th style={{ padding: "16px 24px", fontSize: "10px", fontWeight: 600, color: "#8B849E", letterSpacing: "0.1em", textTransform: "uppercase" }}>Avg Session</th>
+                <th style={{ padding: "16px 24px", fontSize: "10px", fontWeight: 600, color: "#8B849E", letterSpacing: "0.1em", textTransform: "uppercase" }}>Last Login</th>
+                <th style={{ padding: "16px 24px", fontSize: "10px", fontWeight: 600, color: "#8B849E", letterSpacing: "0.1em", textTransform: "uppercase", textAlign: "right" }}>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((u, i) => (
+                <tr 
+                  key={u.id} 
+                  onClick={() => setSelectedUser(u)}
+                  style={{ 
+                    borderBottom: i === users.length - 1 ? "none" : "1px solid rgba(255,255,255,0.03)",
+                    cursor: "pointer",
+                    backgroundColor: selectedUser?.id === u.id ? "rgba(255,255,255,0.02)" : "transparent",
+                    transition: "background-color 0.2s ease"
+                  }}
+                  onMouseEnter={(e) => {
+                    if (selectedUser?.id !== u.id) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.02)";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (selectedUser?.id !== u.id) e.currentTarget.style.backgroundColor = "transparent";
+                  }}
+                >
+                  <td style={{ padding: "16px 24px", display: "flex", alignItems: "center", gap: "12px" }}>
+                    <div style={{ 
+                      width: "36px", 
+                      height: "36px", 
+                      borderRadius: "50%", 
+                      background: "linear-gradient(135deg, #4D3FFF, #00C896)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "white",
+                      fontWeight: 600,
+                      fontSize: "14px",
+                      overflow: "hidden"
+                    }}>
+                      {u.name.charAt(0)}
+                    </div>
+                    <div>
+                      <div style={{ fontSize: "14px", fontWeight: 600, color: "#FFFFFF" }}>{u.name}</div>
+                      <div style={{ fontSize: "12px", color: "#8B849E", marginTop: "2px" }}>{u.email}</div>
+                    </div>
+                  </td>
+                  <td style={{ padding: "16px 24px", fontSize: "13px", color: "#E2DCEF" }}>{u.college}</td>
+                  <td style={{ padding: "16px 24px", fontSize: "13px", color: "#E2DCEF" }}>
+                    <div style={{ width: "80px" }}>{u.joined}</div>
+                  </td>
+                  <td style={{ padding: "16px 24px", fontSize: "13px", color: "#E2DCEF", textAlign: "center" }}>{u.courses}</td>
+                  <td style={{ padding: "16px 24px", fontSize: "13px", color: "#E2DCEF" }}>{u.avgSession}</td>
+                  <td style={{ padding: "16px 24px", fontSize: "13px", color: "#8B849E" }}>{u.lastLogin}</td>
+                  <td style={{ padding: "16px 24px", textAlign: "right" }}>
+                    {getStatusPill(u.status)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination Footer */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "24px" }}>
+          <div style={{ fontSize: "13px", color: "#8B849E" }}>
+            Showing 1 to 6 of 1,248 results
+          </div>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <button style={{ width: "32px", height: "32px", borderRadius: "6px", background: "transparent", border: "1px solid rgba(255,255,255,0.1)", color: "#8B849E", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+              <ChevronLeft size={16} />
+            </button>
+            <button style={{ width: "32px", height: "32px", borderRadius: "6px", background: "rgba(123, 112, 255, 0.2)", border: "1px solid rgba(123, 112, 255, 0.3)", color: "#B2A3FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 600, cursor: "pointer" }}>
+              1
+            </button>
+            <button style={{ width: "32px", height: "32px", borderRadius: "6px", background: "transparent", border: "none", color: "#8B849E", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", cursor: "pointer" }}>
+              2
+            </button>
+            <button style={{ width: "32px", height: "32px", borderRadius: "6px", background: "transparent", border: "none", color: "#8B849E", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", cursor: "pointer" }}>
+              3
+            </button>
+            <button style={{ width: "32px", height: "32px", borderRadius: "6px", background: "transparent", border: "1px solid rgba(255,255,255,0.1)", color: "#E2DCEF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+              <ChevronRight size={16} />
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Users Table */}
-        <div className="lg:col-span-2 bg-[#14122A] rounded-2xl border border-white/5 overflow-hidden">
-          <div className="p-6 border-b border-white/5 flex justify-between items-center">
-            <h2 className="text-xl font-bold">User Management</h2>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-slate-400">
-                Page {page} of {Math.ceil(totalUsers / 20) || 1}
-              </span>
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                className="p-1 hover:bg-white/5 rounded transition-colors"
+      {/* Slide-out User Profile Sidebar */}
+      <div style={{
+        position: "fixed",
+        top: 0,
+        right: selectedUser ? 0 : "-420px",
+        width: "400px",
+        height: "100vh",
+        backgroundColor: "#13111C",
+        borderLeft: "1px solid rgba(255,255,255,0.05)",
+        boxShadow: "-10px 0 40px rgba(0,0,0,0.5)",
+        transition: "right 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        zIndex: 50,
+        overflowY: "auto"
+      }}>
+        {selectedUser && (
+          <div style={{ padding: "32px" }}>
+            
+            {/* Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px", flexShrink: 0 }}>
+              <h2 style={{ fontSize: "14px", fontWeight: 600, color: "#FFFFFF" }}>User Profile</h2>
+              <button 
+                onClick={() => setSelectedUser(null)}
+                style={{ background: "none", border: "none", color: "#8B849E", cursor: "pointer" }}
               >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setPage((p) => p + 1)}
-                className="p-1 hover:bg-white/5 rounded transition-colors"
-              >
-                <ChevronRight className="w-5 h-5" />
+                <X size={20} />
               </button>
             </div>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="text-slate-500 text-sm uppercase tracking-wider">
-                  <th className="px-6 py-4 font-semibold">User</th>
-                  <th className="px-6 py-4 font-semibold">College</th>
-                  <th className="px-6 py-4 font-semibold">Joined</th>
-                  <th className="px-6 py-4 font-semibold">Status</th>
-                  <th className="px-6 py-4 font-semibold text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {users.map((u) => (
-                  <tr
-                    key={u.user_id}
-                    className="hover:bg-white/[0.02] transition-colors"
-                  >
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col">
-                        <span className="font-medium">{u.name}</span>
-                        <span className="text-xs text-slate-500">
-                          {u.email}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-slate-300">
-                      {u.college || "N/A"}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-slate-300">
-                      {new Date(u.created_at).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4">
-                      <StatusBadge active={u.is_active} />
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <button
-                        onClick={() => handleBlockUser(u.user_id)}
-                        className={`px-3 py-1 rounded text-xs font-bold transition-all ${
-                          u.is_active
-                            ? "bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white"
-                            : "bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white"
-                        }`}
-                      >
-                        {u.is_active ? "Block" : "Unblock"}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
 
-        {/* Sidebar: Activity & Health */}
-        <div className="flex flex-col gap-8">
-          {/* Recent AI Generations */}
-          <div className="bg-[#14122A] rounded-2xl border border-white/5 p-6">
-            <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-              <Activity className="w-5 h-5 text-[#4D3FFF]" />
-              AI Activity Log
-            </h2>
-            <div className="space-y-4">
-              {aiActivity.map((log) => (
-                <div
-                  key={log.id}
-                  className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/5"
-                >
-                  <div
-                    className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${log.status === "success" ? "bg-emerald-500" : "bg-red-500"}`}
-                  />
-                  <div className="flex-1 overflow-hidden">
-                    <p className="text-sm font-medium truncate">{log.topic}</p>
-                    <div className="flex justify-between items-center text-[11px] text-slate-500 mt-1">
-                      <span>
-                        {log.user} • {log.type}
-                      </span>
-                      <span>
-                        {new Date(log.timestamp).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </span>
-                    </div>
-                  </div>
+            {/* Profile Info */}
+            <div style={{ display: "flex", gap: "16px", alignItems: "center", marginBottom: "40px" }}>
+              <div style={{ 
+                width: "56px", 
+                height: "56px", 
+                borderRadius: "50%", 
+                background: "linear-gradient(135deg, #4D3FFF, #00C896)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "white",
+                fontWeight: 600,
+                fontSize: "20px"
+              }}>
+                {selectedUser.name.charAt(0)}
+              </div>
+              <div>
+                <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#FFFFFF", marginBottom: "2px" }}>{selectedUser.name}</h3>
+                <p style={{ fontSize: "12px", color: "#8B849E", marginBottom: "8px" }}>{selectedUser.email}</p>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <span style={{ padding: "4px 8px", borderRadius: "4px", backgroundColor: "rgba(0, 210, 142, 0.1)", color: "#00D28E", fontSize: "9px", fontWeight: 700, letterSpacing: "0.05em" }}>
+                    PREMIUM MEMBER
+                  </span>
+                  <span style={{ padding: "4px 8px", borderRadius: "4px", backgroundColor: "rgba(255, 255, 255, 0.05)", color: "#E2DCEF", fontSize: "9px", fontWeight: 700, letterSpacing: "0.05em" }}>
+                    VERIFIED
+                  </span>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* System Health */}
-          <div className="bg-[#14122A] rounded-2xl border border-white/5 p-6">
-            <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-              <Database className="w-5 h-5 text-[#4D3FFF]" />
-              System Integrity
-            </h2>
-            <div className="space-y-4">
-              <HealthRow
-                label="Database Cluster"
-                status={health?.database || "Checking..."}
-                active={health?.database === "Connected"}
-              />
-              <HealthRow
-                label="Gemini API Engine"
-                status={health?.gemini || "Checking..."}
-                active={health?.gemini === "Active"}
-              />
-              <HealthRow
-                label="SMTP Node"
-                status={health?.email || "Checking..."}
-                active={health?.email === "Active"}
-              />
-            </div>
-            <div className="mt-8 p-4 rounded-xl bg-[#4D3FFF]/5 border border-[#4D3FFF]/20">
-              <div className="flex items-center gap-3 text-xs text-[#4D3FFF]">
-                <Activity className="w-4 h-4 animate-pulse" />
-                <span className="font-mono uppercase tracking-tighter">
-                  System Pulse Monitoring Active
-                </span>
               </div>
             </div>
+
+            {/* Section: Academic Foundation */}
+            <div style={{ marginBottom: "32px" }}>
+              <div style={{ fontSize: "10px", fontWeight: 600, color: "#8B849E", letterSpacing: "0.1em", marginBottom: "12px" }}>
+                ACADEMIC FOUNDATION
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                <div style={{ backgroundColor: "#1A1825", padding: "16px", borderRadius: "8px" }}>
+                  <div style={{ fontSize: "9px", color: "#8B849E", letterSpacing: "0.05em", marginBottom: "4px", textTransform: "uppercase" }}>Institution</div>
+                  <div style={{ fontSize: "13px", fontWeight: 500, color: "#E2DCEF" }}>{selectedUser.college || "N/A"}</div>
+                </div>
+                <div style={{ backgroundColor: "#1A1825", padding: "16px", borderRadius: "8px" }}>
+                  <div style={{ fontSize: "9px", color: "#8B849E", letterSpacing: "0.05em", marginBottom: "4px", textTransform: "uppercase" }}>Semester</div>
+                  <div style={{ fontSize: "13px", fontWeight: 500, color: "#E2DCEF" }}>{selectedUser.semester || "N/A"}</div>
+                </div>
+                <div style={{ backgroundColor: "#1A1825", padding: "16px", borderRadius: "8px" }}>
+                  <div style={{ fontSize: "9px", color: "#8B849E", letterSpacing: "0.05em", marginBottom: "4px", textTransform: "uppercase" }}>Major</div>
+                  <div style={{ fontSize: "13px", fontWeight: 500, color: "#E2DCEF" }}>{selectedUser.major || "N/A"}</div>
+                </div>
+                <div style={{ backgroundColor: "#1A1825", padding: "16px", borderRadius: "8px" }}>
+                  <div style={{ fontSize: "9px", color: "#8B849E", letterSpacing: "0.05em", marginBottom: "4px", textTransform: "uppercase" }}>GPA</div>
+                  <div style={{ fontSize: "13px", fontWeight: 500, color: "#E2DCEF" }}>{selectedUser.gpa || "N/A"}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section: Engagement Metrics */}
+            <div style={{ marginBottom: "32px" }}>
+              <div style={{ fontSize: "10px", fontWeight: 600, color: "#8B849E", letterSpacing: "0.1em", marginBottom: "12px" }}>
+                ENGAGEMENT METRICS
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                <div style={{ backgroundColor: "#22202E", padding: "16px", borderRadius: "8px" }}>
+                  <div style={{ fontSize: "20px", fontWeight: 600, color: "#FFFFFF", marginBottom: "4px" }}>{selectedUser.courses}</div>
+                  <div style={{ fontSize: "9px", color: "#8B849E", letterSpacing: "0.05em", textTransform: "uppercase" }}>Courses</div>
+                </div>
+                <div style={{ backgroundColor: "#22202E", padding: "16px", borderRadius: "8px" }}>
+                  <div style={{ fontSize: "20px", fontWeight: 600, color: "#00D28E", marginBottom: "4px" }}>
+                    {selectedUser.avgSession?.split(' ')[0]}<span style={{ fontSize: "14px", color: "#8B849E", marginLeft: "2px" }}>{selectedUser.avgSession?.split(' ')[1] || 'm'}</span>
+                  </div>
+                  <div style={{ fontSize: "9px", color: "#8B849E", letterSpacing: "0.05em", textTransform: "uppercase" }}>Avg Session</div>
+                </div>
+                <div style={{ backgroundColor: "#22202E", padding: "16px", borderRadius: "8px" }}>
+                  <div style={{ fontSize: "20px", fontWeight: 600, color: "#FFFFFF", marginBottom: "4px" }}>{selectedUser.queries || 0}</div>
+                  <div style={{ fontSize: "9px", color: "#8B849E", letterSpacing: "0.05em", textTransform: "uppercase" }}>Queries</div>
+                </div>
+                <div style={{ backgroundColor: "#22202E", padding: "16px", borderRadius: "8px" }}>
+                  <div style={{ fontSize: "20px", fontWeight: 600, color: "#FFFFFF", marginBottom: "4px" }}>
+                    {selectedUser.streak?.split(' ')[0] || "00"}<span style={{ fontSize: "14px", color: "#8B849E", marginLeft: "2px" }}>d</span>
+                  </div>
+                  <div style={{ fontSize: "9px", color: "#8B849E", letterSpacing: "0.05em", textTransform: "uppercase" }}>Streak</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section: Institutional Ledger */}
+            <div style={{ marginBottom: "0" }}>
+              <div style={{ fontSize: "10px", fontWeight: 600, color: "#8B849E", letterSpacing: "0.1em", marginBottom: "16px" }}>
+                INSTITUTIONAL LEDGER
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "16px", position: "relative", paddingLeft: "8px" }}>
+                {/* Connecting line */}
+                <div style={{ position: "absolute", left: "10px", top: "10px", bottom: "10px", width: "1px", backgroundColor: "rgba(255,255,255,0.05)" }} />
+                
+                {selectedUser.activities?.map((activity, idx) => (
+                  <div key={idx} style={{ display: "flex", gap: "16px", position: "relative" }}>
+                    <div style={{ width: "5px", height: "5px", borderRadius: "50%", backgroundColor: activity.color, marginTop: "6px", flexShrink: 0, zIndex: 2 }} />
+                    <div>
+                      <div style={{ fontSize: "12px", fontWeight: 500, color: "#E2DCEF", marginBottom: "2px" }}>{activity.title}</div>
+                      <div style={{ fontSize: "10px", color: "#8B849E" }}>{activity.meta}</div>
+                    </div>
+                  </div>
+                ))}
+                
+                {(!selectedUser.activities || selectedUser.activities.length === 0) && (
+                  <div style={{ fontSize: "12px", color: "#8B849E", paddingLeft: "16px" }}>No recent activity.</div>
+                )}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div style={{ display: "flex", gap: "12px", marginTop: "24px", flexShrink: 0 }}>
+              <button style={{ 
+                flex: 1, 
+                backgroundColor: "#D4C9FF", 
+                color: "#0B0A10", 
+                border: "none", 
+                padding: "12px", 
+                borderRadius: "8px", 
+                fontSize: "13px", 
+                fontWeight: 600, 
+                cursor: "pointer",
+                flexShrink: 0,
+                minHeight: "44px"
+              }}>
+                Message User
+              </button>
+              <button style={{ 
+                flex: 1, 
+                backgroundColor: "transparent", 
+                color: "#FF6B6B", 
+                border: "1px solid rgba(255, 107, 107, 0.3)", 
+                padding: "12px", 
+                borderRadius: "8px", 
+                fontSize: "13px", 
+                fontWeight: 600, 
+                cursor: "pointer",
+                flexShrink: 0,
+                minHeight: "44px"
+              }}>
+                Block User
+              </button>
+            </div>
+            
           </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function StatCard({
-  title,
-  value,
-  icon,
-  trend,
-}: {
-  title: string;
-  value: number | string;
-  icon: React.ReactNode;
-  trend: string;
-}) {
-  return (
-    <div className="bg-[#14122A] p-6 rounded-2xl border border-white/5 transition-transform hover:scale-[1.02]">
-      <div className="flex justify-between items-start mb-4">
-        <h3 className="text-slate-400 text-sm font-medium uppercase tracking-wider">
-          {title}
-        </h3>
-        <div className="p-2 rounded-lg bg-white/5 text-[#4D3FFF]">{icon}</div>
-      </div>
-      <div className="text-3xl font-bold mb-2">
-        {typeof value === "number" ? value.toLocaleString() : value}
-      </div>
-      <p className="text-xs text-slate-500">{trend}</p>
-    </div>
-  );
-}
-
-function StatusBadge({ active }: { active: boolean }) {
-  return (
-    <div
-      className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${
-        active
-          ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
-          : "bg-red-500/10 text-red-500 border border-red-500/20"
-      }`}
-    >
-      <span
-        className={`w-1 h-1 rounded-full ${active ? "bg-emerald-500" : "bg-red-500"}`}
-      />
-      {active ? "Active" : "Blocked"}
-    </div>
-  );
-}
-
-function HealthRow({
-  label,
-  status,
-  active,
-}: {
-  label: string;
-  status: string;
-  active: boolean;
-}) {
-  return (
-    <div className="flex justify-between items-center">
-      <span className="text-sm text-slate-400">{label}</span>
-      <div className="flex items-center gap-2">
-        <span className="text-xs font-medium">{status}</span>
-        {active ? (
-          <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-        ) : (
-          <XCircle className="w-4 h-4 text-red-500" />
         )}
       </div>
+
     </div>
   );
 }

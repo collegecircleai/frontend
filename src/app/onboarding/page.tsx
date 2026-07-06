@@ -116,7 +116,7 @@ function Sidebar({ step, isMobile }: { step: number; isMobile: boolean }) {
               marginTop: "12px",
             }}
           >
-            GURUKUL DIGITAL INFRASTRUCTURE
+            Student Intelligence INFRASTRUCTURE
           </div>
         </div>
 
@@ -1167,7 +1167,7 @@ export default function Onboarding() {
 
   useEffect(() => {
     if (step === 4) {
-      const timer = setTimeout(() => router.push("/dashboard"), 4000);
+      const timer = setTimeout(() => router.push("/premium"), 4000);
       return () => clearTimeout(timer);
     }
   }, [step, router]);

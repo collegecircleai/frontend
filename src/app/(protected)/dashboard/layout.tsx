@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   Home,
   BookOpen,
@@ -19,7 +19,6 @@ import {
   Settings,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import api from "@/lib/api";
 import DarkAurora from "@/components/effects/DarkAurora";
 import ElegantParticles from "@/components/effects/ElegantParticles";
 import ComponentErrorBoundary from "@/components/effects/ErrorBoundary";
@@ -65,7 +64,7 @@ function CCAILogo({ collapsed = false }: { collapsed?: boolean }) {
               lineHeight: 1,
             }}
           >
-            CC{" "}&gt;AI
+            CC &gt;AI
           </div>
           <div
             style={{
@@ -77,7 +76,7 @@ function CCAILogo({ collapsed = false }: { collapsed?: boolean }) {
               marginTop: "3px",
             }}
           >
-            Gurukul Digital
+            Student Intelligence
           </div>
         </div>
       )}
@@ -90,14 +89,12 @@ const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: Home },
   { href: "/course", label: "My Courses", icon: BookOpen },
   { href: "/upload", label: "Upload", icon: Upload },
-  { href: "/assignment-solver", label: "Assg Solver", icon: Zap },
+  { href: "/assignment-solver", label: "Research Studio", icon: Zap },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/classroom", label: "Live Classroom", icon: Mic },
   { href: "/pricing", label: "Pricing", icon: CreditCard },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
-
-
 
 /* ── Single Nav Link ── */
 function NavLink({
@@ -179,35 +176,7 @@ function Sidebar({
 }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const router = useRouter();
-  const [credits, setCredits] = useState<number | null>(null);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-
-  useEffect(() => {
-    let mounted = true;
-
-    const loadCredits = async () => {
-      try {
-        const res = await api.get("/payments/credits");
-        const nextCredits = res.data?.data?.credits ?? res.data?.credits;
-        if (mounted && typeof nextCredits === "number") {
-          setCredits(nextCredits);
-        }
-      } catch {
-        if (mounted) {
-          setCredits(null);
-        }
-      }
-    };
-
-    if (user) {
-      void loadCredits();
-    }
-
-    return () => {
-      mounted = false;
-    };
-  }, [user]);
 
   const handleLogout = async () => {
     setIsLogoutModalOpen(true);
@@ -237,7 +206,8 @@ function Sidebar({
         borderRight: "1px solid var(--border-light)",
         backdropFilter: "blur(40px)",
         boxShadow: "20px 0 50px rgba(0,0,0,0.15)",
-        transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.25s ease",
+        transition:
+          "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.25s ease",
         overflowX: "hidden",
         overflowY: "auto",
       }}
@@ -245,7 +215,11 @@ function Sidebar({
       {/* Logo & Mobile Close */}
       <div
         style={{
-          padding: isMobile ? "0 8px 28px" : collapsed ? "4px 0 28px" : "4px 8px 28px",
+          padding: isMobile
+            ? "0 8px 28px"
+            : collapsed
+              ? "4px 0 28px"
+              : "4px 8px 28px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -265,7 +239,7 @@ function Sidebar({
               alignItems: "center",
               justifyContent: "center",
               color: "var(--logo-accent)",
-              cursor: "pointer"
+              cursor: "pointer",
             }}
           >
             <X size={20} />
@@ -296,16 +270,7 @@ function Sidebar({
           />
         ))}
 
-        {/* Admin — only if role === 'admin' */}
-        {user?.role === "admin" && (
-          <NavLink
-            href="/admin"
-            label="Admin"
-            icon={Shield}
-            active={pathname?.startsWith("/admin")}
-            collapsed={collapsed}
-          />
-        )}
+        {/* Admin button removed for maximum stealth (Option 3). Access via URL /admin */}
       </nav>
 
       {/* Divider */}
@@ -378,33 +343,9 @@ function Sidebar({
               >
                 {user?.role || "student"}
               </div>
-              <div
-                style={{
-                  marginTop: 6,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "4px 8px",
-                  borderRadius: 999,
-                  background: "rgba(0, 200, 150, 0.12)",
-                  color: "var(--jade)",
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 10,
-                  fontWeight: 700,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Credits
-                <span style={{ color: "var(--ink)", letterSpacing: 0 }}>
-                  {credits ?? "--"}
-                </span>
-              </div>
             </div>
           )}
         </div>
-
       </div>
 
       <ConfirmModal
@@ -555,8 +496,22 @@ export default function DashboardLayout({
 
           {/* Mobile Top Left Logo */}
           {isMobile && (
-            <div style={{ zIndex: 10, paddingLeft: "4px", display: "flex", alignItems: "center" }}>
-              <div style={{ transform: "scale(0.8)", transformOrigin: "left center" }}><CCAILogo collapsed={true} /></div>
+            <div
+              style={{
+                zIndex: 10,
+                paddingLeft: "4px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  transform: "scale(0.8)",
+                  transformOrigin: "left center",
+                }}
+              >
+                <CCAILogo collapsed={true} />
+              </div>
             </div>
           )}
 
@@ -583,7 +538,8 @@ export default function DashboardLayout({
                 opacity: 0.8,
               }}
             >
-              <span>CC</span><span style={{ marginLeft: "3px" }}>&gt;AI</span>
+              <span>CC</span>
+              <span style={{ marginLeft: "3px" }}>&gt;AI</span>
             </div>
             <NetworkStatusDot />
             <div
@@ -604,7 +560,14 @@ export default function DashboardLayout({
           <div style={{ flex: 1 }} />
 
           {/* Right Side Tools */}
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", zIndex: 10 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              zIndex: 10,
+            }}
+          >
             <ThemeSwitcher />
           </div>
         </div>
@@ -613,7 +576,12 @@ export default function DashboardLayout({
         <div style={{ height: isMobile ? "56px" : "64px" }} />
 
         {/* Page content */}
-        <div style={{ padding: isMobile ? "12px 20px" : "32px", paddingBottom: isMobile ? "88px" : "32px" }}>
+        <div
+          style={{
+            padding: isMobile ? "12px 20px" : "32px",
+            paddingBottom: isMobile ? "88px" : "32px",
+          }}
+        >
           {children}
         </div>
       </div>
