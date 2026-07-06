@@ -10,7 +10,7 @@ import { Home, BookOpen, Zap, Mic, BarChart2, Settings } from "lucide-react";
 const MOBILE_NAV_ITEMS = [
   { href: "/dashboard", label: "Home", icon: Home },
   { href: "/course", label: "Courses", icon: BookOpen },
-  { href: "/assignment-solver", label: "Solver", icon: Zap },
+  { href: "/assignment-solver", label: "Research Studio", icon: Zap },
   { href: "/classroom", label: "Live", icon: Mic },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/settings", label: "Settings", icon: Settings },
