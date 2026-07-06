@@ -644,7 +644,7 @@ export default function DashboardPage() {
             letterSpacing: isMobile ? "-0.03em" : "-0.01em"
           }}
         >
-          {getGreeting()}, {firstName} 👋
+          {getGreeting()}, {firstName}
         </h1>
         <p
           style={{
