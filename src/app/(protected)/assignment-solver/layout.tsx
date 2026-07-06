@@ -76,7 +76,7 @@ function CCAILogo({ collapsed = false }: { collapsed?: boolean }) {
               marginTop: "3px",
             }}
           >
-            Gurukul Digital
+            Student Intelligence
           </div>
         </div>
       )}
