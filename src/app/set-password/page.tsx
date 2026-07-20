@@ -15,6 +15,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import BrandPanel from "@/components/brand/BrandPanel";
 import CCAILogo from "@/components/brand/CCAILogo";
 import { api, getFriendlyErrorMessage } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +52,7 @@ const MobileStyles = () => (
 function SetPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { setUser } = useAuth();
   const token = searchParams.get("token");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -94,10 +96,19 @@ function SetPasswordContent() {
           response.data?.token;
         const refreshToken =
           response.data?.data?.refreshToken || response.data?.refreshToken;
+        const verifiedUser = response.data?.data?.user;
         if (accessToken && typeof window !== "undefined") {
           localStorage.setItem("token", accessToken);
           if (refreshToken) {
             localStorage.setItem("refreshToken", refreshToken);
+          }
+        }
+
+        // Without this the next page is protected, `user` is null, and it bounces to /login.
+        if (verifiedUser) {
+          setUser(verifiedUser);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("user", JSON.stringify(verifiedUser));
           }
         }
 

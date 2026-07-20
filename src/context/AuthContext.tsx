@@ -27,6 +27,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<any>;
   logout: () => Promise<void>;
+  hydrateUser: () => Promise<User | null>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -36,6 +37,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Fetches the signed-in user from the token alone. Every entry path that only
+  // persists tokens (Google callback fragment, set-password, silent refresh)
+  // depends on this to populate `user` — without it ProtectedRoute bounces to /login.
+  const hydrateUser = async (): Promise<User | null> => {
+    const response = await api.get("/auth/me");
+    const fetchedUser = response.data?.data ?? null;
+
+    if (fetchedUser) {
+      setUser(fetchedUser);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("user", JSON.stringify(fetchedUser));
+      }
+    }
+
+    return fetchedUser;
+  };
 
   useEffect(() => {
     const initAuth = async () => {
@@ -156,6 +174,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (error) {
         console.error("Auth init error:", error);
       } finally {
+        // Runs whichever branch above returned: if we hold a token but no user
+        // (Google callback, set-password, refreshed session), fetch it.
+        const activeToken =
+          typeof window !== "undefined" ? localStorage.getItem("token") : null;
+        const activeUser =
+          typeof window !== "undefined" ? localStorage.getItem("user") : null;
+
+        if (activeToken && !activeUser) {
+          try {
+            await hydrateUser();
+          } catch (error) {
+            // Token is present but unusable — drop it rather than bounce forever.
+            if (typeof window !== "undefined") {
+              localStorage.removeItem("token");
+              localStorage.removeItem("refreshToken");
+              localStorage.removeItem("user");
+            }
+            setUser(null);
+            setToken(null);
+            setRefreshToken(null);
+          }
+        }
+
         setIsLoading(false);
       }
     };
@@ -226,6 +267,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isLoading,
         login,
         logout,
+        hydrateUser,
       }}
     >
       {children}
