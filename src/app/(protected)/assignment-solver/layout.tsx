@@ -76,7 +76,7 @@ function CCAILogo({ collapsed = false }: { collapsed?: boolean }) {
               marginTop: "3px",
             }}
           >
-            Gurukul Digital
+            Student Intelligence
           </div>
         </div>
       )}
@@ -89,7 +89,7 @@ const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: Home },
   { href: "/course", label: "My Courses", icon: BookOpen },
   { href: "/upload", label: "Upload", icon: Upload },
-  { href: "/assignment-solver", label: "Assg Solver", icon: Zap },
+  { href: "/assignment-solver", label: "Research Studio", icon: Zap },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/classroom", label: "Live Classroom", icon: Mic },
   { href: "/pricing", label: "Pricing", icon: CreditCard },
@@ -547,7 +547,7 @@ export default function AssignmentSolverLayout({
                 whiteSpace: "nowrap",
               }}
             >
-              Assg Solver
+              Research Studio
             </div>
           </div>
 

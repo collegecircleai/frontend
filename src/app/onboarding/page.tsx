@@ -116,7 +116,7 @@ function Sidebar({ step, isMobile }: { step: number; isMobile: boolean }) {
               marginTop: "12px",
             }}
           >
-            GURUKUL DIGITAL INFRASTRUCTURE
+            Student Intelligence INFRASTRUCTURE
           </div>
         </div>
 

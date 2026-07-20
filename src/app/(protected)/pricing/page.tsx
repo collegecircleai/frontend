@@ -16,7 +16,7 @@ interface Package {
 
 const PLAN_ICONS: Record<string, any> = {
   "Emergency Study pack": Rocket,
-  "Assignment Rescue": Zap,
+  "Research Rescue": Zap,
   "Exam Rescue": Crown,
 };
 

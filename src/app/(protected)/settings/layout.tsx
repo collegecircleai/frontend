@@ -73,7 +73,7 @@ function CCAILogo({ collapsed = false }: { collapsed?: boolean }) {
               marginTop: "3px",
             }}
           >
-            Gurukul Digital
+            Student Intelligence
           </div>
         </div>
       )}
@@ -86,7 +86,7 @@ const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: Home },
   { href: "/course", label: "My Courses", icon: BookOpen },
   { href: "/upload", label: "Upload", icon: Upload },
-  { href: "/assignment-solver", label: "Assg Solver", icon: Zap },
+  { href: "/assignment-solver", label: "Research Studio", icon: Zap },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/classroom", label: "Live Classroom", icon: Mic },
   { href: "/pricing", label: "Pricing", icon: CreditCard },
@@ -97,7 +97,7 @@ const NAV_ITEMS = [
 const MOBILE_NAV_ITEMS = [
   { href: "/dashboard", label: "Home", icon: Home },
   { href: "/course", label: "Courses", icon: BookOpen },
-  { href: "/assignment-solver", label: "Solver", icon: Zap },
+  { href: "/assignment-solver", label: "Research Studio", icon: Zap },
   { href: "/classroom", label: "Live", icon: Mic },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/settings", label: "Settings", icon: Settings },

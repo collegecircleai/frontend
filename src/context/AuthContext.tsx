@@ -83,6 +83,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         }
 
+        if (storedToken && !storedUser) {
+          try {
+            const meRes = await api.get("/auth/me");
+            const meData = meRes?.data?.data ?? meRes?.data;
+            const meUser = meData?.user ?? meData?.data?.user ?? meData;
+
+            if (meUser) {
+              setUser(meUser);
+              if (typeof window !== "undefined") {
+                localStorage.setItem("user", JSON.stringify(meUser));
+              }
+              return;
+            }
+          } catch (error) {
+            // If the access token is no longer valid, fall back to refresh.
+          }
+        }
+
         const isJwtExpired = (tokenValue: string) => {
           const payload = parseJwt(tokenValue);
           if (!payload?.exp) {

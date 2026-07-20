@@ -358,7 +358,7 @@ export default function CoursePage() {
               boxShadow: "0 2px 16px rgba(77,63,255,0.06)",
             }}
           >
-            <div style={{ fontSize: 40, marginBottom: 16 }}>📚</div>
+            {/* Emoji removed per request */}
             <h2
               style={{
                 fontFamily: "var(--font-display)",

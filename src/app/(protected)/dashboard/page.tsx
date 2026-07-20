@@ -644,7 +644,7 @@ export default function DashboardPage() {
             letterSpacing: isMobile ? "-0.03em" : "-0.01em"
           }}
         >
-          {getGreeting()}, {firstName} 👋
+          {getGreeting()}, {firstName}
         </h1>
         <p
           style={{
@@ -768,8 +768,9 @@ export default function DashboardPage() {
               maxWidth: 440,
             }}
           >
-            Upload a PDF or DOCX syllabus and we'll build your entire learning
-            system — notes, quizzes, flashcards and more.
+            Upload your PDF Subject syllabus once.<br />
+            College Circle AI organizes your entire semester, assignments, revision plans, quizzes, exam preparation,
+            and personalized study roadmap.
           </p>
           <button
             id="upload-cta-btn"
