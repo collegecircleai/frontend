@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import api from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
+import WelcomeGiftPopup from "@/components/WelcomeGiftPopup";
 
 /* ─────────────────────────────────────────
    TYPES
@@ -388,8 +389,11 @@ function activityLabel(a: Activity) {
    MAIN DASHBOARD PAGE
 ───────────────────────────────────────── */
 export default function DashboardPage() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const router = useRouter();
+
+  // Welcome Gift popup: show once, only for users who haven't claimed it.
+  const [showWelcomeGift, setShowWelcomeGift] = useState(false);
 
   const [courses, setCourses] = useState<Course[]>([]);
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
@@ -408,6 +412,13 @@ export default function DashboardPage() {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  // Surface the gift once the user is loaded and hasn't claimed it yet.
+  useEffect(() => {
+    if (user && user.welcomeGiftClaimed === false) {
+      setShowWelcomeGift(true);
+    }
+  }, [user]);
 
 
   useEffect(() => {
@@ -623,6 +634,19 @@ export default function DashboardPage() {
   return (
     <>
       <style>{shimmerCSS + dashCSS}</style>
+
+      {showWelcomeGift && (
+        <WelcomeGiftPopup
+          onClaimed={() =>
+            setUser(user ? { ...user, welcomeGiftClaimed: true } : user)
+          }
+          onClose={() => setShowWelcomeGift(false)}
+          onStart={() => {
+            setShowWelcomeGift(false);
+            router.push("/dashboard");
+          }}
+        />
+      )}
 
        {/* ── SECTION 1: Greeting ── */}
        <div 

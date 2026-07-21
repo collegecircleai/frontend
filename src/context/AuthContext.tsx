@@ -15,6 +15,8 @@ interface User {
   premiumUptoDate?: string | null;
   isPremium?: boolean;
   isActive?: boolean;
+  phoneNo?: string | null;
+  welcomeGiftClaimed?: boolean;
 }
 
 interface AuthContextType {

@@ -12,12 +12,7 @@ import api, { getFriendlyErrorMessage } from "@/lib/api";
 import { useEffect } from "react";
 export default function Login() {
   const router = useRouter();
-<<<<<<< HEAD
   const { login, user, isLoading, hydrateUser } = useAuth();
-=======
-  const { login, user, isLoading, setToken, setRefreshToken, setUser } =
-    useAuth();
->>>>>>> 14826b01b094a1040bf91918ea108a7c91b8422e
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -75,13 +70,11 @@ export default function Login() {
       return;
     }
 
-    const syncGoogleSession = async () => {
-      localStorage.setItem("token", accessToken);
-      if (refreshToken) {
-        localStorage.setItem("refreshToken", refreshToken);
-      }
+    localStorage.setItem("token", accessToken);
+    if (refreshToken) {
+      localStorage.setItem("refreshToken", refreshToken);
+    }
 
-<<<<<<< HEAD
     window.history.replaceState(
       null,
       "",
@@ -93,38 +86,6 @@ export default function Login() {
       .then((googleUser) => router.replace(getPostAuthRoute(googleUser)))
       .catch(() => setError("Google sign-in failed. Please try again."));
   }, [hydrateUser, router]);
-=======
-      setToken(accessToken);
-      if (refreshToken) {
-        setRefreshToken(refreshToken);
-      }
-
-      try {
-        const meResponse = await api.get("/auth/me");
-        const meData = meResponse?.data?.data ?? meResponse?.data;
-        const meUser = meData?.user ?? meData?.data?.user ?? meData;
-
-        if (meUser) {
-          setUser(meUser);
-          localStorage.setItem("user", JSON.stringify(meUser));
-          router.replace(getPostAuthRoute(meUser));
-        }
-      } catch {
-        setError(
-          "Google sign-in completed, but the session could not be loaded.",
-        );
-      } finally {
-        window.history.replaceState(
-          null,
-          "",
-          `${window.location.pathname}${window.location.search}`,
-        );
-      }
-    };
-
-    void syncGoogleSession();
-  }, [router, setRefreshToken, setToken, setUser]);
->>>>>>> 14826b01b094a1040bf91918ea108a7c91b8422e
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

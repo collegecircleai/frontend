@@ -6,11 +6,18 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import BrandPanel from "@/components/brand/BrandPanel";
 import CCAILogo from "@/components/brand/CCAILogo";
-import { Mail, ArrowRight, User as UserIcon, AlertCircle } from "lucide-react";
+import {
+  Mail,
+  ArrowRight,
+  User as UserIcon,
+  AlertCircle,
+  Phone,
+} from "lucide-react";
 
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [isSent, setIsSent] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -38,6 +45,7 @@ export default function Register() {
       const response = await api.post("/auth/register", {
         name,
         email,
+        ...(phone.trim() ? { phone_no: phone.trim() } : {}),
       });
 
       if (
@@ -338,6 +346,45 @@ export default function Register() {
                         placeholder="Enter your email address"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        onFocus={(e) => {
+                          e.target.style.background = "white";
+                          e.target.style.borderColor = "var(--violet)";
+                          e.target.style.boxShadow =
+                            "0 0 0 4px rgba(77, 63, 255, 0.05)";
+                        }}
+                        onBlur={(e) => {
+                          e.target.style.background = "#F9FAFB";
+                          e.target.style.borderColor = "#E5E7EB";
+                          e.target.style.boxShadow = "none";
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: "40px" }}>
+                    <label htmlFor="phone" style={labelStyle}>
+                      Phone Number
+                    </label>
+                    <div className="relative">
+                      <Phone
+                        size={18}
+                        style={{
+                          position: "absolute",
+                          right: "20px",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          color: "#9CA3AF",
+                        }}
+                      />
+                      <input
+                        id="phone"
+                        type="tel"
+                        autoComplete="tel"
+                        required
+                        style={inputStyle}
+                        placeholder="Enter your phone number"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
                         onFocus={(e) => {
                           e.target.style.background = "white";
                           e.target.style.borderColor = "var(--violet)";

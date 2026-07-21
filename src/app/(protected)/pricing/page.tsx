@@ -11,7 +11,9 @@ interface Package {
   name: string;
   amount: number;
   premiumDays?: number;
+  accessHours?: number;
   description: string;
+  type: "plan" | "topup";
 }
 
 const PLAN_ICONS: Record<string, any> = {
@@ -20,33 +22,10 @@ const PLAN_ICONS: Record<string, any> = {
   "Exam Rescue": Crown,
 };
 
-const FALLBACK_PACKAGES: Package[] = [
-  {
-    id: "pkg_1",
-    name: "Starter Premium",
-    amount: 20,
-    premiumDays: 7,
-    description: "Unlock premium access for 7 days.",
-  },
-  {
-    id: "pkg_2",
-    name: "Monthly Premium",
-    amount: 49,
-    premiumDays: 30,
-    description: "Unlock premium access for 30 days.",
-  },
-  {
-    id: "pkg_3",
-    name: "Quarterly Premium",
-    amount: 199,
-    premiumDays: 90,
-    description: "Unlock premium access for 90 days.",
-  },
-];
-
 export default function PricingPage() {
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [buying, setBuying] = useState<string | null>(null);
   const [toast, setToast] = useState<{
     msg: string;
@@ -66,43 +45,96 @@ export default function PricingPage() {
     setTimeout(() => setToast(null), 4000);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const pkgRes = await api.get("/payments/packages");
-        const fetchedPackages = pkgRes.data?.data || pkgRes.data || [];
+  const fetchPackages = async () => {
+    setLoading(true);
+    setLoadError(false);
+    try {
+      // Backend returns { plans: [...], topups: [...] } inside data —
+      // see collegecircleai/backend/src/controllers/payment.ts getPaymentPackages.
+      const pkgRes = await api.get("/payments/packages");
+      const catalogue = pkgRes.data?.data ?? {};
+      const plans = Array.isArray(catalogue.plans) ? catalogue.plans : [];
+      const topups = Array.isArray(catalogue.topups) ? catalogue.topups : [];
 
-        setPackages(
-          Array.isArray(fetchedPackages) && fetchedPackages.length > 0
-            ? fetchedPackages.map((pkg: any) => ({
-                id: pkg.id,
-                name: pkg.name,
-                amount: pkg.amount,
-                premiumDays: pkg.premiumDays ?? pkg.premium_days ?? pkg.days,
-                description: pkg.description || "Premium subscription access",
-              }))
-            : FALLBACK_PACKAGES,
-        );
-      } catch (err) {
-        console.error("Pricing sync deferred:", err);
-        setPackages(FALLBACK_PACKAGES);
-        showToast(
-          getFriendlyErrorMessage(err, "Unable to load pricing right now."),
-        );
-      } finally {
-        setLoading(false);
+      const mapped: Package[] = [
+        ...plans.map((pkg: any) => ({
+          id: pkg.id,
+          name: pkg.name,
+          amount: pkg.monthlyPrice,
+          premiumDays: pkg.premiumDays ?? 30,
+          description: `${pkg.premiumDays ?? 30} days of premium access.`,
+          type: "plan" as const,
+        })),
+        ...topups.map((pkg: any) => ({
+          id: pkg.id,
+          name: pkg.name,
+          amount: pkg.price,
+          accessHours: pkg.accessHours ?? undefined,
+          description: `${pkg.accessHours ?? 24} hours of premium access.`,
+          type: "topup" as const,
+        })),
+      ];
+
+      if (!mapped.length) {
+        throw new Error("Empty pricing catalogue");
       }
-    };
-    fetchData();
+      setPackages(mapped);
+    } catch (err) {
+      console.error("Failed to load pricing catalogue:", err);
+      // Never show made-up prices: surface the failure and let the user retry.
+      setPackages([]);
+      setLoadError(true);
+      showToast(
+        getFriendlyErrorMessage(err, "Unable to load pricing right now."),
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPackages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Polls the server-confirmed premium status (set by the Razorpay webhook)
+  // instead of trusting the client-side checkout callback.
+  const confirmActivation = async (pkg: Package) => {
+    showToast("Payment received. Activating your premium…", "success");
+    for (let attempt = 0; attempt < 8; attempt++) {
+      await new Promise((r) => setTimeout(r, 2000));
+      try {
+        const statusRes = await api.get("/payments/status");
+        if (statusRes.data?.data?.is_premium) {
+          showToast(
+            pkg.type === "topup"
+              ? `Premium activated for ${pkg.accessHours ?? 24} hours.`
+              : `Premium activated for ${pkg.premiumDays ?? 30} days.`,
+            "success",
+          );
+          return;
+        }
+      } catch {
+        // transient — keep polling
+      }
+    }
+    showToast(
+      "Payment received — activation is taking longer than usual. It will reflect on your account shortly.",
+      "success",
+    );
+  };
 
   const handleBuy = async (pkg: Package) => {
     setBuying(pkg.id);
     try {
-      // 1. Create Order
+      // 1. Create Order — backend validates itemId/type against its catalogue
+      // and rejects any amount that doesn't match the server-side price.
       const orderRes = await api.post("/payments/create-order", {
         amount: pkg.amount,
         description: pkg.description,
+        itemId: pkg.id,
+        type: pkg.type,
+        billingMode: "monthly",
       });
 
       const orderData = orderRes.data?.data;
@@ -116,12 +148,8 @@ export default function PricingPage() {
         name: "College Circle AI",
         description: pkg.description,
         order_id: orderData.orderId,
-        handler: async (response: any) => {
-          // Success callback
-          showToast(
-            `Premium activated for ${pkg.premiumDays ?? "your selected"} days.`,
-            "success",
-          );
+        handler: async (_response: any) => {
+          await confirmActivation(pkg);
         },
         prefill: {
           name: "", // Optional: Fill from user profile
@@ -158,6 +186,51 @@ export default function PricingPage() {
         }}
       >
         <div className="spinner" />
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 16,
+          height: "80vh",
+          textAlign: "center",
+          padding: 24,
+        }}
+      >
+        <p
+          style={{
+            fontFamily: "var(--font-body)",
+            fontSize: 16,
+            color: "var(--mist)",
+            maxWidth: 420,
+          }}
+        >
+          We couldn't load the latest pricing. Please check your connection and
+          try again.
+        </p>
+        <button
+          onClick={fetchPackages}
+          style={{
+            padding: "14px 32px",
+            borderRadius: 14,
+            border: "none",
+            background: "#4D3FFF",
+            color: "#fff",
+            fontFamily: "var(--font-body)",
+            fontSize: 15,
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          Retry
+        </button>
       </div>
     );
   }
@@ -377,7 +450,9 @@ export default function PricingPage() {
                     marginTop: 4,
                   }}
                 >
-                  {pkg.premiumDays ?? 30} days of premium access
+                  {pkg.type === "topup"
+                    ? `${pkg.accessHours ?? 24} hours of premium access`
+                    : `${pkg.premiumDays ?? 30} days of premium access`}
                 </p>
               </div>
 

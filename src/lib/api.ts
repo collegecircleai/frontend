@@ -93,6 +93,7 @@ export const getFriendlyErrorMessage = (
 export const api = axios.create({
   baseURL: normalizedBaseUrl,
   // withCredentials: true,
+  timeout: 30_000,
   headers: {
     "Content-Type": "application/json",
   },
