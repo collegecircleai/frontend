@@ -14,8 +14,8 @@ export interface SkewedCarouselProps {
 export function SkewedCarousel({
   children,
   perspective = 1000,
-  inactiveScale = 0.8,
-  gap = 0,
+  inactiveScale = 0.85,
+  gap = 24,
   className = ''
 }: SkewedCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -28,11 +28,14 @@ export function SkewedCarousel({
         className="w-full overflow-x-auto flex items-center hide-scroll-bar"
         ref={containerRef}
         style={{
-          padding: '40px calc(50vw - clamp(140px, 40vw, 170px)) 80px calc(50vw - clamp(140px, 40vw, 170px))', // Centers the first and last items
+          paddingLeft: '50vw', // so first card can be centered
+          paddingRight: '50vw', // so last card can be centered
+          paddingTop: '40px',
+          paddingBottom: '80px',
           scrollSnapType: 'x mandatory',
           WebkitOverflowScrolling: 'touch',
           scrollBehavior: 'smooth',
-          marginBottom: '-40px'
+          gap: `${gap}px`,
         }}
       >
         <style>{`
@@ -78,7 +81,6 @@ function CarouselItem({
   // Use MotionValues for 60fps animations without React re-renders
   const scale = useMotionValue(1);
   const rotateY = useMotionValue(0);
-  const x = useMotionValue(0);
   const zIndex = useMotionValue(1);
   const opacity = useMotionValue(1);
 
@@ -96,7 +98,7 @@ function CarouselItem({
       
       // Calculate signed distance from center (negative = left of center, positive = right of center)
       const distance = itemCenter - containerCenter;
-      // Use the item's width as the max influence distance for tight overlap
+      // Use the item's width as the max influence distance
       const maxDistance = itemRect.width + 40; 
       
       // Normalized distance (-1 to 1)
@@ -108,29 +110,21 @@ function CarouselItem({
       // 1. Scale: 1 at center, drops to inactiveScale at edges
       const newScale = 1 - absoluteNormalized * (1 - inactiveScale);
       
-      // 2. RotateY: 
-      // If item is on the left (negative distance), rotate right (positive degrees).
-      // If item is on the right (positive distance), rotate left (negative degrees).
-      const maxRotation = 55; // Steep rotation like Apple Coverflow
+      // 2. RotateY (Coverflow inward tilt):
+      // Left cards (negative distance) tilt right (positive Y).
+      // Right cards (positive distance) tilt left (negative Y).
+      const maxRotation = 50;
       const newRotateY = -normalizedDistance * maxRotation;
       
-      // 3. Translate X (Overlap):
-      // Push items toward the center to create the overlapping coverflow effect
-      // If on left (negative distance), push right (positive X).
-      // If on right (positive distance), push left (negative X).
-      const overlapStrength = 0; // Removed artificial overlap to give them space
-      const newTranslateX = -normalizedDistance * overlapStrength;
-      
-      // 4. Z-Index: Center item gets highest Z
+      // 3. Z-Index: Center item gets highest Z
       const newZIndex = Math.round(100 - absoluteNormalized * 100);
 
-      // 5. Opacity: Slightly fade out edge items
-      const newOpacity = 1 - absoluteNormalized * 0.2;
+      // 4. Opacity: Slightly fade out edge items
+      const newOpacity = 1 - absoluteNormalized * 0.25;
       
       // Apply the values to MotionValues directly
       scale.set(Math.max(inactiveScale, newScale));
       rotateY.set(newRotateY);
-      x.set(newTranslateX);
       zIndex.set(newZIndex);
       opacity.set(newOpacity);
     };
@@ -161,7 +155,7 @@ function CarouselItem({
         // If it's more than 50px away from center, it's not the active card
         if (Math.abs(itemCenter - containerCenter) > 50) {
           e.preventDefault();
-          e.stopPropagation(); // Prevent the child's onClick (modal) from firing
+          e.stopPropagation();
           
           // Scroll the container so this item moves to the center
           const scrollTarget = containerRef.current.scrollLeft + (itemCenter - containerCenter);
@@ -174,15 +168,12 @@ function CarouselItem({
       style={{
         scale,
         rotateY,
-        x,
         zIndex,
         opacity,
         transformPerspective: perspective,
         transformStyle: 'preserve-3d',
         flexShrink: 0,
         scrollSnapAlign: 'center',
-        // Optional: add a slight transition so snapping feels smooth when you release the drag
-        transition: 'all 0.15s ease-out',
         cursor: 'pointer'
       }}
     >
