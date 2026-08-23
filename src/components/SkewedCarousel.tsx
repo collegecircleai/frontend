@@ -29,10 +29,10 @@ export function SkewedCarousel({
           display: 'flex',
           alignItems: 'center',
           gap: `${gap}px`,
-          paddingLeft: '50vw',
-          paddingRight: '50vw',
-          paddingTop: '20px',
-          paddingBottom: '40px',
+          paddingLeft: 'calc(50% - clamp(140px, 40vw, 170px))',
+          paddingRight: 'calc(50% - clamp(140px, 40vw, 170px))',
+          paddingTop: '60px',
+          paddingBottom: '80px',
           scrollSnapType: 'x mandatory',
           WebkitOverflowScrolling: 'touch',
           msOverflowStyle: 'none',
@@ -84,11 +84,12 @@ function CarouselItem({
     const containerCenter = containerRect.left + containerRect.width / 2;
     const itemCenter = itemRect.left + itemRect.width / 2;
     const distance = itemCenter - containerCenter;
-    const maxDistance = itemRect.width + 40;
+    const maxDistance = item.offsetWidth + 40;
     const norm = Math.max(-1, Math.min(1, distance / maxDistance));
     const absNorm = Math.abs(norm);
 
-    const scale = Math.max(inactiveScale, 1 - absNorm * (1 - inactiveScale));
+    const maxScale = 1.08;
+    const scale = Math.max(inactiveScale, maxScale - absNorm * (maxScale - inactiveScale));
     const rotateY = -norm * 50;
     const opacity = 1 - absNorm * 0.25;
     const zIndex = Math.round(100 - absNorm * 100);
