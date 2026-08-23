@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
-import { motion, useScroll, useMotionValue } from 'framer-motion';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 
 export interface SkewedCarouselProps {
   children: React.ReactNode[];
@@ -13,40 +12,47 @@ export interface SkewedCarouselProps {
 
 export function SkewedCarousel({
   children,
-  perspective = 1000,
+  perspective = 1400,
   inactiveScale = 0.85,
   gap = 24,
   className = ''
 }: SkewedCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [, forceUpdate] = useState(0);
+
+  // Trigger re-render after mount so refs are available
+  useEffect(() => {
+    forceUpdate(1);
+  }, []);
 
   return (
-    <div 
-      className={`relative w-full py-10 overflow-hidden ${className}`}
-    >
-      <motion.div
-        className="w-full overflow-x-auto flex items-center hide-scroll-bar"
+    <div className={`relative w-full overflow-hidden ${className}`} style={{ padding: '40px 0 80px' }}>
+      <div
         ref={containerRef}
         style={{
-          paddingLeft: '50vw', // so first card can be centered
-          paddingRight: '50vw', // so last card can be centered
-          paddingTop: '40px',
-          paddingBottom: '80px',
+          width: '100%',
+          overflowX: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          gap: `${gap}px`,
+          paddingLeft: '50vw',
+          paddingRight: '50vw',
+          paddingTop: '20px',
+          paddingBottom: '40px',
           scrollSnapType: 'x mandatory',
           WebkitOverflowScrolling: 'touch',
-          scrollBehavior: 'smooth',
-          gap: `${gap}px`,
+          msOverflowStyle: 'none',
+          scrollbarWidth: 'none',
+          boxSizing: 'border-box',
         }}
       >
         <style>{`
-          .hide-scroll-bar::-webkit-scrollbar { display: none; }
-          .hide-scroll-bar { -ms-overflow-style: none; scrollbar-width: none; }
+          .skewed-carousel-container::-webkit-scrollbar { display: none; }
         `}</style>
-        
         {children.map((child, index) => (
-          <CarouselItem 
-            key={index} 
-            containerRef={containerRef} 
+          <CarouselItem
+            key={index}
+            containerRef={containerRef}
             inactiveScale={inactiveScale}
             perspective={perspective}
             index={index}
@@ -54,130 +60,114 @@ export function SkewedCarousel({
             {child}
           </CarouselItem>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }
 
-// Separate component for each item so we can track its position individually relative to the viewport
-function CarouselItem({ 
-  children, 
+function CarouselItem({
+  children,
   containerRef,
   inactiveScale,
   perspective,
-  index
-}: { 
-  children: React.ReactNode; 
+  index,
+}: {
+  children: React.ReactNode;
   containerRef: React.RefObject<HTMLDivElement>;
   inactiveScale: number;
   perspective: number;
   index: number;
 }) {
   const itemRef = useRef<HTMLDivElement>(null);
-  
-  // Track scroll position of the container
-  const { scrollX } = useScroll({ container: containerRef });
-  
-  // Use MotionValues for 60fps animations without React re-renders
-  const scale = useMotionValue(1);
-  const rotateY = useMotionValue(0);
-  const zIndex = useMotionValue(1);
-  const opacity = useMotionValue(1);
+  const [transforms, setTransforms] = useState({
+    scale: 1,
+    rotateY: 0,
+    opacity: 1,
+    zIndex: 1,
+  });
+
+  const updateTransforms = useCallback(() => {
+    const container = containerRef.current;
+    const item = itemRef.current;
+    if (!container || !item) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+
+    const containerCenter = containerRect.left + containerRect.width / 2;
+    const itemCenter = itemRect.left + itemRect.width / 2;
+
+    const distance = itemCenter - containerCenter;
+    const maxDistance = itemRect.width + 40;
+
+    const normalizedDistance = Math.max(-1, Math.min(1, distance / maxDistance));
+    const absNorm = Math.abs(normalizedDistance);
+
+    const newScale = Math.max(inactiveScale, 1 - absNorm * (1 - inactiveScale));
+    // Cards on left (negative dist) tilt right (positive rotateY), cards on right tilt left
+    const newRotateY = -normalizedDistance * 50;
+    const newOpacity = 1 - absNorm * 0.25;
+    const newZIndex = Math.round(100 - absNorm * 100);
+
+    setTransforms({
+      scale: newScale,
+      rotateY: newRotateY,
+      opacity: newOpacity,
+      zIndex: newZIndex,
+    });
+  }, [containerRef, inactiveScale]);
 
   useEffect(() => {
-    if (!containerRef.current || !itemRef.current) return;
-    
-    const updateTransforms = () => {
-      if (!containerRef.current || !itemRef.current) return;
-      
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const itemRect = itemRef.current.getBoundingClientRect();
-      
-      const containerCenter = containerRect.left + containerRect.width / 2;
-      const itemCenter = itemRect.left + itemRect.width / 2;
-      
-      // Calculate signed distance from center (negative = left of center, positive = right of center)
-      const distance = itemCenter - containerCenter;
-      // Use the item's width as the max influence distance
-      const maxDistance = itemRect.width + 40; 
-      
-      // Normalized distance (-1 to 1)
-      const normalizedDistance = Math.max(-1, Math.min(1, distance / maxDistance));
-      
-      // Absolute distance for scaling and z-index
-      const absoluteNormalized = Math.abs(normalizedDistance);
-      
-      // 1. Scale: 1 at center, drops to inactiveScale at edges
-      const newScale = 1 - absoluteNormalized * (1 - inactiveScale);
-      
-      // 2. RotateY (Coverflow inward tilt):
-      // Left cards (negative distance) tilt right (positive Y).
-      // Right cards (positive distance) tilt left (negative Y).
-      const maxRotation = 50;
-      const newRotateY = -normalizedDistance * maxRotation;
-      
-      // 3. Z-Index: Center item gets highest Z
-      const newZIndex = Math.round(100 - absoluteNormalized * 100);
+    const container = containerRef.current;
+    if (!container) return;
 
-      // 4. Opacity: Slightly fade out edge items
-      const newOpacity = 1 - absoluteNormalized * 0.25;
-      
-      // Apply the values to MotionValues directly
-      scale.set(Math.max(inactiveScale, newScale));
-      rotateY.set(newRotateY);
-      zIndex.set(newZIndex);
-      opacity.set(newOpacity);
-    };
-
-    // Initial update
+    // Run immediately
     updateTransforms();
-    
-    // Update on scroll and resize
-    const unsubscribe = scrollX.on('change', updateTransforms);
-    window.addEventListener('resize', updateTransforms);
-    
+
+    // Listen to native scroll event on the container element
+    container.addEventListener('scroll', updateTransforms, { passive: true });
+    window.addEventListener('resize', updateTransforms, { passive: true });
+
     return () => {
-      unsubscribe();
+      container.removeEventListener('scroll', updateTransforms);
       window.removeEventListener('resize', updateTransforms);
     };
-  }, [scrollX, inactiveScale]);
+  }, [updateTransforms]);
+
+  const handleClickCapture = (e: React.MouseEvent) => {
+    const container = containerRef.current;
+    const item = itemRef.current;
+    if (!container || !item) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    const containerCenter = containerRect.left + containerRect.width / 2;
+    const itemCenter = itemRect.left + itemRect.width / 2;
+
+    if (Math.abs(itemCenter - containerCenter) > 50) {
+      e.preventDefault();
+      e.stopPropagation();
+      const scrollTarget = container.scrollLeft + (itemCenter - containerCenter);
+      container.scrollTo({ left: scrollTarget, behavior: 'smooth' });
+    }
+  };
 
   return (
-    <motion.div
+    <div
       ref={itemRef}
-      onClickCapture={(e) => {
-        if (!containerRef.current || !itemRef.current) return;
-        const containerRect = containerRef.current.getBoundingClientRect();
-        const itemRect = itemRef.current.getBoundingClientRect();
-        const containerCenter = containerRect.left + containerRect.width / 2;
-        const itemCenter = itemRect.left + itemRect.width / 2;
-        
-        // If it's more than 50px away from center, it's not the active card
-        if (Math.abs(itemCenter - containerCenter) > 50) {
-          e.preventDefault();
-          e.stopPropagation();
-          
-          // Scroll the container so this item moves to the center
-          const scrollTarget = containerRef.current.scrollLeft + (itemCenter - containerCenter);
-          containerRef.current.scrollTo({
-            left: scrollTarget,
-            behavior: 'smooth'
-          });
-        }
-      }}
+      onClickCapture={handleClickCapture}
       style={{
-        scale,
-        rotateY,
-        zIndex,
-        opacity,
-        transformPerspective: perspective,
-        transformStyle: 'preserve-3d',
         flexShrink: 0,
         scrollSnapAlign: 'center',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        transform: `perspective(${perspective}px) rotateY(${transforms.rotateY}deg) scale(${transforms.scale})`,
+        opacity: transforms.opacity,
+        zIndex: transforms.zIndex,
+        transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
+        willChange: 'transform',
       }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
