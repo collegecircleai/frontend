@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 
 export interface SkewedCarouselProps {
   children: React.ReactNode[];
@@ -72,14 +72,6 @@ function CarouselItem({
   index: number;
 }) {
   const itemRef = useRef<HTMLDivElement>(null);
-  // Start with identity transforms to avoid SSR/CSR mismatch
-  const [style, setStyle] = useState<React.CSSProperties>({
-    flexShrink: 0,
-    scrollSnapAlign: 'center',
-    cursor: 'pointer',
-    willChange: 'transform',
-    transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
-  });
 
   const updateTransforms = useCallback(() => {
     const container = containerRef.current;
@@ -101,30 +93,37 @@ function CarouselItem({
     const opacity = 1 - absNorm * 0.25;
     const zIndex = Math.round(100 - absNorm * 100);
 
-    setStyle({
-      flexShrink: 0,
-      scrollSnapAlign: 'center',
-      cursor: 'pointer',
-      willChange: 'transform',
-      transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
-      transform: `perspective(${perspective}px) rotateY(${rotateY}deg) scale(${scale})`,
-      opacity,
-      zIndex,
-    });
+    // Apply transforms directly to the DOM to bypass React re-renders for 60fps performance
+    item.style.transform = `perspective(${perspective}px) rotateY(${rotateY}deg) scale(${scale})`;
+    item.style.opacity = opacity.toString();
+    item.style.zIndex = zIndex.toString();
   }, [containerRef, inactiveScale, perspective]);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    updateTransforms();
+    // Run on mount
+    requestAnimationFrame(updateTransforms);
 
-    container.addEventListener('scroll', updateTransforms, { passive: true });
-    window.addEventListener('resize', updateTransforms, { passive: true });
+    // Use requestAnimationFrame loop on scroll for butter-smooth performance
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateTransforms();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    container.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
 
     return () => {
-      container.removeEventListener('scroll', updateTransforms);
-      window.removeEventListener('resize', updateTransforms);
+      container.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
   }, [updateTransforms]);
 
@@ -149,7 +148,17 @@ function CarouselItem({
   };
 
   return (
-    <div ref={itemRef} onClickCapture={handleClickCapture} style={style}>
+    <div 
+      ref={itemRef} 
+      onClickCapture={handleClickCapture} 
+      style={{
+        flexShrink: 0,
+        scrollSnapAlign: 'center',
+        cursor: 'pointer',
+        willChange: 'transform',
+        // Removed transition: 'transform...' as it fights with the scroll event and causes shivering
+      }}
+    >
       {children}
     </div>
   );
