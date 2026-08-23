@@ -114,35 +114,12 @@ export default function CommunityPage() {
       className="content-wrapper"
       style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: c.bg, color: c.text }}
     >
-      {mounted && (
-        <ComponentErrorBoundary>
-          <div style={{ opacity: isDark ? 1 : 0.3, position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-            <DarkAurora />
-          </div>
-          <ElegantParticles count={40} />
-        </ComponentErrorBoundary>
-      )}
-
-
-      {mounted && (
-        <motion.button
-          onClick={toggleTheme}
-          whileHover={{ scale: 1.1, backgroundColor: isDark ? 'rgba(139, 128, 249, 0.15)' : 'rgba(139, 128, 249, 0.05)' }}
-          whileTap={{ scale: 0.9 }}
-          style={{
-            position: "absolute", top: "clamp(20px, 4vw, 40px)", right: "clamp(20px, 4vw, 40px)",
-            backgroundColor: 'rgba(139, 128, 249, 0)', border: `1px solid ${c.border10}`,
-            borderRadius: '12px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: c.text, cursor: 'pointer', zIndex: 100, transition: 'all 0.3s ease'
-          }}
-        >
-          <AnimatePresence mode="wait">
-            <motion.div key={theme} initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 20, opacity: 0 }} transition={{ duration: 0.2 }}>
-              {isDark ? <Moon size={18} /> : <Sun size={18} />}
-            </motion.div>
-          </AnimatePresence>
-        </motion.button>
-      )}
+      <ComponentErrorBoundary>
+        <div style={{ opacity: isDark ? 1 : 0.3, position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+          <DarkAurora />
+        </div>
+        <ElegantParticles count={40} />
+      </ComponentErrorBoundary>
 
       <ComponentErrorBoundary>
         <Header onGetStarted={() => window.location.href = '/login'} />
@@ -605,7 +582,7 @@ export default function CommunityPage() {
                         backdropFilter: 'blur(24px)', 
                         display: 'flex', 
                         flexDirection: 'column', 
-                        justify: 'center',
+                        justifyContent: 'center',
                         position: 'relative',
                         overflow: 'hidden',
                         boxShadow: isDark 
@@ -893,10 +870,12 @@ export default function CommunityPage() {
             >
               <ScrollExpand
                 src={isDark ? "/lead-network-bg.png" : "/lead-network-bg-light.png"}
-                mediaZoom={1.2}
-                startWidth={48}
-                startHeight={52}
-                startRadius={24}
+                mediaZoom={1.15}
+                startWidth={65}
+                startHeight={65}
+                startRadius={28}
+                endRadius={20}
+                smoothing={0.06}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -906,7 +885,6 @@ export default function CommunityPage() {
               >
                 <div
                   style={{
-                    padding: 'clamp(48px, 8vw, 90px) clamp(16px, 4vw, 24px)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -914,6 +892,8 @@ export default function CommunityPage() {
                     textAlign: 'center',
                     width: '100%',
                     height: '100%',
+                    padding: 'clamp(12px, 2.5vw, 28px)',
+                    boxSizing: 'border-box',
                     pointerEvents: 'auto'
                   }}
                 >
@@ -923,10 +903,10 @@ export default function CommunityPage() {
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '8px',
-                      padding: '6px 16px',
+                      padding: '5px 14px',
                       background: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(255, 255, 255, 0.8)',
                       borderRadius: '100px',
-                      marginBottom: 'clamp(18px, 3vw, 28px)',
+                      marginBottom: 'clamp(10px, 1.5vw, 18px)',
                       border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(123, 107, 255, 0.25)',
                       backdropFilter: 'blur(12px)'
                     }}
@@ -940,10 +920,10 @@ export default function CommunityPage() {
                   {/* Title */}
                   <h2
                     style={{
-                      fontSize: 'clamp(32px, 5.5vw, 68px)',
+                      fontSize: 'clamp(24px, 3.8vw, 46px)',
                       fontWeight: 800,
-                      lineHeight: 1.1,
-                      marginBottom: 'clamp(16px, 2.5vw, 24px)',
+                      lineHeight: 1.15,
+                      marginBottom: 'clamp(8px, 1.4vw, 14px)',
                       letterSpacing: '-0.02em',
                       fontFamily: 'var(--font-body), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
                     }}
@@ -957,11 +937,11 @@ export default function CommunityPage() {
                   <p
                     style={{
                       color: isDark ? 'rgba(225, 225, 245, 0.72)' : 'rgba(30, 25, 55, 0.75)',
-                      fontSize: 'clamp(14px, 1.8vw, 18px)',
-                      marginBottom: 'clamp(28px, 4vw, 44px)',
+                      fontSize: 'clamp(12px, 1.3vw, 15px)',
+                      marginBottom: 'clamp(14px, 2vw, 24px)',
                       fontWeight: 500,
-                      maxWidth: '620px',
-                      lineHeight: 1.6
+                      maxWidth: '520px',
+                      lineHeight: 1.5
                     }}
                   >
                     The future will not be built by average students.
@@ -979,21 +959,18 @@ export default function CommunityPage() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '8px',
-                      minWidth: 'clamp(160px, 50vw, 200px)',
                       background: 'linear-gradient(135deg, #7E6EF2 0%, #6A56E8 100%)',
                       color: '#FFFFFF',
-                      padding: '16px 36px',
+                      padding: '10px 26px',
                       borderRadius: '100px',
-                      fontSize: '15px',
+                      fontSize: '14px',
                       fontWeight: 600,
                       textDecoration: 'none',
-                      boxShadow: '0 10px 30px -4px rgba(126, 110, 242, 0.5), 0 0 20px rgba(126, 110, 242, 0.25)',
-                      border: '1px solid rgba(255, 255, 255, 0.15)',
-                      cursor: 'pointer',
-                      pointerEvents: 'auto'
+                      boxShadow: '0 8px 24px -4px rgba(126, 110, 242, 0.5)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)'
                     }}
                   >
-                    Apply To The Network <ArrowUpRight size={18} />
+                    Apply To The Network <span style={{ fontSize: '15px' }}>↗</span>
                   </motion.a>
                 </div>
               </ScrollExpand>

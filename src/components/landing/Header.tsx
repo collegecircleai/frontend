@@ -62,6 +62,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
 
   return (
     <motion.header
+      suppressHydrationWarning
       style={{
         position: 'fixed',
         left: '50%',
@@ -150,38 +151,37 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
         flex: 1
       }}>
         {/* Theme Toggle Button */}
-        {mounted && (
-          <motion.button
-            onClick={toggleTheme}
-            whileHover={{ scale: 1.1, backgroundColor: 'rgba(139, 128, 249, 0.15)' }}
-            whileTap={{ scale: 0.9 }}
-            style={{
-              backgroundColor: 'rgba(139, 128, 249, 0)', // Fix: 'transparent' keyword crashes Framer interpolator
-              border: '1px solid var(--border)',
-              borderRadius: '12px',
-              width: '36px', // Slightly smaller on mobile
-              height: '36px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--ink)',
-              cursor: 'pointer',
-              transition: 'background-color 0.3s ease'
-            }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={theme}
-                initial={{ y: 20, opacity: 0, rotate: -45 }}
-                animate={{ y: 0, opacity: 1, rotate: 0 }}
-                exit={{ y: -20, opacity: 0, rotate: 45 }}
-                transition={{ duration: 0.2 }}
-              >
-                {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
-              </motion.div>
-            </AnimatePresence>
-          </motion.button>
-        )}
+        <motion.button
+          onClick={toggleTheme}
+          whileHover={{ scale: 1.1, backgroundColor: 'rgba(139, 128, 249, 0.15)' }}
+          whileTap={{ scale: 0.9 }}
+          suppressHydrationWarning
+          style={{
+            backgroundColor: 'rgba(139, 128, 249, 0)',
+            border: '1px solid var(--border)',
+            borderRadius: '12px',
+            width: '36px',
+            height: '36px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--ink)',
+            cursor: 'pointer',
+            transition: 'background-color 0.3s ease'
+          }}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={theme}
+              initial={{ y: 20, opacity: 0, rotate: -45 }}
+              animate={{ y: 0, opacity: 1, rotate: 0 }}
+              exit={{ y: -20, opacity: 0, rotate: 45 }}
+              transition={{ duration: 0.2 }}
+            >
+              {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+            </motion.div>
+          </AnimatePresence>
+        </motion.button>
 
         {/* Premium Mobile Menu Toggle */}
         <motion.button
