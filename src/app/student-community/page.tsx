@@ -14,6 +14,7 @@ import ScrollExpand from '@/components/ScrollExpand'
 import DriftWall from '@/components/DriftWall'
 import { SkewedCarousel } from '@/components/SkewedCarousel'
 import ScrollStack, { ScrollStackItem } from '@/components/ScrollStack'
+import ImagesReveal from '@/components/animata/image/images-reveal'
 import { Sun, ArrowRight, Terminal, Network, Rocket, Code2, Users, Compass, Zap, Shield, Crown, MessageSquare, Heart, Repeat, Flame, Sparkles, Moon, Cpu, Briefcase, Library, Star, MapPin, Trophy, ArrowUpRight } from 'lucide-react'
 
 export default function CommunityPage() {
@@ -311,25 +312,27 @@ export default function CommunityPage() {
             </motion.div>
 
             {/* Right Side Cards */}
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} style={{ flex: '1 1 600px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-              {[
-                { title: 'AI Workshops', desc: 'Immersive sessions on prompt engineering, agents, and the AI stack.', icon: <Network size={16} color="#8B80F9" /> },
-                { title: 'Builder Network', desc: 'Build with operators across 24 cities. Ship in public. Get noticed.', icon: <Terminal size={16} color="#8B80F9" /> },
-                { title: 'Startup Exposure', desc: 'Direct access to founders, VCs, and the Indian AI ecosystem.', icon: <Rocket size={16} color="#8B80F9" /> },
-                { title: 'Real Projects', desc: 'Work on shipped products — not toy demos, not case studies.', icon: <Code2 size={16} color="#8B80F9" /> },
-                { title: 'Mentorship', desc: '1:1 with operators who\'ve built in the AI space.', icon: <Compass size={16} color="#8B80F9" /> },
-                { title: 'Community Expansion', desc: 'Become campus ambassadors, run cohorts, lead culture.', icon: <Users size={16} color="#8B80F9" /> }
-              ].map((card, i) => (
-                <motion.div key={i} variants={fadeInUp} whileHover={{ y: -5, background: isDark ? 'rgba(255,255,255,0.05)' : '#F9F9FB', boxShadow: isDark ? '0 10px 40px rgba(123, 107, 255, 0.1)' : '0 15px 40px rgba(0,0,0,0.05)', borderColor: isDark ? 'rgba(123, 107, 255, 0.3)' : c.border10 }} style={{ background: c.cardLight, border: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : c.border05}`, borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '24px', backdropFilter: 'blur(10px)', transition: 'all 0.3s ease', cursor: 'pointer' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: c.border03, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    {card.icon}
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} style={{ flex: '1 1 600px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '140px' }}>
+              <ImagesReveal>
+                {[
+                  { title: 'AI Workshops', desc: 'Immersive sessions on prompt engineering, agents, and the AI stack.', icon: <Network size={16} color="#8B80F9" /> },
+                  { title: 'Builder Network', desc: 'Build with operators across 24 cities. Ship in public. Get noticed.', icon: <Terminal size={16} color="#8B80F9" /> },
+                  { title: 'Startup Exposure', desc: 'Direct access to founders, VCs, and the Indian AI ecosystem.', icon: <Rocket size={16} color="#8B80F9" /> },
+                  { title: 'Real Projects', desc: 'Work on shipped products — not toy demos, not case studies.', icon: <Code2 size={16} color="#8B80F9" /> },
+                  { title: 'Mentorship', desc: '1:1 with operators who\'ve built in the AI space.', icon: <Compass size={16} color="#8B80F9" /> },
+                  { title: 'Community Expansion', desc: 'Become campus ambassadors, run cohorts, lead culture.', icon: <Users size={16} color="#8B80F9" /> }
+                ].map((card, i) => (
+                  <div key={i} style={{ width: '280px', height: '230px', background: c.cardLight, border: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : c.border05}`, borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '24px', backdropFilter: 'blur(10px)', transition: 'all 0.3s ease', cursor: 'pointer', boxShadow: isDark ? '0 10px 40px rgba(123, 107, 255, 0.1)' : '0 15px 40px rgba(0,0,0,0.05)' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: c.border03, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
+                      {card.icon}
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: '15px', fontWeight: 700, color: c.text, marginBottom: '8px' }}>{card.title}</h3>
+                      <p style={{ color: c.text50, fontSize: '13px', lineHeight: 1.6 }}>{card.desc}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 style={{ fontSize: '15px', fontWeight: 700, color: c.text, marginBottom: '8px' }}>{card.title}</h3>
-                    <p style={{ color: c.text50, fontSize: '13px', lineHeight: 1.6 }}>{card.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
+                ))}
+              </ImagesReveal>
             </motion.div>
           </div>
         </section>
