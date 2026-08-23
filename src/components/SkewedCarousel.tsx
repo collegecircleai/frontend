@@ -112,7 +112,7 @@ function CarouselItem({
       // If item is on the left (negative distance), rotate right (positive degrees).
       // If item is on the right (positive distance), rotate left (negative degrees).
       const maxRotation = 55; // Steep rotation like Apple Coverflow
-      const newRotateY = normalizedDistance * maxRotation;
+      const newRotateY = -normalizedDistance * maxRotation;
       
       // 3. Translate X (Overlap):
       // Push items toward the center to create the overlapping coverflow effect
