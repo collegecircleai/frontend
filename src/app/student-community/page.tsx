@@ -9,7 +9,9 @@ import Footer from '@/components/landing/Footer'
 import DarkAurora from '@/components/effects/DarkAurora'
 import ElegantParticles from '@/components/effects/ElegantParticles'
 import ComponentErrorBoundary from '@/components/effects/ErrorBoundary'
+// @ts-ignore
 import ScrollExpand from '@/components/ScrollExpand'
+import { SkewedCarousel } from '@/components/SkewedCarousel'
 import { Sun, ArrowRight, Terminal, Network, Rocket, Code2, Users, Compass, Zap, Shield, Crown, MessageSquare, Heart, Repeat, Flame, Sparkles, Moon, Cpu, Briefcase, Library, Star, MapPin, Trophy, ArrowUpRight } from 'lucide-react'
 
 export default function CommunityPage() {
@@ -379,7 +381,7 @@ export default function CommunityPage() {
                 .progression-arrow svg { transform: rotate(0deg); }
               }
             `}</style>
-            <div className="tier-scroll" style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'stretch', gap: '16px', overflowX: 'auto', paddingBottom: '40px', scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch', margin: '0 -5%', padding: '0 5% 40px 5%' }}>
+            <SkewedCarousel perspective={1400} inactiveScale={0.85} gap={24}>
               {[
                 { lvl: '01', title: 'Explore', badge: undefined, subtitle: 'Discover what is possible.', desc: 'Most students enter college without a clear direction. Gain access to AI workshops, career guidance, and networking.', icon: <Compass size={20} />, perks: ['AI Workshops', 'Career Guidance', 'Networking Circles', 'Senior Mentorship'] },
                 { lvl: '02', title: 'Build', badge: undefined, subtitle: 'Learn by building.', desc: 'Builders don\'t just attend sessions. They create. Work on projects, startup experiments, and creator systems.', icon: <Terminal size={20} />, perks: ['AI Projects', 'Startup Experiments', 'Creator Systems', 'Collaborative Initiatives'] },
@@ -389,8 +391,8 @@ export default function CommunityPage() {
                 { lvl: '06', title: 'Expand', badge: undefined, subtitle: 'Build a city-wide ecosystem.', desc: 'Connect colleges, ambassadors, contributors, and builders across an entire city. Your impact extends beyond a campus.', icon: <Network size={20} />, perks: ['Free Annual Premium', 'Revenue Sharing', 'Strategic Operator Access', 'Scale: Up to 10,000 Students'] },
                 { lvl: '07', title: 'Impact', badge: undefined, subtitle: 'Shape the future of the network.', desc: 'Country Ambassadors become strategic ecosystem partners helping scale the community nationally.', icon: <Trophy size={20} />, perks: ['Direct Founder Access', 'National Leadership', 'Strategic Planning Access', 'Premium Network'] }
               ].map((tier, i) => (
-                <React.Fragment key={i}>
-                  <motion.div onClick={() => setActiveTierModal(tier.lvl)} initial="hidden" whileInView="visible" whileHover={{ y: -8, scale: 1.02, boxShadow: isDark ? '0 20px 50px rgba(123, 107, 255, 0.15)' : '0 20px 50px rgba(123, 107, 255, 0.1)', borderColor: 'rgba(123, 107, 255, 0.4)' }} viewport={{ once: true }} variants={fadeInUp} style={{ flex: '0 0 clamp(280px, 80vw, 340px)', scrollSnapAlign: 'center', background: c.tierCardGradient, border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px 24px', position: 'relative', display: 'flex', flexDirection: 'column', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: isDark ? 'none' : '0 10px 40px rgba(0,0,0,0.03)' }}>
+                <div key={i} style={{ width: 'clamp(280px, 80vw, 340px)', height: '100%' }}>
+                  <motion.div onClick={() => setActiveTierModal(tier.lvl)} initial="hidden" whileInView="visible" whileHover={{ y: -8, scale: 1.02, boxShadow: isDark ? '0 20px 50px rgba(123, 107, 255, 0.15)' : '0 20px 50px rgba(123, 107, 255, 0.1)', borderColor: 'rgba(123, 107, 255, 0.4)' }} viewport={{ once: true }} variants={fadeInUp} style={{ height: '100%', background: c.tierCardGradient, border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px 24px', position: 'relative', display: 'flex', flexDirection: 'column', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: isDark ? 'none' : '0 10px 40px rgba(0,0,0,0.03)' }}>
 
                     {/* Top Bar (Level + Arrow) */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
@@ -434,9 +436,9 @@ export default function CommunityPage() {
                       Explore {tier.title} progression <ArrowRight size={12} style={{ marginLeft: '4px' }} />
                     </div>
                   </motion.div>
-                </React.Fragment>
+                </div>
               ))}
-            </div>
+            </SkewedCarousel>
           </div>
         </section>
 
