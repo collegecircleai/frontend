@@ -18,15 +18,9 @@ export function SkewedCarousel({
   className = ''
 }: SkewedCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [, forceUpdate] = useState(0);
-
-  // Trigger re-render after mount so refs are available
-  useEffect(() => {
-    forceUpdate(1);
-  }, []);
 
   return (
-    <div className={`relative w-full overflow-hidden ${className}`} style={{ padding: '40px 0 80px' }}>
+    <div className={`relative w-full ${className}`} style={{ padding: '40px 0 80px' }}>
       <div
         ref={containerRef}
         style={{
@@ -47,7 +41,7 @@ export function SkewedCarousel({
         }}
       >
         <style>{`
-          .skewed-carousel-container::-webkit-scrollbar { display: none; }
+          .skewed-carousel-wrap::-webkit-scrollbar { display: none; }
         `}</style>
         {children.map((child, index) => (
           <CarouselItem
@@ -70,7 +64,6 @@ function CarouselItem({
   containerRef,
   inactiveScale,
   perspective,
-  index,
 }: {
   children: React.ReactNode;
   containerRef: React.RefObject<HTMLDivElement>;
@@ -79,11 +72,13 @@ function CarouselItem({
   index: number;
 }) {
   const itemRef = useRef<HTMLDivElement>(null);
-  const [transforms, setTransforms] = useState({
-    scale: 1,
-    rotateY: 0,
-    opacity: 1,
-    zIndex: 1,
+  // Start with identity transforms to avoid SSR/CSR mismatch
+  const [style, setStyle] = useState<React.CSSProperties>({
+    flexShrink: 0,
+    scrollSnapAlign: 'center',
+    cursor: 'pointer',
+    willChange: 'transform',
+    transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
   });
 
   const updateTransforms = useCallback(() => {
@@ -96,35 +91,34 @@ function CarouselItem({
 
     const containerCenter = containerRect.left + containerRect.width / 2;
     const itemCenter = itemRect.left + itemRect.width / 2;
-
     const distance = itemCenter - containerCenter;
     const maxDistance = itemRect.width + 40;
+    const norm = Math.max(-1, Math.min(1, distance / maxDistance));
+    const absNorm = Math.abs(norm);
 
-    const normalizedDistance = Math.max(-1, Math.min(1, distance / maxDistance));
-    const absNorm = Math.abs(normalizedDistance);
+    const scale = Math.max(inactiveScale, 1 - absNorm * (1 - inactiveScale));
+    const rotateY = -norm * 50;
+    const opacity = 1 - absNorm * 0.25;
+    const zIndex = Math.round(100 - absNorm * 100);
 
-    const newScale = Math.max(inactiveScale, 1 - absNorm * (1 - inactiveScale));
-    // Cards on left (negative dist) tilt right (positive rotateY), cards on right tilt left
-    const newRotateY = -normalizedDistance * 50;
-    const newOpacity = 1 - absNorm * 0.25;
-    const newZIndex = Math.round(100 - absNorm * 100);
-
-    setTransforms({
-      scale: newScale,
-      rotateY: newRotateY,
-      opacity: newOpacity,
-      zIndex: newZIndex,
+    setStyle({
+      flexShrink: 0,
+      scrollSnapAlign: 'center',
+      cursor: 'pointer',
+      willChange: 'transform',
+      transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
+      transform: `perspective(${perspective}px) rotateY(${rotateY}deg) scale(${scale})`,
+      opacity,
+      zIndex,
     });
-  }, [containerRef, inactiveScale]);
+  }, [containerRef, inactiveScale, perspective]);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Run immediately
     updateTransforms();
 
-    // Listen to native scroll event on the container element
     container.addEventListener('scroll', updateTransforms, { passive: true });
     window.addEventListener('resize', updateTransforms, { passive: true });
 
@@ -147,26 +141,15 @@ function CarouselItem({
     if (Math.abs(itemCenter - containerCenter) > 50) {
       e.preventDefault();
       e.stopPropagation();
-      const scrollTarget = container.scrollLeft + (itemCenter - containerCenter);
-      container.scrollTo({ left: scrollTarget, behavior: 'smooth' });
+      container.scrollTo({
+        left: container.scrollLeft + (itemCenter - containerCenter),
+        behavior: 'smooth',
+      });
     }
   };
 
   return (
-    <div
-      ref={itemRef}
-      onClickCapture={handleClickCapture}
-      style={{
-        flexShrink: 0,
-        scrollSnapAlign: 'center',
-        cursor: 'pointer',
-        transform: `perspective(${perspective}px) rotateY(${transforms.rotateY}deg) scale(${transforms.scale})`,
-        opacity: transforms.opacity,
-        zIndex: transforms.zIndex,
-        transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
-        willChange: 'transform',
-      }}
-    >
+    <div ref={itemRef} onClickCapture={handleClickCapture} style={style}>
       {children}
     </div>
   );
