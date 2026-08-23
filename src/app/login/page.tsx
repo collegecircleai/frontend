@@ -8,11 +8,11 @@ import { getPostAuthRoute, useAuth } from "../../context/AuthContext";
 import BrandPanel from "@/components/brand/BrandPanel";
 import CCAILogo from "@/components/brand/CCAILogo";
 import { Mail, Lock, ArrowRight, AlertCircle, Eye, EyeOff } from "lucide-react";
-import api, { getFriendlyErrorMessage } from "@/lib/api";
+import { getFriendlyErrorMessage } from "@/lib/api";
 import { useEffect } from "react";
 export default function Login() {
   const router = useRouter();
-  const { login, user, isLoading, hydrateUser } = useAuth();
+  const { login, user, isLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -58,13 +58,14 @@ export default function Login() {
       return;
     }
 
-    const searchParams = new URLSearchParams(window.location.search);
     const hash = window.location.hash.replace(/^#/, "");
+    if (!hash) {
+      return;
+    }
+
     const hashParams = new URLSearchParams(hash);
-    const accessToken =
-      hashParams.get("accessToken") || searchParams.get("accessToken");
-    const refreshToken =
-      hashParams.get("refreshToken") || searchParams.get("refreshToken");
+    const accessToken = hashParams.get("accessToken");
+    const refreshToken = hashParams.get("refreshToken");
 
     if (!accessToken) {
       return;
@@ -80,12 +81,7 @@ export default function Login() {
       "",
       `${window.location.pathname}${window.location.search}`,
     );
-
-    // Tokens alone leave `user` null, which bounces straight back here.
-    hydrateUser()
-      .then((googleUser) => router.replace(getPostAuthRoute(googleUser)))
-      .catch(() => setError("Google sign-in failed. Please try again."));
-  }, [hydrateUser, router]);
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

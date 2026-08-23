@@ -116,7 +116,7 @@ function Sidebar({ step, isMobile }: { step: number; isMobile: boolean }) {
               marginTop: "12px",
             }}
           >
-            Student Intelligence INFRASTRUCTURE
+            GURUKUL DIGITAL INFRASTRUCTURE
           </div>
         </div>
 
@@ -291,23 +291,15 @@ function Step1({
   user,
   name,
   onNameChange,
-  phone,
-  onPhoneChange,
   onNext,
   isMobile,
 }: {
   user: any;
   name: string;
   onNameChange: (val: string) => void;
-  phone: string;
-  onPhoneChange: (val: string) => void;
   onNext: () => void;
   isMobile: boolean;
 }) {
-  // Require a name and a plausible phone before continuing — this is the only
-  // place Google-auth users can provide a phone number.
-  const phoneValid = /^[+\d][\d\s-]{6,14}$/.test(phone.trim());
-  const canContinue = name.trim().length > 1 && phoneValid;
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -447,45 +439,6 @@ function Step1({
             />
           </div>
         </div>
-        <div>
-          <label
-            style={{
-              display: "block",
-              fontSize: "10px",
-              fontFamily: FONTS.mono,
-              fontWeight: 700,
-              letterSpacing: "0.25em",
-              color: COLORS.textLight,
-              marginBottom: "16px",
-              textTransform: "uppercase",
-            }}
-          >
-            Phone Number
-          </label>
-          <div
-            style={{ position: "relative", width: isMobile ? "100%" : "400px" }}
-          >
-            <input
-              value={phone}
-              onChange={(e) => onPhoneChange(e.target.value)}
-              type="tel"
-              inputMode="tel"
-              autoComplete="tel"
-              placeholder="Enter your phone number"
-              style={{
-                width: "100%",
-                backgroundColor: "#fff",
-                border: `1.5px solid ${COLORS.border}`,
-                borderRadius: "12px",
-                padding: isMobile ? "14px 18px" : "18px 24px",
-                fontSize: "15px",
-                fontFamily: FONTS.sans,
-                color: COLORS.textMain,
-                outline: "none",
-              }}
-            />
-          </div>
-        </div>
       </div>
       <div
         style={{
@@ -498,7 +451,6 @@ function Step1({
       >
         <button
           onClick={onNext}
-          disabled={!canContinue}
           style={{
             flex: isMobile ? 1 : "initial",
             display: "flex",
@@ -513,8 +465,7 @@ function Step1({
             fontSize: "14px",
             fontWeight: 700,
             fontFamily: FONTS.sans,
-            cursor: canContinue ? "pointer" : "not-allowed",
-            opacity: canContinue ? 1 : 0.5,
+            cursor: "pointer",
             boxShadow: "0 10px 25px rgba(77, 63, 255, 0.25)",
           }}
         >
@@ -1186,7 +1137,6 @@ export default function Onboarding() {
   const { user, setUser, isLoading } = useAuth();
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);
@@ -1213,12 +1163,10 @@ export default function Onboarding() {
       router.push("/login");
     }
     if (user?.name && !name) setName(user.name);
-    if (user?.phoneNo && !phone) setPhone(user.phoneNo);
-  }, [user, isLoading, mounted, name, phone, router]);
+  }, [user, isLoading, mounted, name, router]);
 
   useEffect(() => {
     if (step === 4) {
-      // Land on the dashboard, where the Welcome Gift popup greets the new user.
       const timer = setTimeout(() => router.push("/dashboard"), 4000);
       return () => clearTimeout(timer);
     }
@@ -1230,7 +1178,6 @@ export default function Onboarding() {
     try {
       const payload = {
         name,
-        phone_no: phone.trim(),
         college_name: formData.college,
         degree:
           formData.degree === "other" ? formData.customDegree : formData.degree,
@@ -1389,8 +1336,6 @@ export default function Onboarding() {
                 user={user}
                 name={name}
                 onNameChange={setName}
-                phone={phone}
-                onPhoneChange={setPhone}
                 onNext={() => setStep(2)}
                 isMobile={isMobile}
               />

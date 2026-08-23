@@ -340,7 +340,7 @@ export default function AssignmentSolverPage() {
       htmlContent.innerHTML = `
         <div style="font-family: Arial, sans-serif; padding: 20px; color: #111827;">
           <h1 style="font-size: 28px; margin-bottom: 10px;">${getSolutionTitle()}</h1>
-          <p style="color: #6b7280; font-size: 12px; margin-bottom: 20px;">Generated from CC&gt;AI Research Studio</p>
+          <p style="color: #6b7280; font-size: 12px; margin-bottom: 20px;">Generated from CC&gt;AI Assignment Solver</p>
           <hr style="margin: 20px 0; border: none; border-top: 1px solid #e5e7eb;" />
           ${element.innerHTML}
         </div>
@@ -389,7 +389,7 @@ export default function AssignmentSolverPage() {
                 spacing: { after: 100 },
               }),
               new Paragraph({
-                text: "Generated from CC>AI Research Studio",
+                text: "Generated from CC>AI Assignment Solver",
                 spacing: { after: 200 },
               }),
               new Paragraph({
@@ -444,7 +444,7 @@ export default function AssignmentSolverPage() {
                   letterSpacing: "0.3em",
                 }}
               >
-                Research Studio
+                ASSIGNMENT ASSISTANT
               </div>
               <h1
                 className="serif"
@@ -454,7 +454,7 @@ export default function AssignmentSolverPage() {
                   marginBottom: "24px",
                 }}
               >
-                Start Your Research
+                Solve Your Assignment
               </h1>
               <p
                 className="serif"
@@ -467,7 +467,7 @@ export default function AssignmentSolverPage() {
                   lineHeight: 1.6,
                 }}
               >
-                Upload your document and let our AI provide detailed solutions
+                Upload your assignment and let our AI provide detailed solutions
                 with step-by-step explanations.
               </p>
             </motion.div>
@@ -544,7 +544,7 @@ export default function AssignmentSolverPage() {
                       marginBottom: "12px",
                     }}
                   >
-                    Upload your document
+                    Upload your assignment
                   </h3>
                   <p
                     style={{
@@ -626,7 +626,7 @@ export default function AssignmentSolverPage() {
                   >
                     {uploadState === "uploading"
                       ? "Uploading..."
-                      : "Start Research"}
+                      : "Solve Assignment"}
                   </motion.button>
                 </motion.div>
               </motion.div>

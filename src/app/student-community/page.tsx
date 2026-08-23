@@ -12,6 +12,7 @@ import ComponentErrorBoundary from '@/components/effects/ErrorBoundary'
 // @ts-ignore
 import ScrollExpand from '@/components/ScrollExpand'
 import { SkewedCarousel } from '@/components/SkewedCarousel'
+import ScrollStack, { ScrollStackItem } from '@/components/ScrollStack'
 import { Sun, ArrowRight, Terminal, Network, Rocket, Code2, Users, Compass, Zap, Shield, Crown, MessageSquare, Heart, Repeat, Flame, Sparkles, Moon, Cpu, Briefcase, Library, Star, MapPin, Trophy, ArrowUpRight } from 'lucide-react'
 
 export default function CommunityPage() {
@@ -525,35 +526,158 @@ export default function CommunityPage() {
               }
             `}</style>
 
-            <div style={{ position: 'relative', padding: '0 0 40px 0' }}>
-              {/* Vertical line */}
-              <div className="experience-line" style={{ position: 'absolute', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, transparent, rgba(123, 107, 255, 0.3) 10%, rgba(123, 107, 255, 0.3) 90%, transparent)' }} />
-
+            <ScrollStack 
+              useWindowScroll={true} 
+              baseScale={0.85} 
+              itemScale={0.03}
+              itemStackDistance={30}
+              scaleDuration={0.5}
+              blurAmount={6}
+            >
               {[
-                { step: '01', title: 'SHOCK', heading: "An AI moment they can't unsee.", desc: "We open with a live demo so visceral it rewires how students think about their next four years." },
-                { step: '02', title: 'DEMO', heading: "Live prompt engineering battles.", desc: "Resume roasting by AI. Productivity stack speedruns. Real builders, on stage, shipping." },
-                { step: '03', title: 'INTERACTION', heading: "Hands on the toolkit.", desc: "Every attendee builds something — a workflow, an agent, a side hustle prototype — before they leave." },
-                { step: '04', title: 'ONBOARD', heading: "Welcome to the network.", desc: "Discord invite. Cohort match. First mission within 48 hours. The community becomes the next chapter." }
-              ].map((item, i) => (
-                <div key={i} className="experience-item" style={{ display: 'flex', justifyContent: i % 2 === 0 ? 'flex-start' : 'flex-end', position: 'relative', marginBottom: '80px' }}>
+                { 
+                  step: '01', 
+                  title: 'SHOCK', 
+                  heading: "An AI moment they can't unsee.", 
+                  desc: "We open with a live demo so visceral it rewires how students think about their next four years.",
+                  accent: '#9B90FF',
+                  glow: 'rgba(155, 144, 255, 0.25)',
+                  gradient: isDark 
+                    ? 'linear-gradient(135deg, #1C1637 0%, #0C0A1C 100%)' 
+                    : 'linear-gradient(135deg, #F0EEFF 0%, #FFFFFF 100%)',
+                  border: isDark ? 'rgba(155, 144, 255, 0.3)' : 'rgba(123, 107, 255, 0.2)',
+                  Icon: Flame
+                },
+                { 
+                  step: '02', 
+                  title: 'DEMO', 
+                  heading: "Live prompt engineering battles.", 
+                  desc: "Resume roasting by AI. Productivity stack speedruns. Real builders, on stage, shipping.",
+                  accent: '#EC4899',
+                  glow: 'rgba(236, 72, 153, 0.25)',
+                  gradient: isDark 
+                    ? 'linear-gradient(135deg, #2A1230 0%, #14081A 100%)' 
+                    : 'linear-gradient(135deg, #FFEEEF 0%, #FFFFFF 100%)',
+                  border: isDark ? 'rgba(236, 72, 153, 0.3)' : 'rgba(236, 72, 153, 0.2)',
+                  Icon: Terminal
+                },
+                { 
+                  step: '03', 
+                  title: 'INTERACTION', 
+                  heading: "Hands on the toolkit.", 
+                  desc: "Every attendee builds something — a workflow, an agent, a side hustle prototype — before they leave.",
+                  accent: '#F59E0B',
+                  glow: 'rgba(245, 158, 11, 0.25)',
+                  gradient: isDark 
+                    ? 'linear-gradient(135deg, #2D1E0C 0%, #160E06 100%)' 
+                    : 'linear-gradient(135deg, #FFF8E6 0%, #FFFFFF 100%)',
+                  border: isDark ? 'rgba(245, 158, 11, 0.3)' : 'rgba(245, 158, 11, 0.2)',
+                  Icon: Cpu
+                },
+                { 
+                  step: '04', 
+                  title: 'ONBOARD', 
+                  heading: "Welcome to the network.", 
+                  desc: "Discord invite. Cohort match. First mission within 48 hours. The community becomes the next chapter.",
+                  accent: '#10B981',
+                  glow: 'rgba(16, 185, 129, 0.25)',
+                  gradient: isDark 
+                    ? 'linear-gradient(135deg, #0E2A22 0%, #061410 100%)' 
+                    : 'linear-gradient(135deg, #E8FDF5 0%, #FFFFFF 100%)',
+                  border: isDark ? 'rgba(16, 185, 129, 0.3)' : 'rgba(16, 185, 129, 0.2)',
+                  Icon: Network
+                }
+              ].map((item, i) => {
+                const IconComponent = item.Icon;
+                return (
+                  <ScrollStackItem 
+                    key={i} 
+                    itemClassName="flex flex-col justify-center items-start overflow-hidden"
+                  >
+                    <div 
+                      style={{ 
+                        background: item.gradient, 
+                        border: `1px solid ${item.border}`, 
+                        borderRadius: '32px', 
+                        padding: '40px 48px', 
+                        width: '100%', 
+                        height: '100%', 
+                        backdropFilter: 'blur(24px)', 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        justify: 'center',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        boxShadow: isDark 
+                          ? `0 20px 40px -15px rgba(0, 0, 0, 0.6), inset 0 1px 1px 0 rgba(255, 255, 255, 0.1)` 
+                          : `0 20px 40px -15px ${item.glow}, inset 0 1px 1px 0 rgba(255, 255, 255, 0.8)`
+                      }}
+                    >
+                      {/* Radial Accent Ambient Glow */}
+                      <div 
+                        style={{
+                          position: 'absolute',
+                          top: '-20%',
+                          right: '-10%',
+                          width: '250px',
+                          height: '250px',
+                          borderRadius: '50%',
+                          background: `radial-gradient(circle, ${item.glow} 0%, transparent 70%)`,
+                          pointerEvents: 'none',
+                          zIndex: 0
+                        }}
+                      />
 
-                  {/* Timeline Dot */}
-                  <div className="experience-dot" style={{ position: 'absolute', top: '24px', transform: 'translate(-50%, -50%)', width: '28px', height: '28px', borderRadius: '50%', background: c.gradBase, border: '1px solid rgba(123,107,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
-                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#9B90FF', boxShadow: '0 0 10px #7B6BFF' }} />
-                  </div>
+                      {/* Large Background Watermark Icon */}
+                      <IconComponent 
+                        size={180} 
+                        style={{
+                          position: 'absolute',
+                          right: '5%',
+                          bottom: '-10%',
+                          color: item.accent,
+                          opacity: isDark ? 0.06 : 0.08,
+                          pointerEvents: 'none',
+                          zIndex: 0
+                        }}
+                      />
 
-                  <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeInUp} className={`experience-content ${i % 2 === 0 ? 'left-side' : 'right-side'}`}>
-                    <div style={{ fontSize: '10px', fontWeight: 700, color: '#9B90FF', fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '16px' }}>
-                      {item.step} <span style={{ color: c.text30, margin: '0 4px' }}>•</span> {item.title}
+                      {/* Content */}
+                      <div style={{ position: 'relative', zIndex: 1 }}>
+                        <div 
+                          style={{ 
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '6px 14px',
+                            borderRadius: '20px',
+                            background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)',
+                            border: `1px solid ${item.border}`,
+                            fontSize: '11px', 
+                            fontWeight: 700, 
+                            color: item.accent, 
+                            fontFamily: 'var(--font-mono)', 
+                            letterSpacing: '0.15em', 
+                            marginBottom: '20px' 
+                          }}
+                        >
+                          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: item.accent, boxShadow: `0 0 8px ${item.accent}` }} />
+                          {item.step} <span style={{ color: c.text30 }}>•</span> {item.title}
+                        </div>
+
+                        <h3 style={{ fontSize: 'clamp(28px, 3.5vw, 36px)', fontWeight: 800, color: c.text, marginBottom: '16px', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
+                          {item.heading}
+                        </h3>
+
+                        <p style={{ color: c.text60, fontSize: '15px', lineHeight: 1.6, maxWidth: '520px' }}>
+                          {item.desc}
+                        </p>
+                      </div>
                     </div>
-                    <h3 style={{ fontSize: 'clamp(24px, 3vw, 32px)', fontWeight: 800, color: c.text, marginBottom: '16px', letterSpacing: '-0.02em' }}>{item.heading}</h3>
-                    <p style={{ color: c.text50, fontSize: '14px', lineHeight: 1.6, display: 'inline-block', maxWidth: '350px' }}>
-                      {item.desc}
-                    </p>
-                  </motion.div>
-                </div>
-              ))}
-            </div>
+                  </ScrollStackItem>
+                );
+              })}
+            </ScrollStack>
           </div>
         </section>
 

@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import api from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
-import WelcomeGiftPopup from "@/components/WelcomeGiftPopup";
 
 /* ─────────────────────────────────────────
    TYPES
@@ -79,6 +78,84 @@ interface Activity {
   timestamp: string;
 }
 
+/* ─────────────────────────────────────────
+   DUMMY DATA
+───────────────────────────────────────── */
+const DUMMY_COURSES: Course[] = [
+  {
+    id: "1",
+    name: "Data Structures",
+    department: "Computer Science",
+    semester: "2",
+    unitCount: 8,
+    progress: 65,
+  },
+  {
+    id: "2",
+    name: "Algorithms",
+    department: "Computer Science",
+    semester: "2",
+    unitCount: 6,
+    progress: 45,
+  },
+  {
+    id: "3",
+    name: "Database Systems",
+    department: "Computer Science",
+    semester: "3",
+    unitCount: 7,
+    progress: 30,
+  },
+];
+
+const DUMMY_ANALYTICS: AnalyticsSummary = {
+  completedTopics: 24,
+  avgScore: 78,
+  streak: 12,
+};
+
+const DUMMY_SESSION: RecentSession = {
+  courseId: "1",
+  topicId: "topic-1",
+  courseName: "Data Structures",
+  topicName: "Binary Trees & Traversal",
+  unitName: "Unit 3",
+  progress: 65,
+};
+
+const DUMMY_WEAK_TOPICS: WeakTopic[] = [
+  { topic: "Graph Algorithms", score: 52, unit: "Unit 5" },
+  { topic: "Dynamic Programming", score: 61, unit: "Unit 7" },
+  { topic: "Recursion", score: 58, unit: "Unit 2" },
+];
+
+const DUMMY_ACTIVITY: Activity[] = [
+  {
+    action: "complete",
+    topic: "Sorting Algorithms",
+    timestamp: new Date(Date.now() - 2 * 60000).toISOString(),
+  },
+  {
+    action: "quiz",
+    topic: "Binary Search",
+    timestamp: new Date(Date.now() - 15 * 60000).toISOString(),
+  },
+  {
+    action: "complete",
+    topic: "Linked Lists",
+    timestamp: new Date(Date.now() - 1 * 3600000).toISOString(),
+  },
+  {
+    action: "quiz",
+    topic: "Tree Traversal",
+    timestamp: new Date(Date.now() - 4 * 3600000).toISOString(),
+  },
+  {
+    action: "complete",
+    topic: "Hash Tables",
+    timestamp: new Date(Date.now() - 1 * 86400000).toISOString(),
+  },
+];
 
 /* ─────────────────────────────────────────
    HELPERS
@@ -389,11 +466,8 @@ function activityLabel(a: Activity) {
    MAIN DASHBOARD PAGE
 ───────────────────────────────────────── */
 export default function DashboardPage() {
-  const { user, setUser } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
-
-  // Welcome Gift popup: show once, only for users who haven't claimed it.
-  const [showWelcomeGift, setShowWelcomeGift] = useState(false);
 
   const [courses, setCourses] = useState<Course[]>([]);
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
@@ -412,13 +486,6 @@ export default function DashboardPage() {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
-
-  // Surface the gift once the user is loaded and hasn't claimed it yet.
-  useEffect(() => {
-    if (user && user.welcomeGiftClaimed === false) {
-      setShowWelcomeGift(true);
-    }
-  }, [user]);
 
 
   useEffect(() => {
@@ -474,7 +541,26 @@ export default function DashboardPage() {
             : [],
         );
 
-        setPersona(analyticsPayload?.persona ?? null);
+        try {
+          const raw = localStorage.getItem("cc-learning-insights");
+          const insights = raw ? JSON.parse(raw) : {};
+          setStrongTopics(
+            Array.isArray(insights.strongTopics)
+              ? insights.strongTopics
+              : Array.isArray(analyticsPayload?.strongTopics)
+                ? analyticsPayload.strongTopics
+                : [],
+          );
+          setPersona(insights.persona ?? analyticsPayload?.persona ?? null);
+          if (
+            Array.isArray(insights.weakTopics) &&
+            insights.weakTopics.length
+          ) {
+            setWeakTopics(insights.weakTopics);
+          }
+        } catch {
+          setPersona(analyticsPayload?.persona ?? null);
+        }
         // setSession(sessionData);
       } catch {
         setError("Unable to load dashboard. Please try again.");
@@ -635,19 +721,6 @@ export default function DashboardPage() {
     <>
       <style>{shimmerCSS + dashCSS}</style>
 
-      {showWelcomeGift && (
-        <WelcomeGiftPopup
-          onClaimed={() =>
-            setUser(user ? { ...user, welcomeGiftClaimed: true } : user)
-          }
-          onClose={() => setShowWelcomeGift(false)}
-          onStart={() => {
-            setShowWelcomeGift(false);
-            router.push("/dashboard");
-          }}
-        />
-      )}
-
        {/* ── SECTION 1: Greeting ── */}
        <div 
         className="cc-fade-in" 
@@ -668,7 +741,7 @@ export default function DashboardPage() {
             letterSpacing: isMobile ? "-0.03em" : "-0.01em"
           }}
         >
-          {getGreeting()}, {firstName}
+          {getGreeting()}, {firstName} 👋
         </h1>
         <p
           style={{
@@ -792,9 +865,8 @@ export default function DashboardPage() {
               maxWidth: 440,
             }}
           >
-            Upload your PDF Subject syllabus once.<br />
-            College Circle AI organizes your entire semester, assignments, revision plans, quizzes, exam preparation,
-            and personalized study roadmap.
+            Upload a PDF or DOCX syllabus and we'll build your entire learning
+            system — notes, quizzes, flashcards and more.
           </p>
           <button
             id="upload-cta-btn"
@@ -1239,17 +1311,7 @@ export default function DashboardPage() {
               overflow: "hidden",
             }}
           >
-            {(() => {
-              const seen = new Set<string>();
-              return activity.filter((a) => {
-                const displayLabel = activityLabel(a);
-                if (seen.has(displayLabel)) return false;
-                seen.add(displayLabel);
-                return true;
-              });
-            })()
-              .slice(0, 5)
-              .map((a, i, deduplicatedArr) => (
+            {activity.slice(0, 5).map((a, i) => (
               <div
                 key={i}
                 style={{
@@ -1258,7 +1320,7 @@ export default function DashboardPage() {
                   gap: 14,
                   padding: "14px 20px",
                   borderBottom:
-                    i < deduplicatedArr.length - 1
+                    i < Math.min(activity.length, 5) - 1
                       ? "1px solid rgba(9,9,15,0.06)"
                       : "none",
                 }}

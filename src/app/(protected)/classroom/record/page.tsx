@@ -12,7 +12,6 @@ import {
   User,
   BookOpen,
   Clock,
-  PenSquare,
 } from "lucide-react";
 import api, { getFriendlyErrorMessage } from "@/lib/api";
 
@@ -141,7 +140,9 @@ export default function RecordPage() {
             showToast(
               `Network reconnecting... (${retryCountRef.current}/${maxRetriesRef.current})`,
             );
-            scheduleRecognitionRestart(1000 + retryCountRef.current * 500);
+            scheduleRecognitionRestart(
+              1000 + retryCountRef.current * 500,
+            );
           } else {
             showToast(
               "Network Error: Service unreachable. Please check your connection.",
@@ -503,98 +504,16 @@ export default function RecordPage() {
               style={{
                 fontFamily: "var(--font-body)",
                 color: "var(--mist)",
-                maxWidth: 460,
-                marginBottom: 24,
+                maxWidth: 400,
+                marginBottom: 48,
                 textAlign: "center",
                 lineHeight: 1.6,
                 fontSize: 18,
               }}
             >
-              Choose how you want to start. Audio recording keeps the current
-              flow; text notes opens a dedicated notes page.
+              Fill in the lecture details below to start your AI-powered
+              recording.
             </p>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                gap: 16,
-                width: "100%",
-                maxWidth: 540,
-                marginBottom: 24,
-              }}
-            >
-              <button
-                type="button"
-                onClick={() => {}}
-                style={{
-                  border: "1px solid rgba(77, 63, 255, 0.18)",
-                  borderRadius: 20,
-                  background: "rgba(77, 63, 255, 0.08)",
-                  color: "var(--ink)",
-                  padding: "16px 18px",
-                  textAlign: "left",
-                  display: "grid",
-                  gap: 8,
-                  cursor: "default",
-                }}
-              >
-                <span
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    fontWeight: 800,
-                  }}
-                >
-                  <Mic size={16} /> Audio session
-                </span>
-                <span
-                  style={{
-                    color: "var(--mist)",
-                    fontSize: 13,
-                    lineHeight: 1.5,
-                  }}
-                >
-                  Use the existing live transcription flow.
-                </span>
-              </button>
-              <button
-                type="button"
-                onClick={() => router.push("/classroom/text")}
-                style={{
-                  border: "1px solid var(--border-light)",
-                  borderRadius: 20,
-                  background: "var(--deep)",
-                  color: "var(--ink)",
-                  padding: "16px 18px",
-                  textAlign: "left",
-                  display: "grid",
-                  gap: 8,
-                  cursor: "pointer",
-                }}
-              >
-                <span
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    fontWeight: 800,
-                  }}
-                >
-                  <PenSquare size={16} /> Text notes
-                </span>
-                <span
-                  style={{
-                    color: "var(--mist)",
-                    fontSize: 13,
-                    lineHeight: 1.5,
-                  }}
-                >
-                  Write notes directly and save them with the classroom API.
-                </span>
-              </button>
-            </div>
 
             <div
               style={{
