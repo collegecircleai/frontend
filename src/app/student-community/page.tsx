@@ -11,6 +11,7 @@ import ElegantParticles from '@/components/effects/ElegantParticles'
 import ComponentErrorBoundary from '@/components/effects/ErrorBoundary'
 // @ts-ignore
 import ScrollExpand from '@/components/ScrollExpand'
+import DriftWall from '@/components/DriftWall'
 import { SkewedCarousel } from '@/components/SkewedCarousel'
 import ScrollStack, { ScrollStackItem } from '@/components/ScrollStack'
 import { Sun, ArrowRight, Terminal, Network, Rocket, Code2, Users, Compass, Zap, Shield, Crown, MessageSquare, Heart, Repeat, Flame, Sparkles, Moon, Cpu, Briefcase, Library, Star, MapPin, Trophy, ArrowUpRight } from 'lucide-react'
@@ -790,59 +791,88 @@ export default function CommunityPage() {
           </motion.p>
 
           {/* Tweet Cards */}
-          <div style={{ display: 'flex', gap: '16px', overflowX: 'auto', paddingBottom: '32px', maxWidth: '1400px', margin: '0 auto', WebkitOverflowScrolling: 'touch', scrollSnapType: 'x mandatory' }}>
-            {[
-              {
-                name: 'Priyanshu Sarangi', role: 'IIT BHUBANESWAR • BUILDER', icon: <Terminal size={14} color="#fff" />, color: '#FF5C00',
-                text: "Joined as an Explorer. Built my first AI workflow in 3 weeks. Today I'm collaborating with students from 8+ colleges on real projects.",
-                likes: '328', replies: '24', retweets: '12'
-              },
-              {
-                name: 'Ananya Sharma', role: 'IIM BANGALORE • CONTRIBUTOR', icon: <Users size={14} color="#fff" />, color: '#9B90FF',
-                text: "The biggest value wasn't the workshop. It was meeting founders, builders, and ambitious students who pushed me to think bigger.",
-                likes: '412', replies: '31', retweets: '18'
-              },
-              {
-                name: 'Kabir Mehta', role: 'BITS PILANI • BUILDER', icon: <Zap size={14} color="#fff" />, color: '#7B6BFF',
-                text: "Built my portfolio, joined startup projects, and connected with mentors I would never have met through college alone.",
-                likes: '284', replies: '19', retweets: '8'
-              },
-              {
-                name: 'Simran Kaur', role: 'DELHI UNIVERSITY • AMBASSADOR', icon: <Crown size={14} color="#fff" />, color: '#FF3366',
-                text: "Managing my college community taught me leadership faster than any classroom ever could.",
-                likes: '501', replies: '42', retweets: '22'
-              },
-              {
-                name: 'Ritika Nair', role: 'CHRIST UNIVERSITY • UNIV. AMBASSADOR', icon: <Flame size={14} color="#fff" />, color: '#00FF9D',
-                text: "Started as an Explorer. Today I help coordinate students across departments and connect them to opportunities.",
-                likes: '391', replies: '28', retweets: '14'
-              },
-              {
-                name: 'Rahul Verma', role: 'NIT SURATHKAL • CONTRIBUTOR', icon: <Sparkles size={14} color="#fff" />, color: '#00C3FF',
-                text: "Working on ecosystem projects gave me real execution experience, not just certificates.",
-                likes: '347', replies: '21', retweets: '11'
-              }
-            ].map((tweet, i) => (
-              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeInUp} style={{ flex: '0 0 320px', scrollSnapAlign: 'start', background: c.card, border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '24px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: tweet.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {tweet.icon}
+          <div style={{ height: 750, width: '100%', maxWidth: '1400px', margin: '0 auto', paddingBottom: '32px', transform: 'translateX(-4%)' }}>
+            <DriftWall
+              items={[
+                {
+                  name: 'Priyanshu Sarangi', role: 'IIT BHUBANESWAR • BUILDER', icon: <Terminal size={14} color="#fff" />, color: '#FF5C00',
+                  text: "Joined as an Explorer. Built my first AI workflow in 3 weeks. Today I'm collaborating with students from 8+ colleges on real projects.",
+                  likes: '328', replies: '24', retweets: '12'
+                },
+                {
+                  name: 'Ananya Sharma', role: 'IIM BANGALORE • CONTRIBUTOR', icon: <Users size={14} color="#fff" />, color: '#9B90FF',
+                  text: "The biggest value wasn't the workshop. It was meeting founders, builders, and ambitious students who pushed me to think bigger.",
+                  likes: '412', replies: '31', retweets: '18'
+                },
+                {
+                  name: 'Kabir Mehta', role: 'BITS PILANI • BUILDER', icon: <Zap size={14} color="#fff" />, color: '#7B6BFF',
+                  text: "Built my portfolio, joined startup projects, and connected with mentors I would never have met through college alone.",
+                  likes: '284', replies: '19', retweets: '8'
+                },
+                {
+                  name: 'Simran Kaur', role: 'DELHI UNIVERSITY • AMBASSADOR', icon: <Crown size={14} color="#fff" />, color: '#FF3366',
+                  text: "Managing my college community taught me leadership faster than any classroom ever could.",
+                  likes: '501', replies: '42', retweets: '22'
+                },
+                {
+                  name: 'Ritika Nair', role: 'CHRIST UNIVERSITY • UNIV. AMBASSADOR', icon: <Flame size={14} color="#fff" />, color: '#00FF9D',
+                  text: "Started as an Explorer. Today I help coordinate students across departments and connect them to opportunities.",
+                  likes: '391', replies: '28', retweets: '14'
+                },
+                {
+                  name: 'Rahul Verma', role: 'NIT SURATHKAL • CONTRIBUTOR', icon: <Sparkles size={14} color="#fff" />, color: '#00C3FF',
+                  text: "Working on ecosystem projects gave me real execution experience, not just certificates.",
+                  likes: '347', replies: '21', retweets: '11'
+                }
+              ].map((tweet, i) => ({
+                id: i,
+                image: '',
+                title: '',
+                href: undefined,
+                content: (
+                  <div style={{ width: '100%', height: '100%', background: c.card, borderRadius: '14px', padding: '24px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                      <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: tweet.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {tweet.icon}
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '13px', fontWeight: 700, color: c.text }}>{tweet.name}</div>
+                        <div style={{ fontSize: '9px', fontWeight: 700, color: c.text40, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em' }}>{tweet.role}</div>
+                      </div>
+                    </div>
+                    <div style={{ fontSize: '14px', color: c.text80, lineHeight: 1.6, flex: 1 }}>
+                      {tweet.text}
+                    </div>
+                    <div style={{ display: 'flex', gap: '16px', color: c.text40, fontSize: '12px', fontWeight: 500 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Heart size={14} /> {tweet.likes}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><MessageSquare size={14} /> {tweet.replies}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Repeat size={14} /> {tweet.retweets}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div style={{ fontSize: '13px', fontWeight: 700, color: c.text }}>{tweet.name}</div>
-                    <div style={{ fontSize: '9px', fontWeight: 700, color: c.text40, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em' }}>{tweet.role}</div>
-                  </div>
-                </div>
-                <div style={{ fontSize: '14px', color: c.text80, lineHeight: 1.6, flex: 1 }}>
-                  {tweet.text}
-                </div>
-                <div style={{ display: 'flex', gap: '16px', color: c.text40, fontSize: '12px', fontWeight: 500 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Heart size={14} /> {tweet.likes}</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><MessageSquare size={14} /> {tweet.replies}</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Repeat size={14} /> {tweet.retweets}</div>
-                </div>
-              </motion.div>
-            ))}
+                )
+              }))}
+              columns={3}
+              tileWidth={360}
+              tileHeight={240}
+              gap={24}
+              tilt={16}
+              turn={-14}
+              perspective={1200}
+              depth={120}
+              speed={42}
+              direction="up"
+              variance={0.45}
+              parallax={0.6}
+              lift={64}
+              fade={0.2}
+              dim={1}
+              overlayColor="transparent"
+              radius={14}
+              roll={0}
+              pauseOnHover={false}
+              grayscale={false}
+              style={{}}
+            />
           </div>
 
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px', marginTop: '48px', maxWidth: '800px', margin: '48px auto 0' }}>
