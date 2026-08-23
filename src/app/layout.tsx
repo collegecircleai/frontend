@@ -6,8 +6,7 @@ import {
   DM_Sans,
   Playfair_Display,
   DM_Mono,
-  Noto_Sans_Devanagari,
-} from "next/font/google";
+  Noto_Sans_Devanagari } from "next/font/google";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -51,6 +50,7 @@ import SmoothScroll from "@/components/effects/SmoothScroll";
 import ComponentErrorBoundary from "@/components/effects/ErrorBoundary";
 import SplashScreen from "@/components/effects/SplashScreen";
 import { AuthProvider } from "@/context/AuthContext";
+import { cn } from "@/lib/utils";
 
 export default function RootLayout({
   children,
@@ -60,7 +60,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${playfair.variable} ${dmMono.variable} ${notoDevanagari.variable}`}
+      className={cn(dmSans.variable, playfair.variable, dmMono.variable, notoDevanagari.variable, "font-sans")}
       suppressHydrationWarning
     >
       <head>

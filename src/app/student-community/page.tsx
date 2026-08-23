@@ -9,6 +9,7 @@ import Footer from '@/components/landing/Footer'
 import DarkAurora from '@/components/effects/DarkAurora'
 import ElegantParticles from '@/components/effects/ElegantParticles'
 import ComponentErrorBoundary from '@/components/effects/ErrorBoundary'
+import ScrollExpand from '@/components/ScrollExpand'
 import { Sun, ArrowRight, Terminal, Network, Rocket, Code2, Users, Compass, Zap, Shield, Crown, MessageSquare, Heart, Repeat, Flame, Sparkles, Moon, Cpu, Briefcase, Library, Star, MapPin, Trophy, ArrowUpRight } from 'lucide-react'
 
 export default function CommunityPage() {
@@ -338,7 +339,7 @@ export default function CommunityPage() {
                 { title: 'Mentorship', desc: '1:1 with operators who\'ve built in the AI space.', icon: <Compass size={16} color="#8B80F9" /> },
                 { title: 'Community Expansion', desc: 'Become campus ambassadors, run cohorts, lead culture.', icon: <Users size={16} color="#8B80F9" /> }
               ].map((card, i) => (
-                <motion.div key={i} variants={fadeInUp} style={{ background: c.cardLight, border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '24px', backdropFilter: 'blur(10px)', transition: 'transform 0.2s', cursor: 'default' }}>
+                <motion.div key={i} variants={fadeInUp} whileHover={{ y: -5, background: isDark ? 'rgba(255,255,255,0.05)' : '#F9F9FB', boxShadow: isDark ? '0 10px 40px rgba(123, 107, 255, 0.1)' : '0 15px 40px rgba(0,0,0,0.05)', borderColor: isDark ? 'rgba(123, 107, 255, 0.3)' : c.border10 }} style={{ background: c.cardLight, border: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : c.border05}`, borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '24px', backdropFilter: 'blur(10px)', transition: 'all 0.3s ease', cursor: 'pointer' }}>
                   <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: c.border03, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
                     {card.icon}
                   </div>
@@ -389,7 +390,7 @@ export default function CommunityPage() {
                 { lvl: '07', title: 'Impact', badge: undefined, subtitle: 'Shape the future of the network.', desc: 'Country Ambassadors become strategic ecosystem partners helping scale the community nationally.', icon: <Trophy size={20} />, perks: ['Direct Founder Access', 'National Leadership', 'Strategic Planning Access', 'Premium Network'] }
               ].map((tier, i) => (
                 <React.Fragment key={i}>
-                  <motion.div onClick={() => setActiveTierModal(tier.lvl)} initial="hidden" whileInView="visible" whileHover={{ y: -5 }} viewport={{ once: true }} variants={fadeInUp} style={{ flex: '0 0 340px', scrollSnapAlign: 'center', background: c.tierCardGradient, border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px 24px', position: 'relative', display: 'flex', flexDirection: 'column', cursor: 'pointer', transition: 'transform 0.2s', boxShadow: isDark ? 'none' : '0 10px 40px rgba(0,0,0,0.03)' }}>
+                  <motion.div onClick={() => setActiveTierModal(tier.lvl)} initial="hidden" whileInView="visible" whileHover={{ y: -8, scale: 1.02, boxShadow: isDark ? '0 20px 50px rgba(123, 107, 255, 0.15)' : '0 20px 50px rgba(123, 107, 255, 0.1)', borderColor: 'rgba(123, 107, 255, 0.4)' }} viewport={{ once: true }} variants={fadeInUp} style={{ flex: '0 0 clamp(280px, 80vw, 340px)', scrollSnapAlign: 'center', background: c.tierCardGradient, border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px 24px', position: 'relative', display: 'flex', flexDirection: 'column', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: isDark ? 'none' : '0 10px 40px rgba(0,0,0,0.03)' }}>
 
                     {/* Top Bar (Level + Arrow) */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
@@ -400,9 +401,9 @@ export default function CommunityPage() {
                             {tier.badge}
                           </div>
                         )}
-                        <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: c.border03, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${c.border10}` }}>
+                        <motion.div whileHover={{ scale: 1.1, backgroundColor: 'rgba(123, 107, 255, 0.1)' }} style={{ width: '28px', height: '28px', borderRadius: '50%', background: c.border03, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${c.border10}`, transition: 'background 0.2s' }}>
                           <ArrowRight size={12} color={c.text50} style={{ transform: 'rotate(-45deg)' }} />
-                        </div>
+                        </motion.div>
                       </div>
                     </div>
 
@@ -751,28 +752,127 @@ export default function CommunityPage() {
         </section>
 
 
-        {/* FINAL CTA SECTION */}
-        <section style={{ position: 'relative', padding: '160px 5%', textAlign: 'center', background: `linear-gradient(180deg, ${c.gradBase} 0%, ${c.gradTop} 100%)`, overflow: 'hidden' }}>
-          {/* Removed Subtle Grid Overlay */}
-
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ position: 'relative', zIndex: 2 }}>
-            <h2 style={{ fontSize: 'clamp(48px, 6vw, 80px)', fontWeight: 800, lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
-              <span style={{ color: c.text }}>India's AI-native</span><br />
-              <span style={{ color: '#7B6BFF' }}>student ecosystem</span><br />
-              <span style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontWeight: 400, color: c.text40 }}>starts here.</span>
-            </h2>
-            <p style={{ color: c.text50, fontSize: '15px', marginBottom: '48px', fontWeight: 500 }}>The future will not be built by average students.</p>
-            <motion.a
-              href="https://docs.google.com/forms/d/e/1FAIpQLScuWSCu-8TwZPABvfl0LiOnVRDhUNjTmVV0PnRZnlYOwZLLkA/viewform"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg, #7B6BFF 0%, #9B90FF 100%)', color: c.text, padding: '16px 32px', borderRadius: '100px', fontSize: '15px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 10px 25px rgba(123, 107, 255, 0.3)' }}
+        {/* FINAL CTA SECTION - LEAD THE NETWORK (THEME AWARE: LIGHT & DARK) */}
+        <section style={{ padding: '0 clamp(16px, 4vw, 5%) clamp(60px, 10vw, 120px) clamp(16px, 4vw, 5%)', position: 'relative', background: 'transparent' }}>
+          <div style={{ maxWidth: '1360px', margin: '0 auto', width: '100%' }}>
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: 'clamp(480px, 58vh, 580px)',
+                minHeight: 'clamp(480px, 58vh, 580px)',
+                borderRadius: 'clamp(22px, 4vw, 36px)',
+                overflow: 'hidden'
+              }}
             >
-              Apply To The Network <ArrowUpRight size={18} />
-            </motion.a>
-          </motion.div>
+              <ScrollExpand
+                src={isDark ? "/lead-network-bg.png" : "/lead-network-bg-light.png"}
+                mediaZoom={1.2}
+                startWidth={48}
+                startHeight={52}
+                startRadius={24}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  '--se-border': isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(123, 107, 255, 0.25)',
+                  '--se-box-shadow': isDark ? '0 25px 80px -20px rgba(0, 0, 0, 0.8)' : '0 20px 60px -15px rgba(123, 107, 255, 0.18)'
+                } as React.CSSProperties}
+              >
+                <div
+                  style={{
+                    padding: 'clamp(48px, 8vw, 90px) clamp(16px, 4vw, 24px)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    width: '100%',
+                    height: '100%',
+                    pointerEvents: 'auto'
+                  }}
+                >
+                  {/* Top Badge */}
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '6px 16px',
+                      background: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(255, 255, 255, 0.8)',
+                      borderRadius: '100px',
+                      marginBottom: 'clamp(18px, 3vw, 28px)',
+                      border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(123, 107, 255, 0.25)',
+                      backdropFilter: 'blur(12px)'
+                    }}
+                  >
+                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#9B90FF', boxShadow: '0 0 8px #7B6BFF' }} />
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: isDark ? '#FFFFFF' : '#4B3BCB', letterSpacing: '0.16em', fontWeight: 700 }}>
+                      LEAD THE NETWORK
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  <h2
+                    style={{
+                      fontSize: 'clamp(32px, 5.5vw, 68px)',
+                      fontWeight: 800,
+                      lineHeight: 1.1,
+                      marginBottom: 'clamp(16px, 2.5vw, 24px)',
+                      letterSpacing: '-0.02em',
+                      fontFamily: 'var(--font-body), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+                    }}
+                  >
+                    <span style={{ color: isDark ? '#FFFFFF' : '#14112E' }}>India's AI-native</span><br />
+                    <span style={{ color: '#7B6BFF' }}>student ecosystem</span><br />
+                    <span style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontWeight: 400, color: isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(20, 17, 46, 0.5)' }}>starts here.</span>
+                  </h2>
+
+                  {/* Subtitle */}
+                  <p
+                    style={{
+                      color: isDark ? 'rgba(225, 225, 245, 0.72)' : 'rgba(30, 25, 55, 0.75)',
+                      fontSize: 'clamp(14px, 1.8vw, 18px)',
+                      marginBottom: 'clamp(28px, 4vw, 44px)',
+                      fontWeight: 500,
+                      maxWidth: '620px',
+                      lineHeight: 1.6
+                    }}
+                  >
+                    The future will not be built by average students.
+                  </p>
+
+                  {/* Action Button */}
+                  <motion.a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLScuWSCu-8TwZPABvfl0LiOnVRDhUNjTmVV0PnRZnlYOwZLLkA/viewform"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.05, boxShadow: '0 14px 40px -4px rgba(126, 110, 242, 0.7), 0 0 30px rgba(126, 110, 242, 0.4)' }}
+                    whileTap={{ scale: 0.95 }}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      minWidth: 'clamp(160px, 50vw, 200px)',
+                      background: 'linear-gradient(135deg, #7E6EF2 0%, #6A56E8 100%)',
+                      color: '#FFFFFF',
+                      padding: '16px 36px',
+                      borderRadius: '100px',
+                      fontSize: '15px',
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                      boxShadow: '0 10px 30px -4px rgba(126, 110, 242, 0.5), 0 0 20px rgba(126, 110, 242, 0.25)',
+                      border: '1px solid rgba(255, 255, 255, 0.15)',
+                      cursor: 'pointer',
+                      pointerEvents: 'auto'
+                    }}
+                  >
+                    Apply To The Network <ArrowUpRight size={18} />
+                  </motion.a>
+                </div>
+              </ScrollExpand>
+            </div>
+          </div>
         </section>
 
       </main>
