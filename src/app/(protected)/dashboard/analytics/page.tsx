@@ -456,41 +456,99 @@ function ScoreBar({ score }: { score: number }) {
 ───────────────────────────────────────── */
 function CustomTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
+
+  const firstEntry = payload[0];
+
   return (
     <div
       style={{
-        background: "#14122A",
-        borderRadius: 10,
+        position: "relative",
+        background: "var(--deep)",
+        borderRadius: 12,
         padding: "10px 14px",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
-        border: "1px solid rgba(77,63,255,0.2)",
+        boxShadow: "0 8px 30px rgba(0, 0, 0, 0.08)",
+        border: "1px solid var(--border-light)",
+        minWidth: 120,
+        pointerEvents: "none",
       }}
     >
-      <p
+      {/* Header Label */}
+      <div
         style={{
-          fontFamily: "var(--font-mono)",
-          fontSize: 11,
-          color: "rgba(255,255,255,0.5)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 12,
           marginBottom: 6,
-          textTransform: "uppercase",
-          letterSpacing: "0.08em",
+          paddingBottom: 4,
+          borderBottom: "1px solid var(--border-light)",
         }}
       >
-        {label}
-      </p>
-      {payload.map((entry: any, i: number) => (
-        <p
-          key={i}
+        <span
           style={{
-            fontFamily: "var(--font-body)",
-            fontSize: 13,
-            color: entry.color,
+            fontFamily: "var(--font-mono)",
+            fontSize: 10,
             fontWeight: 600,
+            color: "var(--mist)",
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
           }}
         >
-          {entry.name}: {entry.value}
-        </p>
-      ))}
+          {label}
+        </span>
+        {firstEntry?.payload?.topic && (
+          <span
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: 10,
+              color: "var(--mist)",
+              fontWeight: 400,
+            }}
+          >
+            {firstEntry.payload.topic}
+          </span>
+        )}
+      </div>
+
+      {/* Metrics Rows */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+        {payload.map((entry: any, i: number) => {
+          return (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 12,
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: 12,
+                  color: "var(--mist)",
+                  fontWeight: 500,
+                }}
+              >
+                {entry.name}
+              </span>
+
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: "var(--ink)",
+                }}
+              >
+                {entry.value}
+                {entry.unit || (entry.name === "Score" ? "%" : "")}
+              </span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
