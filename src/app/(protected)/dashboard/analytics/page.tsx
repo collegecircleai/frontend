@@ -132,6 +132,16 @@ const DUMMY_WEEKLY: WeeklyEntry[] = [
   { day: "Sun", topicsStudied: 6, quizzesDone: 2 },
 ];
 
+const EMPTY_WEEKLY: WeeklyEntry[] = [
+  { day: "Mon", topicsStudied: 0, quizzesDone: 0 },
+  { day: "Tue", topicsStudied: 0, quizzesDone: 0 },
+  { day: "Wed", topicsStudied: 0, quizzesDone: 0 },
+  { day: "Thu", topicsStudied: 0, quizzesDone: 0 },
+  { day: "Fri", topicsStudied: 0, quizzesDone: 0 },
+  { day: "Sat", topicsStudied: 0, quizzesDone: 0 },
+  { day: "Sun", topicsStudied: 0, quizzesDone: 0 },
+];
+
 const DUMMY_SCORES: ScoreEntry[] = [
   { date: "2024-04-01", topic: "Arrays", score: 72 },
   { date: "2024-04-02", topic: "Linked Lists", score: 80 },
@@ -598,17 +608,17 @@ export default function AnalyticsPage() {
 
         setSummary(payload?.summary ?? DUMMY_SUMMARY);
         setWeekly(
-          Array.isArray(payload?.weekly) && payload.weekly.length
-            ? payload.weekly
+          Array.isArray(payload?.weekly)
+            ? payload.weekly.length > 0
+              ? payload.weekly
+              : EMPTY_WEEKLY
             : DUMMY_WEEKLY,
         );
         setScores(
-          Array.isArray(payload?.scores) && payload.scores.length
-            ? payload.scores
-            : DUMMY_SCORES,
+          Array.isArray(payload?.scores) ? payload.scores : DUMMY_SCORES,
         );
         setWeakTopics(
-          Array.isArray(payload?.weakTopics) && payload.weakTopics.length
+          Array.isArray(payload?.weakTopics)
             ? payload.weakTopics
             : DUMMY_WEAK_TOPICS,
         );
@@ -619,8 +629,7 @@ export default function AnalyticsPage() {
           Array.isArray(payload?.bloomData) ? payload.bloomData : [],
         );
         setCourseProgress(
-          Array.isArray(payload?.courseProgress) &&
-            payload.courseProgress.length
+          Array.isArray(payload?.courseProgress)
             ? payload.courseProgress
             : DUMMY_COURSE_PROGRESS,
         );
