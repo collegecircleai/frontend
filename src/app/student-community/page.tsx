@@ -15,6 +15,8 @@ import DriftWall from '@/components/DriftWall'
 import { SkewedCarousel } from '@/components/SkewedCarousel'
 import ScrollStack, { ScrollStackItem } from '@/components/ScrollStack'
 import ImagesReveal from '@/components/animata/image/images-reveal'
+import { HoverEffectGrid } from '@/components/HoverEffectGrid'
+import { StartupExposureHero } from '@/components/StartupExposureHero'
 import { Sun, ArrowRight, Terminal, Network, Rocket, Code2, Users, Compass, Zap, Shield, Crown, MessageSquare, Heart, Repeat, Flame, Sparkles, Moon, Cpu, Briefcase, Library, Star, MapPin, Trophy, ArrowUpRight, BarChart2, GraduationCap, Share2, Box } from 'lucide-react'
 
 export default function CommunityPage() {
@@ -683,38 +685,23 @@ export default function CommunityPage() {
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
 
               {/* Big Left Card */}
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} whileHover={{ y: -4 }} style={{ flex: '1 1 500px', background: isDark ? 'linear-gradient(180deg, rgba(20,15,25,0.8) 0%, rgba(30,20,50,0.4) 100%)' : 'linear-gradient(180deg, #F8F7FF 0%, #EBE6FF 100%)', border: `1px solid ${isDark ? c.border08 : 'rgba(139,128,249,0.15)'}`, borderRadius: '24px', padding: '40px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '320px', position: 'relative', overflow: 'hidden', backdropFilter: 'blur(20px)', transition: 'all 0.3s ease', boxShadow: isDark ? 'none' : '0 20px 40px rgba(139,128,249,0.08)' }}>
-                <div style={{ background: 'rgba(139,128,249,0.15)', width: '48px', height: '48px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
-                  <Rocket size={24} color="#8B80F9" />
-                </div>
-                <div style={{ zIndex: 10 }}>
-                  <h3 style={{ fontSize: '28px', fontWeight: 800, color: c.text, letterSpacing: '-0.02em', marginBottom: '12px' }}>Startup Exposure</h3>
-                  <p style={{ color: c.text60, fontSize: '14px', lineHeight: 1.6, maxWidth: '80%' }}>Get direct access to the fastest growing AI startups in the country. Skip the resume pile and let your shipped projects do the talking.</p>
-                </div>
-                <div style={{ position: 'absolute', bottom: '-50px', right: '-50px', width: '300px', height: '300px', background: '#7B6BFF', filter: 'blur(100px)', opacity: isDark ? 0.3 : 0.15, borderRadius: '50%' }} />
-              </motion.div>
+              <StartupExposureHero isDark={isDark} c={c} fadeInUp={fadeInUp} />
 
               {/* Right Grid */}
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} style={{ flex: '1 1 600px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', alignContent: 'start' }}>
-                {[
+              <HoverEffectGrid 
+                isDark={isDark} 
+                c={c} 
+                fadeInUp={fadeInUp} 
+                staggerContainer={staggerContainer}
+                items={[
                   { title: 'Founder Access', desc: 'Direct 1:1s with AI founders', icon: <Users size={18} /> },
                   { title: 'Real AI Projects', desc: 'Ship production-ready code', icon: <Cpu size={18} /> },
                   { title: 'Internship Pathways', desc: 'Fast-tracked hiring', icon: <Briefcase size={18} /> },
                   { title: 'AI Resources', desc: 'Premium API credits & tools', icon: <Library size={18} /> },
                   { title: 'Community Status', desc: 'Earned, never bought', icon: <Star size={18} /> },
                   { title: 'National Network', desc: '24 cities, 80 nodes', icon: <MapPin size={18} /> }
-                ].map((item, i) => (
-                  <motion.div key={i} variants={fadeInUp} whileHover={{ y: -4, borderColor: 'rgba(139,128,249,0.4)', boxShadow: '0 10px 30px rgba(139,128,249,0.08)' }} style={{ background: isDark ? c.card : '#FFFFFF', border: `1px solid ${isDark ? c.border08 : 'rgba(0,0,0,0.04)'}`, borderRadius: '24px', padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '130px', backdropFilter: 'blur(10px)', transition: 'all 0.3s ease', cursor: 'default', boxShadow: isDark ? 'none' : '0 10px 20px rgba(0,0,0,0.02)' }}>
-                    <div style={{ color: '#8B80F9', background: 'rgba(139,128,249,0.1)', width: '40px', height: '40px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      {item.icon}
-                    </div>
-                    <div>
-                      <h3 style={{ fontSize: '15px', fontWeight: 700, color: c.text, marginBottom: '4px' }}>{item.title}</h3>
-                      <p style={{ fontSize: '12px', color: c.text50, fontWeight: 500 }}>{item.desc}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
+                ]}
+              />
             </div>
           </div>
         </section>
