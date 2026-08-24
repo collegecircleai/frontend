@@ -85,14 +85,18 @@ function CarouselItem({
     const itemCenter = itemRect.left + itemRect.width / 2;
     const distance = itemCenter - containerCenter;
     const maxDistance = item.offsetWidth + 40;
+    const distRatio = Math.abs(distance / maxDistance);
     const norm = Math.max(-1, Math.min(1, distance / maxDistance));
     const absNorm = Math.abs(norm);
 
     const maxScale = 1.08;
     const scale = Math.max(inactiveScale, maxScale - absNorm * (maxScale - inactiveScale));
     const rotateY = -norm * 50;
-    const opacity = 1 - absNorm * 0.25;
-    const zIndex = Math.round(100 - absNorm * 100);
+    
+    let opacity = 1 - (distRatio * 0.15);
+    opacity = Math.max(0.6, Math.min(1, opacity)); // Clamp between 0.6 and 1
+
+    const zIndex = Math.round(100 - distRatio * 100);
 
     // Apply transforms directly to the DOM to bypass React re-renders for 60fps performance
     item.style.transform = `perspective(${perspective}px) rotateY(${rotateY}deg) scale(${scale})`;
