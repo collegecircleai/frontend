@@ -15,7 +15,7 @@ import DriftWall from '@/components/DriftWall'
 import { SkewedCarousel } from '@/components/SkewedCarousel'
 import ScrollStack, { ScrollStackItem } from '@/components/ScrollStack'
 import ImagesReveal from '@/components/animata/image/images-reveal'
-import { Sun, ArrowRight, Terminal, Network, Rocket, Code2, Users, Compass, Zap, Shield, Crown, MessageSquare, Heart, Repeat, Flame, Sparkles, Moon, Cpu, Briefcase, Library, Star, MapPin, Trophy, ArrowUpRight } from 'lucide-react'
+import { Sun, ArrowRight, Terminal, Network, Rocket, Code2, Users, Compass, Zap, Shield, Crown, MessageSquare, Heart, Repeat, Flame, Sparkles, Moon, Cpu, Briefcase, Library, Star, MapPin, Trophy, ArrowUpRight, BarChart2, GraduationCap, Share2, Box } from 'lucide-react'
 
 export default function CommunityPage() {
   const lenis = useLenis()
@@ -732,43 +732,110 @@ export default function CommunityPage() {
               <span style={{ color: c.text30 }}>into access.</span>
             </motion.h2>
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(16px, 4vw, 24px)' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(32px, 5vw, 64px)', alignItems: 'start', justifyContent: 'center' }}>
               {/* Left Panel: Scoring System */}
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ flex: '1 1 450px', background: isDark ? c.cardLight : '#FFFFFF', border: `1px solid ${isDark ? c.border05 : 'rgba(0,0,0,0.04)'}`, borderRadius: '24px', padding: '40px', backdropFilter: 'blur(10px)', boxShadow: isDark ? 'none' : '0 10px 30px rgba(0,0,0,0.02)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
-                  <span style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>EXPERTISE POINTS (XP)</span>
-                  <Trophy size={16} color="#E5C158" />
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp} style={{ flex: '1 1 320px', maxWidth: '420px', background: c.card, borderRadius: '24px', padding: '32px', border: `1px solid ${c.border10}`, boxShadow: isDark ? '0 20px 40px rgba(0,0,0,0.2)' : '0 20px 40px rgba(0,0,0,0.02)', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', bottom: '-20%', left: '-20%', width: '300px', height: '300px', background: `radial-gradient(circle, ${isDark ? 'rgba(123, 107, 255, 0.15)' : 'rgba(123, 107, 255, 0.08)'} 0%, transparent 70%)`, opacity: 0.8, pointerEvents: 'none' }} />
+                
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', position: 'relative', zIndex: 1 }}>
+                  <div>
+                    <h3 style={{ fontSize: '12px', fontWeight: 700, color: c.text50, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Expertise Points (XP)</h3>
+                    <div style={{ width: '24px', height: '2px', background: '#7B6BFF', marginTop: '8px' }} />
+                  </div>
+                  <Trophy size={20} color="#E5C158" />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                <motion.div variants={staggerContainer} style={{ display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 1 }}>
                   {[
-                    { label: 'Project contribution', pts: '+50 XP' },
-                    { label: 'Creator collaboration', pts: '+40 XP' },
-                    { label: 'Attend workshop', pts: '+20 XP' },
-                    { label: 'Networking session', pts: '+15 XP' }
+                    { title: "Project contribution", desc: "Contribute to real projects and earn XP.", xp: "+50 XP" },
+                    { title: "Creator collaboration", desc: "Collaborate with creators and build together.", xp: "+40 XP" },
+                    { title: "Attend workshop", desc: "Join workshops and level up your skills.", xp: "+20 XP" },
+                    { title: "Networking session", desc: "Engage, connect, and grow your network.", xp: "+15 XP" }
                   ].map((item, i) => (
-                    <div key={i}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                        <span style={{ fontSize: '14px', fontWeight: 600, color: c.text }}>{item.label}</span>
-                        <div style={{ background: 'rgba(123, 107, 255, 0.1)', color: '#9B90FF', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>{item.pts}</div>
+                    <motion.div key={i} variants={fadeInUp} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', padding: '24px 0', borderBottom: i < 3 ? `1px solid ${c.border05}` : 'none' }}>
+                      <div style={{ flex: 1 }}>
+                        <h4 style={{ fontSize: '15px', fontWeight: 600, color: c.text, marginBottom: '4px' }}>{item.title}</h4>
+                        <p style={{ fontSize: '13px', color: c.text50, lineHeight: 1.5 }}>{item.desc}</p>
                       </div>
-                      {i < 3 && <div style={{ height: '1px', background: c.border05, width: '100%' }} />}
-                    </div>
+                      <div style={{ padding: '6px 10px', background: isDark ? 'rgba(123, 107, 255, 0.15)' : 'rgba(123, 107, 255, 0.08)', borderRadius: '8px', fontSize: '12px', fontWeight: 700, color: '#7B6BFF', whiteSpace: 'nowrap' }}>
+                        {item.xp}
+                      </div>
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
               </motion.div>
 
               {/* Right Panel: Monthly Structure */}
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} style={{ flex: '1 1 600px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} style={{ flex: '1 1 450px', maxWidth: '560px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {[
-                  { title: 'AI-Native Workshops', desc: 'Deep dive into prompt engineering, agents, and execution frameworks.', highlight: true },
-                  { title: 'Startup Systems', desc: 'Build real operational experience with live case studies and founder feedback.', highlight: false },
-                  { title: 'Creator Ecosystems', desc: 'Collaborate with editors, designers, and storytellers to build massive internet leverage.', highlight: false },
-                  { title: 'Micro-Group Networking', desc: 'Join small growth circles for extreme accountability and ecosystem bonding.', highlight: false }
+                  { 
+                    icon: (
+                      <svg width={28} height={28} viewBox="0 0 24 24" fill="none" stroke="#7B6BFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <path d="M8 3v12" />
+                        <circle cx="8" cy="17" r="2" />
+                        <path d="M8 10l6 6v5" />
+                        <path d="M14 3v4l3.5 3.5" />
+                        <circle cx="18.5" cy="11.5" r="2" />
+                      </svg>
+                    ), 
+                    title: "AI-Native Workshops", 
+                    desc: "Deep dive into prompt engineering, agents, and execution frameworks.",
+                    bg: isDark ? 'linear-gradient(135deg, rgba(123,107,255,0.2) 0%, rgba(123,107,255,0.05) 100%)' : 'linear-gradient(135deg, #F0EEFF 0%, #F8F7FF 100%)',
+                    iconBg: isDark ? 'rgba(123,107,255,0.2)' : '#FFFFFF',
+                    titleColor: '#7B6BFF'
+                  },
+                  { 
+                    icon: (
+                      <svg width={28} height={28} viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="3" width="6" height="18" rx="2" />
+                        <path d="M9 5h11a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9" />
+                        <path d="M13 9v6" />
+                        <path d="M17 9v6" />
+                        <path d="M12 11h6" />
+                        <path d="M12 13h6" />
+                      </svg>
+                    ), 
+                    title: "Startup Systems", 
+                    desc: "Build real operational experience with live case studies and founder feedback.",
+                    bg: c.cardLight,
+                    iconBg: isDark ? 'rgba(16,185,129,0.1)' : '#E8FDF5'
+                  },
+                  { 
+                    icon: (
+                      <svg width={28} height={28} viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="14" r="4" />
+                        <path d="M7 22c0-3 2-5 5-5s5 2 5 5" />
+                        <path d="M9.5 9a3 3 0 1 0-5.5 2c-1 1.5-1.5 3-2 5" />
+                        <path d="M14.5 9a3 3 0 1 1 5.5 2c1 1.5 1.5 3 2 5" />
+                      </svg>
+                    ), 
+                    title: "Creator Ecosystems", 
+                    desc: "Collaborate with editors, designers, and storytellers to build massive internet leverage.",
+                    bg: c.cardLight,
+                    iconBg: isDark ? 'rgba(245,158,11,0.1)' : '#FFF8E6'
+                  },
+                  { 
+                    icon: <Network size={28} color="#3B82F6" strokeWidth={1.5} />, 
+                    title: "Micro-Group Networking", 
+                    desc: "Join small growth circles for extreme accountability and ecosystem bonding.",
+                    bg: c.cardLight,
+                    iconBg: isDark ? 'rgba(59,130,246,0.1)' : '#EFF6FF'
+                  }
                 ].map((item, i) => (
-                  <motion.div key={i} variants={fadeInUp} style={{ background: item.highlight ? (isDark ? 'linear-gradient(90deg, rgba(15,15,20,0.6) 0%, rgba(60,40,100,0.4) 100%)' : 'linear-gradient(90deg, #FFFFFF 0%, rgba(139,128,249,0.1) 100%)') : (isDark ? c.cardLight : '#FFFFFF'), border: item.highlight && !isDark ? '1px solid rgba(139,128,249,0.2)' : `1px solid ${isDark ? c.border05 : 'rgba(0,0,0,0.04)'}`, borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '8px', backdropFilter: 'blur(10px)', boxShadow: isDark ? 'none' : '0 10px 20px rgba(0,0,0,0.02)' }}>
-                    <div style={{ fontSize: '18px', fontWeight: 800, color: item.highlight ? (isDark ? '#9B90FF' : '#7B6BFF') : c.text }}>{item.title}</div>
-                    <div style={{ fontSize: '14px', fontWeight: 500, color: c.text60, lineHeight: 1.6 }}>{item.desc}</div>
+                  <motion.div 
+                    key={i} 
+                    variants={fadeInUp}
+                    whileHover={{ y: -4, boxShadow: isDark ? '0 12px 30px rgba(0,0,0,0.3)' : '0 12px 30px rgba(0,0,0,0.05)' }}
+                    style={{ background: item.bg, borderRadius: '20px', padding: '24px', border: `1px solid ${c.border05}`, boxShadow: isDark ? '0 10px 20px rgba(0,0,0,0.1)' : '0 10px 20px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '24px', cursor: 'pointer', transition: 'all 0.3s ease' }}
+                  >
+                    <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: item.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: isDark ? 'inset 0 1px 1px rgba(255,255,255,0.1)' : '0 2px 10px rgba(0,0,0,0.05)' }}>
+                      {item.icon}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <h4 style={{ fontSize: '16px', fontWeight: 700, color: item.titleColor || c.text, marginBottom: '6px' }}>{item.title}</h4>
+                      <p style={{ fontSize: '13px', color: c.text50, lineHeight: 1.5 }}>{item.desc}</p>
+                    </div>
                   </motion.div>
                 ))}
               </motion.div>
@@ -886,7 +953,6 @@ export default function CommunityPage() {
             ))}
           </motion.div>
         </section>
-
 
         {/* FINAL CTA SECTION - LEAD THE NETWORK (THEME AWARE: LIGHT & DARK) */}
         <section style={{ padding: '0 clamp(16px, 4vw, 5%) clamp(60px, 10vw, 120px) clamp(16px, 4vw, 5%)', position: 'relative', background: 'transparent' }}>
