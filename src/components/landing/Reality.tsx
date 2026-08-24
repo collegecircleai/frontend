@@ -1,12 +1,36 @@
 import React, { memo } from 'react'
 import { FileX, Clock, TrendingDown } from 'lucide-react'
 
+import { AnimatedFolder, FolderCard } from "@/components/gammaui/animated-folder";
+
+const realityCards: FolderCard[] = [
+  {
+    id: "notes",
+    icon: <FileX size={20} strokeWidth={2.5} />,
+    title: "No structured notes",
+    description: "You're stuck with scattered PDFs, textbooks, and lecture slides. Nothing connects."
+  },
+  {
+    id: "time",
+    icon: <Clock size={20} strokeWidth={2.5} />,
+    title: "Hours of manual work",
+    description: "Making notes, flashcards, and practice questions takes forever. Time you don't have."
+  },
+  {
+    id: "missing",
+    icon: <TrendingDown size={20} strokeWidth={2.5} />,
+    title: "No idea what you're missing",
+    description: "You study blind. No way to track weak areas or what topics matter most."
+  }
+];
+
 const Reality = memo(function Reality() {
   return (
     <section style={{
       background: 'var(--cream)',
-      padding: '120px 80px',
-      display: 'flex', flexDirection: 'column', alignItems: 'center'
+      padding: '120px 24px 80px',
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      overflow: 'hidden'
     }}>
       <div style={{
         fontFamily: 'var(--font-mono)', fontSize: '11px', fontWeight: 600,
@@ -19,68 +43,20 @@ const Reality = memo(function Reality() {
       <h2 style={{
         fontFamily: 'var(--font-display)', fontSize: '44px', fontWeight: 800,
         color: 'var(--ink)', textAlign: 'center', lineHeight: 1.2,
-        marginBottom: '64px'
+        marginBottom: '20px'
       }}>
         Your syllabus is just a PDF.<br />
         And exams are next week.
       </h2>
 
-      <div 
-        className="responsive-grid"
-        style={{
-        display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '32px',
-        width: '100%', maxWidth: '1200px'
-      }}>
-        {/* Card 1 */}
-        <div className="reality-card">
-          <div style={{
-            width: '48px', height: '48px', borderRadius: '12px',
-            background: 'var(--violet-pale)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--violet)', marginBottom: '24px'
-          }}>
-            <FileX size={24} />
-          </div>
-          <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--ink)', marginBottom: '12px' }}>
-            No structured notes
-          </div>
-          <div style={{ fontSize: '14px', color: 'var(--mist)', lineHeight: 1.6 }}>
-            You're stuck with scattered PDFs, textbooks, and lecture slides. Nothing connects.
-          </div>
-        </div>
-
-        {/* Card 2 */}
-        <div className="reality-card">
-          <div style={{
-            width: '48px', height: '48px', borderRadius: '12px',
-            background: 'var(--violet-pale)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--violet)', marginBottom: '24px'
-          }}>
-            <Clock size={24} />
-          </div>
-          <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--ink)', marginBottom: '12px' }}>
-            Hours of manual work
-          </div>
-          <div style={{ fontSize: '14px', color: 'var(--mist)', lineHeight: 1.6 }}>
-            Making notes, flashcards, and practice questions takes forever. Time you don't have.
-          </div>
-        </div>
-
-        {/* Card 3 */}
-        <div className="reality-card">
-          <div style={{
-            width: '48px', height: '48px', borderRadius: '12px',
-            background: 'var(--violet-pale)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--violet)', marginBottom: '24px'
-          }}>
-            <TrendingDown size={24} />
-          </div>
-          <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--ink)', marginBottom: '12px' }}>
-            No idea what you're missing
-          </div>
-          <div style={{ fontSize: '14px', color: 'var(--mist)', lineHeight: 1.6 }}>
-            You study blind. No way to track weak areas or what topics matter most.
-          </div>
-        </div>
+      {/* Interactive Folder replacing static cards */}
+      <div style={{ width: '100%', maxWidth: '1000px', display: 'flex', justifyContent: 'center' }}>
+        <AnimatedFolder
+          title="The Study Trap"
+          subtitle="Explore what's inside"
+          openSubtitle="Select a challenge to view"
+          cards={realityCards}
+        />
       </div>
     </section>
   )
