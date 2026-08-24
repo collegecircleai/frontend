@@ -17,6 +17,7 @@ import ScrollStack, { ScrollStackItem } from '@/components/ScrollStack'
 import ImagesReveal from '@/components/animata/image/images-reveal'
 import { HoverEffectGrid } from '@/components/HoverEffectGrid'
 import { StartupExposureHero } from '@/components/StartupExposureHero'
+import { EcosystemAccessCards } from '@/components/EcosystemAccessCards'
 import { Sun, ArrowRight, Terminal, Network, Rocket, Code2, Users, Compass, Zap, Shield, Crown, MessageSquare, Heart, Repeat, Flame, Sparkles, Moon, Cpu, Briefcase, Library, Star, MapPin, Trophy, ArrowUpRight, BarChart2, GraduationCap, Share2, Box } from 'lucide-react'
 
 export default function CommunityPage() {
@@ -435,46 +436,13 @@ export default function CommunityPage() {
               <div style={{ width: '32px', height: '1px', background: 'linear-gradient(270deg, transparent, #7B6BFF)' }} />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '24px' }}>
-              {/* Explorer Card */}
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ fontSize: '10px', fontWeight: 700, color: '#00FF9D', fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '16px' }}>EARLY ECOSYSTEM ACCESS</div>
-                <h3 style={{ fontSize: '32px', fontWeight: 800, color: c.text, marginBottom: '8px' }}>Explorer Access</h3>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '24px' }}>
-                  <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>$10</span>
-                  <span style={{ fontSize: '24px', fontWeight: 800, color: '#00FF9D' }}>FREE</span>
-                </div>
-
-                <div style={{ background: 'rgba(0,255,157,0.1)', border: '1px solid rgba(0,255,157,0.2)', padding: '12px 16px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-                  <span style={{ color: '#00FF9D', fontSize: '13px', fontWeight: 600 }}>Curated ecosystem access</span>
-                  <span style={{ color: '#00FF9D', fontSize: '14px', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>50 Seats Left</span>
-                </div>
-
-                <button onClick={() => setActiveTierModal('01')} style={{ width: '100%', padding: '16px', background: c.border05, border: `1px solid ${c.border10}`, borderRadius: '100px', color: c.text, fontWeight: 600, fontSize: '15px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', transition: 'background 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.background = c.border10} onMouseLeave={(e) => e.currentTarget.style.background = c.border05}>
-                  View Explorer Pathway <ArrowRight size={16} />
-                </button>
-              </motion.div>
-
-              {/* Builder Card */}
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} style={{ background: c.tierCardGradient, border: `1px solid ${c.border10}`, borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden', boxShadow: '0 20px 40px rgba(123, 107, 255, 0.1)' }}>
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #7B6BFF, #9B90FF)' }} />
-                <div style={{ fontSize: '10px', fontWeight: 700, color: '#9B90FF', fontFamily: 'var(--font-mono)', letterSpacing: '0.15em', marginBottom: '16px' }}>OPERATE THE ECOSYSTEM</div>
-                <h3 style={{ fontSize: '32px', fontWeight: 800, color: c.text, marginBottom: '8px' }}>Ambassador Lead</h3>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '24px' }}>
-                  <span style={{ fontSize: '18px', color: c.text50, textDecoration: 'line-through' }}>$30</span>
-                  <span style={{ fontSize: '24px', fontWeight: 800, color: '#9B90FF' }}>FREE</span>
-                </div>
-
-                <div style={{ background: 'rgba(123, 107, 255, 0.1)', border: '1px solid rgba(123, 107, 255, 0.2)', padding: '12px 16px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-                  <span style={{ color: '#9B90FF', fontSize: '13px', fontWeight: 600 }}>Curated ecosystem access</span>
-                  <span style={{ color: '#9B90FF', fontSize: '14px', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>25 Seats Left</span>
-                </div>
-
-                <button onClick={() => setActiveTierModal('04')} style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #7B6BFF 0%, #9B90FF 100%)', border: 'none', borderRadius: '100px', color: '#fff', fontWeight: 600, fontSize: '15px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', boxShadow: '0 10px 20px rgba(123, 107, 255, 0.2)' }}>
-                  View Ambassador Pathway <ArrowRight size={16} />
-                </button>
-              </motion.div>
-            </div>
+            <EcosystemAccessCards
+              isDark={isDark}
+              c={c}
+              fadeInUp={fadeInUp}
+              onExplorerClick={() => setActiveTierModal('01')}
+              onAmbassadorClick={() => setActiveTierModal('04')}
+            />
           </div>
         </section>
 
