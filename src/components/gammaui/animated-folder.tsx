@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { IconFolder, IconFolderOpen } from "@tabler/icons-react";
 
 export interface FolderCard {
@@ -27,8 +27,24 @@ export function AnimatedFolder({
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  // Only trigger when 85% of the folder container is visible — user must fully reach the section
+  const isInView = useInView(containerRef, { amount: 0.85, once: false });
+
+  // Auto-open only when user scrolls down and reaches this section
+  React.useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (isInView) {
+      timeout = setTimeout(() => setIsOpen(true), 1800);
+    } else {
+      setIsOpen(false);
+    }
+    return () => clearTimeout(timeout);
+  }, [isInView]);
+
   return (
     <div
+      ref={containerRef}
       className="relative flex flex-col items-center justify-end w-full max-w-4xl mx-auto cursor-pointer select-none"
       style={{ minHeight: "400px", perspective: "1400px", marginTop: "20px" }}
       onMouseEnter={() => setIsOpen(true)}
@@ -97,18 +113,18 @@ export function AnimatedFolder({
               <motion.div
                 key={card.id}
                 initial={{
-                  y: 40,
+                  y: 60,
                   x: 0,
                   opacity: 0,
                   rotate: 0,
-                  scale: 0.85,
+                  scale: 0.75,
                 }}
                 animate={{
-                  y: isOpen ? (isHovered ? spreadY - 30 : spreadY) : 30,
+                  y: isOpen ? (isHovered ? spreadY - 30 : spreadY) : 60,
                   x: isOpen ? (isHovered ? spreadX : spreadX) : 0,
                   opacity: isOpen ? 1 : 0,
                   rotate: isOpen ? (isHovered ? 0 : spreadRotate) : 0,
-                  scale: isOpen ? (isHovered ? 1.05 : 1) : 0.85,
+                  scale: isOpen ? (isHovered ? 1.05 : 1) : 0.75,
                   zIndex: isHovered ? 60 : 20 + i,
                 }}
                 transition={{
@@ -283,7 +299,7 @@ export function AnimatedFolder({
         </div>
       </motion.div>
 
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         .folder-card {
           background: #FFFFFF;
           border: 1px solid rgba(0, 0, 0, 0.08);
@@ -311,7 +327,7 @@ export function AnimatedFolder({
           background: rgba(139, 92, 246, 0.15);
           color: var(--violet-light);
         }
-      `}</style>
+      `}} />
     </div>
   );
 }
