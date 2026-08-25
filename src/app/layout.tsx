@@ -1,6 +1,7 @@
 import "./globals.css";
 import "katex/dist/katex.min.css";
 import type { Metadata } from "next";
+import Script from "next/script";
 import {
   DM_Sans,
   Playfair_Display,
@@ -75,6 +76,18 @@ export default function RootLayout({
             `,
           }}
         />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-JMYNXW14R8"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-JMYNXW14R8');
+          `}
+        </Script>
       </head>
       <body className={dmSans.className}>
         <AuthProvider>
