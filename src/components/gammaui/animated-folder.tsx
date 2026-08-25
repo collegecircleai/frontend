@@ -26,10 +26,21 @@ export function AnimatedFolder({
 }: AnimatedFolderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   // Only trigger when 85% of the folder container is visible — user must fully reach the section
   const isInView = useInView(containerRef, { amount: 0.85, once: false });
+
+  // Detect mobile screen width (< 640px)
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Auto-open only when user scrolls down and reaches this section
   React.useEffect(() => {
@@ -45,8 +56,8 @@ export function AnimatedFolder({
   return (
     <div
       ref={containerRef}
-      className="relative flex flex-col items-center justify-end w-full max-w-4xl mx-auto cursor-pointer select-none"
-      style={{ minHeight: "400px", perspective: "1400px", marginTop: "20px" }}
+      className="animated-folder-container relative flex flex-col items-center justify-end w-full max-w-4xl mx-auto cursor-pointer select-none"
+      style={{ minHeight: isMobile ? "340px" : "400px", perspective: "1400px", marginTop: "20px" }}
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => {
         setIsOpen(false);
@@ -56,11 +67,12 @@ export function AnimatedFolder({
     >
       {/* Folder Back Base / Tab */}
       <div
+        className="folder-back-base"
         style={{
           position: "absolute",
           bottom: 0,
-          width: "360px",
-          height: "220px",
+          width: isMobile ? "300px" : "360px",
+          height: isMobile ? "190px" : "220px",
           borderRadius: "24px 36px 24px 24px",
           background: "linear-gradient(145deg, #2A245C, #181438)",
           border: "1px solid rgba(255, 255, 255, 0.12)",
@@ -74,7 +86,7 @@ export function AnimatedFolder({
             position: "absolute",
             top: "-14px",
             left: "20px",
-            width: "110px",
+            width: isMobile ? "90px" : "110px",
             height: "20px",
             borderRadius: "10px 10px 0 0",
             background: "#2A245C",
@@ -93,7 +105,7 @@ export function AnimatedFolder({
           display: "flex",
           alignItems: "flex-end",
           justifyContent: "center",
-          height: "380px",
+          height: isMobile ? "320px" : "380px",
           zIndex: 20,
           pointerEvents: isOpen ? "auto" : "none",
         }}
@@ -101,11 +113,18 @@ export function AnimatedFolder({
         <AnimatePresence>
           {cards.map((card, i) => {
             // When closed: all stacked inside folder
-            // When open: spread horizontally into 3 distinct clear columns
+            // Desktop: spread horizontally into 3 distinct columns
+            // Mobile (<640px): stacked / fanned deck layout with reduced width so it fits within screen perfectly
             const total = cards.length;
-            const spreadX = (i - (total - 1) / 2) * 290; // generous spacing so no text overlap
-            const spreadRotate = (i - (total - 1) / 2) * 6; // subtle natural tilt
-            const spreadY = -120 - Math.abs(i - (total - 1) / 2) * -15;
+            const spreadX = isMobile
+              ? (i - (total - 1) / 2) * 55
+              : (i - (total - 1) / 2) * 290;
+            const spreadRotate = isMobile
+              ? (i - (total - 1) / 2) * 10
+              : (i - (total - 1) / 2) * 6;
+            const spreadY = isMobile
+              ? -100 - (total - 1 - i) * 18
+              : -120 - Math.abs(i - (total - 1) / 2) * -15;
 
             const isHovered = hoveredIndex === i;
 
@@ -120,11 +139,11 @@ export function AnimatedFolder({
                   scale: 0.75,
                 }}
                 animate={{
-                  y: isOpen ? (isHovered ? spreadY - 30 : spreadY) : 60,
+                  y: isOpen ? (isHovered ? spreadY - (isMobile ? 15 : 30) : spreadY) : 60,
                   x: isOpen ? (isHovered ? spreadX : spreadX) : 0,
                   opacity: isOpen ? 1 : 0,
                   rotate: isOpen ? (isHovered ? 0 : spreadRotate) : 0,
-                  scale: isOpen ? (isHovered ? 1.05 : 1) : 0.75,
+                  scale: isOpen ? (isHovered ? (isMobile ? 1.02 : 1.05) : (isMobile ? 0.92 : 1)) : 0.75,
                   zIndex: isHovered ? 60 : 20 + i,
                 }}
                 transition={{
@@ -138,9 +157,9 @@ export function AnimatedFolder({
                 className={`folder-card ${isHovered ? "hovered" : ""}`}
                 style={{
                   position: "absolute",
-                  width: "270px",
-                  borderRadius: "20px",
-                  padding: "24px",
+                  width: isMobile ? "230px" : "270px",
+                  borderRadius: isMobile ? "16px" : "20px",
+                  padding: isMobile ? "18px 16px" : "24px",
                   cursor: "pointer",
                   transformOrigin: "bottom center",
                   textAlign: "left",
@@ -201,9 +220,9 @@ export function AnimatedFolder({
       {/* Folder Front Cover (3D Flap) */}
       <motion.div
         animate={{
-          rotateX: isOpen ? -38 : 0,
-          y: isOpen ? 12 : 0,
-          scale: isOpen ? 0.98 : 1,
+          rotateX: isOpen ? (isMobile ? -32 : -38) : 0,
+          y: isOpen ? (isMobile ? 8 : 12) : 0,
+          scale: isOpen ? (isMobile ? 0.96 : 0.98) : 1,
         }}
         transition={{
           type: "spring",
@@ -212,9 +231,9 @@ export function AnimatedFolder({
         }}
         style={{
           position: "relative",
-          width: "360px",
-          height: "200px",
-          borderRadius: "20px",
+          width: isMobile ? "300px" : "360px",
+          height: isMobile ? "170px" : "200px",
+          borderRadius: isMobile ? "18px" : "20px",
           background: "linear-gradient(135deg, #4D3FFF 0%, #6E61FF 50%, #897EFF 100%)",
           borderTop: "1px solid rgba(255, 255, 255, 0.4)",
           borderLeft: "1px solid rgba(255, 255, 255, 0.2)",
@@ -227,7 +246,7 @@ export function AnimatedFolder({
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: "8px",
+          gap: isMobile ? "6px" : "8px",
           color: "#FFFFFF",
           zIndex: 30,
         }}
@@ -254,18 +273,18 @@ export function AnimatedFolder({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: "56px",
-            height: "56px",
-            borderRadius: "16px",
+            width: isMobile ? "46px" : "56px",
+            height: isMobile ? "46px" : "56px",
+            borderRadius: isMobile ? "13px" : "16px",
             background: "rgba(255, 255, 255, 0.15)",
             backdropFilter: "blur(8px)",
             border: "1px solid rgba(255, 255, 255, 0.25)",
           }}
         >
           {isOpen ? (
-            <IconFolderOpen size={30} strokeWidth={2} color="#FFFFFF" />
+            <IconFolderOpen size={isMobile ? 24 : 30} strokeWidth={2} color="#FFFFFF" />
           ) : (
-            <IconFolder size={30} strokeWidth={2} color="#FFFFFF" />
+            <IconFolder size={isMobile ? 24 : 30} strokeWidth={2} color="#FFFFFF" />
           )}
         </motion.div>
 
@@ -273,7 +292,7 @@ export function AnimatedFolder({
           <span
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "18px",
+              fontSize: isMobile ? "16px" : "18px",
               fontWeight: 800,
               letterSpacing: "-0.01em",
               display: "block",
@@ -284,11 +303,11 @@ export function AnimatedFolder({
           <span
             style={{
               fontFamily: "var(--font-mono)",
-              fontSize: "11px",
+              fontSize: isMobile ? "10px" : "11px",
               fontWeight: 500,
               letterSpacing: "0.04em",
               color: "rgba(255, 255, 255, 0.8)",
-              marginTop: "4px",
+              marginTop: isMobile ? "2px" : "4px",
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
