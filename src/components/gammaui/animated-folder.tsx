@@ -139,30 +139,43 @@ export function AnimatedFolder({
                   scale: 0.75,
                 }}
                 animate={{
-                  y: isOpen ? (isHovered ? spreadY - (isMobile ? 15 : 30) : spreadY) : 60,
-                  x: isOpen ? (isHovered ? spreadX : spreadX) : 0,
+                  y: isOpen ? (isHovered ? (isMobile ? -145 : spreadY - 30) : spreadY) : 60,
+                  x: isOpen ? (isHovered ? (isMobile ? 0 : spreadX) : spreadX) : 0,
                   opacity: isOpen ? 1 : 0,
                   rotate: isOpen ? (isHovered ? 0 : spreadRotate) : 0,
-                  scale: isOpen ? (isHovered ? (isMobile ? 1.02 : 1.05) : (isMobile ? 0.92 : 1)) : 0.75,
-                  zIndex: isHovered ? 60 : 20 + i,
+                  scale: isOpen ? (isHovered ? (isMobile ? 1.05 : 1.05) : (isMobile ? 0.92 : 1)) : 0.75,
+                  zIndex: isHovered ? 120 : 20 + i,
                 }}
                 transition={{
                   type: "spring",
-                  stiffness: 280,
-                  damping: 24,
-                  delay: isOpen ? i * 0.06 : (total - 1 - i) * 0.04,
+                  stiffness: 300,
+                  damping: 25,
+                  delay: isOpen ? i * 0.05 : (total - 1 - i) * 0.03,
                 }}
-                onMouseEnter={() => setHoveredIndex(i)}
-                onMouseLeave={() => setHoveredIndex(null)}
+                onMouseEnter={() => {
+                  if (!isMobile) setHoveredIndex(i);
+                }}
+                onMouseLeave={() => {
+                  if (!isMobile) setHoveredIndex(null);
+                }}
+                onPointerDown={(e) => {
+                  if (isMobile) {
+                    e.stopPropagation();
+                    setHoveredIndex((prev) => (prev === i ? null : i));
+                  }
+                }}
                 className={`folder-card ${isHovered ? "hovered" : ""}`}
                 style={{
                   position: "absolute",
-                  width: isMobile ? "230px" : "270px",
+                  width: isMobile ? "240px" : "270px",
                   borderRadius: isMobile ? "16px" : "20px",
-                  padding: isMobile ? "18px 16px" : "24px",
+                  padding: isMobile ? "20px 18px" : "24px",
                   cursor: "pointer",
                   transformOrigin: "bottom center",
                   textAlign: "left",
+                  touchAction: "manipulation",
+                  WebkitTapHighlightColor: "transparent",
+                  userSelect: "none",
                 }}
               >
                 {/* Card Icon Container */}
