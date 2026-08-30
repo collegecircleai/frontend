@@ -25,10 +25,16 @@ export default function CommunityPage() {
   const [mounted, setMounted] = useState(false)
   const [activeTierModal, setActiveTierModal] = useState<string | null>(null)
   const [activePathway, setActivePathway] = useState<'builder' | 'creator'>('builder')
-
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
@@ -878,38 +884,38 @@ export default function CommunityPage() {
                 title: '',
                 href: undefined,
                 content: (
-                  <div style={{ width: '100%', height: '100%', background: c.card, borderRadius: '14px', padding: '24px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <div style={{ width: '100%', height: '100%', background: c.card, borderRadius: '16px', padding: '24px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '14px', justifyContent: 'space-between', border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`, boxShadow: isDark ? '0 12px 36px rgba(0,0,0,0.4)' : '0 12px 32px rgba(0,0,0,0.06)' }}>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                      <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: tweet.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: tweet.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         {tweet.icon}
                       </div>
                       <div>
-                        <div style={{ fontSize: '13px', fontWeight: 700, color: c.text }}>{tweet.name}</div>
-                        <div style={{ fontSize: '9px', fontWeight: 700, color: c.text40, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em' }}>{tweet.role}</div>
+                        <div style={{ fontSize: '14px', fontWeight: 700, color: c.text }}>{tweet.name}</div>
+                        <div style={{ fontSize: '10px', fontWeight: 700, color: c.text40, fontFamily: 'var(--font-mono)', letterSpacing: '0.12em' }}>{tweet.role}</div>
                       </div>
                     </div>
-                    <div style={{ fontSize: '14px', color: c.text80, lineHeight: 1.6, flex: 1 }}>
+                    <div style={{ fontSize: '15px', color: c.text80, lineHeight: 1.55, flex: 1 }}>
                       {tweet.text}
                     </div>
-                    <div style={{ display: 'flex', gap: '16px', color: c.text40, fontSize: '12px', fontWeight: 500 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Heart size={14} /> {tweet.likes}</div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><MessageSquare size={14} /> {tweet.replies}</div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Repeat size={14} /> {tweet.retweets}</div>
+                    <div style={{ display: 'flex', gap: '18px', color: c.text40, fontSize: '13px', fontWeight: 500 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Heart size={15} /> {tweet.likes}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><MessageSquare size={15} /> {tweet.replies}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Repeat size={15} /> {tweet.retweets}</div>
                     </div>
                   </div>
                 )
               }))}
-              columns={3}
-              tileWidth={360}
-              tileHeight={240}
-              gap={24}
+              columns={isMobile ? 1 : 3}
+              tileWidth={isMobile ? 360 : 360}
+              tileHeight={isMobile ? 245 : 240}
+              gap={isMobile ? 24 : 24}
               tilt={16}
               turn={-14}
               perspective={1200}
               depth={120}
               speed={42}
               direction="up"
-              variance={0.45}
+              variance={isMobile ? 0 : 0.45}
               parallax={0.6}
               lift={64}
               fade={0.2}

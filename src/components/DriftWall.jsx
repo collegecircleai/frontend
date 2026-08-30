@@ -111,12 +111,13 @@ const DriftWall = ({
     (px, py) => {
       const plane = planeRef.current;
       if (!plane) return;
+      const scale = columns === 1 ? 1.25 : 1.18;
       plane.style.transform =
-        `translate(-50%, -50%) scale(1.18) ` +
+        `translate(-50%, -50%) scale(${scale}) ` +
         `rotateX(${tilt + py}deg) rotateY(${turn + px}deg) rotateZ(${roll}deg) ` +
         `translateZ(${-depth}px)`;
     },
-    [tilt, turn, roll, depth]
+    [tilt, turn, roll, depth, columns]
   );
 
   useEffect(() => {
@@ -208,9 +209,9 @@ const DriftWall = ({
     release();
   }, [release]);
 
-  const maskStyle =
-    'radial-gradient(ellipse 78% 82% at 50% 46%, #000 var(--dw-edge), transparent 100%), ' +
-    'linear-gradient(to top, #000 var(--dw-edge), transparent 100%)';
+  const maskStyle = columns === 1
+    ? 'linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%)'
+    : 'radial-gradient(ellipse 78% 82% at 50% 46%, #000 var(--dw-edge), transparent 100%), linear-gradient(to top, #000 var(--dw-edge), transparent 100%)';
 
   const cssVars = useMemo(
     () => ({
