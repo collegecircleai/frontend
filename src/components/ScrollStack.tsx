@@ -102,11 +102,42 @@ const ScrollStack = ({
 
     isUpdatingRef.current = true;
 
-    const currentStackPos = isMobile ? '14%' : stackPosition;
-    const currentScaleEnd = isMobile ? '8%' : scaleEndPosition;
-    const currentStackDistance = isMobile ? 22 : itemStackDistance;
-    const currentBaseScale = isMobile ? 0.88 : baseScale;
-    const currentItemScale = isMobile ? 0.03 : itemScale;
+    if (isMobile) {
+      // Mobile: GPU compositor handles sticky pinning (zero shivering).
+      // We calculate dynamic depth scaling and opacity transitions as cards stack up.
+      cardsRef.current.forEach((card, i) => {
+        if (!card) return;
+        const rect = card.getBoundingClientRect();
+        const stickyTop = (window.innerHeight * 0.12) + (i * 24);
+        
+        let nextCardsOverCount = 0;
+        for (let k = i + 1; k < cardsRef.current.length; k++) {
+          const nextCard = cardsRef.current[k];
+          if (nextCard) {
+            const nextRect = nextCard.getBoundingClientRect();
+            const nextStickyTop = (window.innerHeight * 0.12) + (k * 24);
+            if (nextRect.top <= nextStickyTop + 30) {
+              nextCardsOverCount++;
+            }
+          }
+        }
+
+        const targetScale = Math.max(0.86, 1 - (nextCardsOverCount * 0.045));
+        const targetOpacity = Math.max(0.4, 1 - (nextCardsOverCount * 0.2));
+        
+        card.style.transform = `scale(${targetScale})`;
+        card.style.opacity = String(targetOpacity);
+        card.style.transition = 'transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease';
+      });
+      isUpdatingRef.current = false;
+      return;
+    }
+
+    const currentStackPos = stackPosition;
+    const currentScaleEnd = scaleEndPosition;
+    const currentStackDistance = itemStackDistance;
+    const currentBaseScale = baseScale;
+    const currentItemScale = itemScale;
 
     const stackPositionPx = parsePercentage(currentStackPos, containerHeight);
     const scaleEndPositionPx = parsePercentage(currentScaleEnd, containerHeight);
