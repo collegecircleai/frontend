@@ -338,29 +338,29 @@ const ScrollStack = ({
       <style>{`
         @media (max-width: 768px) {
           .scroll-stack-inner {
-            padding-left: 0 !important;
-            padding-right: 0 !important;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
             padding-top: 4vh !important;
-            padding-bottom: 6rem !important;
+            padding-bottom: 20vh !important;
             min-height: auto !important;
             display: flex !important;
             flex-direction: column !important;
           }
           .scroll-stack-card {
             position: sticky !important;
-            top: calc(14vh + var(--stack-idx, 0) * 14px) !important;
+            top: calc(12vh + var(--stack-idx, 0) * 24px) !important;
             padding: 0 !important;
             height: auto !important;
             min-height: 240px !important;
             border-radius: 24px !important;
             margin-top: 0 !important;
-            margin-bottom: 40px !important;
+            margin-bottom: 28vh !important;
             transform: none !important;
-            box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.4) !important;
+            box-shadow: 0 18px 45px -10px rgba(0, 0, 0, 0.4) !important;
             z-index: calc(10 + var(--stack-idx, 0)) !important;
           }
           .scroll-stack-card-inner {
-            padding: 24px 20px !important;
+            padding: 26px 20px !important;
             border-radius: 24px !important;
             min-height: 240px !important;
           }
