@@ -127,6 +127,17 @@ const ScrollStack = ({
     const scaleEndPositionPx = parsePercentage(scaleEndPosition, containerHeight);
     const endElementTop = endElementTopRef.current;
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    if (isMobile) {
+      cardsRef.current.forEach((card) => {
+        if (card) {
+          card.style.transform = '';
+          card.style.filter = '';
+          card.style.opacity = '1';
+        }
+      });
+      isUpdatingRef.current = false;
+      return;
+    }
 
     let globalTopCardIndex = 0;
     const cardTops = cardBaseTopsRef.current;
@@ -157,7 +168,7 @@ const ScrollStack = ({
       let opacity = 1;
       if (i < globalTopCardIndex) {
         const depthInStack = globalTopCardIndex - i;
-        if (blurAmount && !isMobile) {
+        if (blurAmount) {
           blur = Math.max(0, depthInStack * blurAmount);
         }
         opacity = Math.max(0.3, 1 - depthInStack * 0.25);
@@ -208,6 +219,7 @@ const ScrollStack = ({
   ]);
 
   const handleScroll = useCallback(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return;
     if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
     animationFrameRef.current = requestAnimationFrame(updateCardTransforms);
   }, [updateCardTransforms]);
@@ -270,6 +282,8 @@ const ScrollStack = ({
     cardsRef.current = cards;
 
     cards.forEach((card, i) => {
+      card.style.setProperty('--stack-idx', String(i));
+      card.style.zIndex = String(10 + i);
       if (i < cards.length - 1) {
         card.style.marginBottom = `${itemDistance}px`;
       }
@@ -326,20 +340,29 @@ const ScrollStack = ({
           .scroll-stack-inner {
             padding-left: 0 !important;
             padding-right: 0 !important;
-            padding-top: 5vh !important;
-            padding-bottom: 25rem !important;
+            padding-top: 4vh !important;
+            padding-bottom: 6rem !important;
+            min-height: auto !important;
+            display: flex !important;
+            flex-direction: column !important;
           }
           .scroll-stack-card {
+            position: sticky !important;
+            top: calc(14vh + var(--stack-idx, 0) * 14px) !important;
             padding: 0 !important;
             height: auto !important;
-            min-height: 250px !important;
+            min-height: 240px !important;
             border-radius: 24px !important;
-            margin-top: 16px !important;
+            margin-top: 0 !important;
             margin-bottom: 40px !important;
+            transform: none !important;
+            box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.4) !important;
+            z-index: calc(10 + var(--stack-idx, 0)) !important;
           }
           .scroll-stack-card-inner {
-            padding: 28px 20px !important;
+            padding: 24px 20px !important;
             border-radius: 24px !important;
+            min-height: 240px !important;
           }
         }
       `}</style>
