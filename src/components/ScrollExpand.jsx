@@ -1,5 +1,6 @@
 'use client'
 import React, { useCallback, useEffect, useRef } from 'react';
+import { useLenis } from 'lenis/react';
 import './ScrollExpand.css';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -151,9 +152,10 @@ const ScrollExpand = ({
       } else {
         // In-viewport element scroll tracking
         const rect = root.getBoundingClientRect();
-        const vh = window.innerHeight || 800;
-        const startTrigger = vh * 0.92;
-        const endTrigger = vh * 0.20;
+        const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
+        const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+        const startTrigger = isMobile ? vh * 0.95 : vh * 0.92;
+        const endTrigger = isMobile ? vh * 0.22 : vh * 0.20;
         return clamp((startTrigger - rect.top) / (startTrigger - endTrigger), 0, 1);
       }
     };
@@ -210,6 +212,17 @@ const ScrollExpand = ({
       ro.disconnect();
     };
   }, [applyProgress]);
+
+  useLenis(() => {
+    if (!propsRef.current.enabled || !rootRef.current) return;
+    const rect = rootRef.current.getBoundingClientRect();
+    const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    const startTrigger = isMobile ? vh * 0.95 : vh * 0.92;
+    const endTrigger = isMobile ? vh * 0.22 : vh * 0.20;
+    const progress = clamp((startTrigger - rect.top) / (startTrigger - endTrigger), 0, 1);
+    applyProgress(progress);
+  });
 
   const media =
     mediaType === 'video' ? (

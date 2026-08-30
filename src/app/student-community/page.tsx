@@ -940,9 +940,25 @@ export default function CommunityPage() {
         </section>
 
         {/* FINAL CTA SECTION - LEAD THE NETWORK (THEME AWARE: LIGHT & DARK) */}
-        <section style={{ padding: '0 clamp(16px, 4vw, 5%) clamp(60px, 10vw, 120px) clamp(16px, 4vw, 5%)', position: 'relative', background: 'transparent' }}>
+        <section className="final-cta-section" style={{ padding: '0 clamp(16px, 4vw, 5%) clamp(60px, 10vw, 120px) clamp(16px, 4vw, 5%)', position: 'relative', background: 'transparent' }}>
+          <style>{`
+            @media (max-width: 768px) {
+              .final-cta-section {
+                padding: 0 12px 60px 12px !important;
+              }
+              .final-cta-wrap {
+                height: 500px !important;
+                min-height: 500px !important;
+                border-radius: 24px !important;
+              }
+              .final-cta-content {
+                padding: 24px 16px !important;
+              }
+            }
+          `}</style>
           <div style={{ maxWidth: '1360px', margin: '0 auto', width: '100%' }}>
             <div
+              className="final-cta-wrap"
               style={{
                 position: 'relative',
                 width: '100%',
@@ -955,10 +971,10 @@ export default function CommunityPage() {
               <ScrollExpand
                 src={isDark ? "/lead-network-bg.png" : "/lead-network-bg-light.png"}
                 mediaZoom={1.15}
-                startWidth={65}
-                startHeight={65}
-                startRadius={28}
-                endRadius={20}
+                startWidth={isMobile ? 86 : 65}
+                startHeight={isMobile ? 82 : 65}
+                startRadius={isMobile ? 22 : 28}
+                endRadius={isMobile ? 14 : 20}
                 smoothing={0.06}
                 style={{
                   width: '100%',
@@ -968,6 +984,7 @@ export default function CommunityPage() {
                 } as React.CSSProperties}
               >
                 <div
+                  className="final-cta-content"
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
