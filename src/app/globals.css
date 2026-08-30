@@ -1,5 +1,9 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap');
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
   /* ── CC>AI Official Palette ── */
@@ -14,7 +18,7 @@
   --amber: #F5A623;
   --coral: #FF4D5A;
   --mist: #7A799A;   /* Increased contrast for comfortable reading */
-  --border: rgba(9,9,15,0.10);
+  --border: oklch(0.922 0 0);
   --border-light: rgba(9,9,15,0.06);
   --header-bg: 255, 255, 255; /* Luminous White for better separation from Pearl */
   --logo-accent: var(--violet);
@@ -26,13 +30,81 @@
   --font-display: 'Playfair Display', serif;
   --font-body: 'DM Sans', sans-serif;
   --font-mono: 'DM Mono', monospace;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* ── How It Works: Tarot Card Design Tokens (Light) ── */
+  --hiw-back-bg: linear-gradient(150deg, #FFFFFF 0%, #F5F7FF 100%);
+  --hiw-back-border: rgba(77, 63, 255, 0.18);
+  --hiw-back-shadow: 0 20px 55px rgba(43, 27, 245, 0.12), 0 4px 14px rgba(0,0,0,0.03);
+  --hiw-back-shadow-hover: 0 32px 80px rgba(43, 27, 245, 0.22), 0 8px 24px rgba(0,0,0,0.06);
+  --hiw-back-outer-stroke: #2B1BF5;
+  --hiw-back-mid-stroke: rgba(77, 63, 255, 0.25);
+  --hiw-back-inner-stroke: rgba(77, 63, 255, 0.12);
+  --hiw-back-lattice-stroke: rgba(77, 63, 255, 0.065);
+  --hiw-back-lattice-dot: rgba(77, 63, 255, 0.18);
+  --hiw-back-rays: rgba(77, 63, 255, 0.16);
+  --hiw-back-wedge: #2B1BF5;
+  --hiw-back-wedge-radii-1: #2B1BF5;
+  --hiw-back-wedge-radii-2: rgba(77, 63, 255, 0.3);
+  --hiw-back-wedge-radii-3: rgba(77, 63, 255, 0.18);
+  --hiw-back-wedge-highlight: rgba(255, 255, 255, 0.35);
+  --hiw-back-emerald-1: #10B981;
+  --hiw-back-emerald-2: rgba(16, 185, 129, 0.45);
+  --hiw-back-emerald-3: rgba(77, 63, 255, 0.2);
+  --hiw-back-halo-fill: #FFFFFF;
+  --hiw-back-halo-stroke: #10B981;
+  --hiw-back-accents: #2B1BF5;
+
+  --hiw-front-bg: #FFFFFF;
+  --hiw-front-border: rgba(0, 0, 0, 0.08);
+  --hiw-front-border-hover: rgba(77, 63, 255, 0.35);
+  --hiw-front-shadow: 0 20px 50px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0,0,0,0.02);
+  --hiw-front-shadow-hover: 0 32px 80px rgba(0, 0, 0, 0.14), 0 6px 20px rgba(0,0,0,0.04);
+  --hiw-front-title: #000000;
+  --hiw-front-item-text: #111827;
+  --hiw-front-bullet: #4D3FFF;
+  --hiw-front-divider: #BAC8FF;
+  --hiw-front-stencil-bg: #000000;
+  --hiw-front-stencil-cutout: #FFFFFF;
+  --hiw-front-watermark-1: #BAC8FF;
+  --hiw-front-watermark-2: #7B8FFF;
 }
 
 [data-theme='dark'] {
   --pearl: #0A0A1E;
   --ink: #FFFFFF;
   --cream: #0A0A1E;
-  --deep: #08081A; /* Significant deepening for Elite Stealth look */
+  --deep: #08081A;
   --border: rgba(139, 92, 246, 0.25);
   --border-light: rgba(139, 92, 246, 0.08);
   --mist: #B0B0D8;
@@ -43,6 +115,43 @@
   --logo-tagline: rgba(160, 159, 192, 0.6);
   --hero-img-filter: brightness(0.85) saturate(1.2) contrast(1.2);
   --hero-mask: radial-gradient(circle at 30% 50%, black 0%, rgba(0,0,0,0.8) 50%, transparent 90%);
+
+  /* ── How It Works: Tarot Card Design Tokens (Dark) ── */
+  --hiw-back-bg: linear-gradient(150deg, #141635 0%, #0B0D24 100%);
+  --hiw-back-border: rgba(139, 128, 255, 0.45);
+  --hiw-back-shadow: 0 20px 60px rgba(0, 0, 0, 0.75), 0 0 40px rgba(99, 102, 241, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --hiw-back-shadow-hover: 0 32px 85px rgba(0, 0, 0, 0.85), 0 0 55px rgba(99, 102, 241, 0.45);
+  --hiw-back-outer-stroke: #6366F1;
+  --hiw-back-mid-stroke: rgba(147, 165, 255, 0.55);
+  --hiw-back-inner-stroke: rgba(147, 165, 255, 0.3);
+  --hiw-back-lattice-stroke: rgba(147, 165, 255, 0.2);
+  --hiw-back-lattice-dot: rgba(147, 165, 255, 0.6);
+  --hiw-back-rays: rgba(147, 165, 255, 0.35);
+  --hiw-back-wedge: #4338CA;
+  --hiw-back-wedge-radii-1: #6366F1;
+  --hiw-back-wedge-radii-2: rgba(147, 165, 255, 0.6);
+  --hiw-back-wedge-radii-3: rgba(147, 165, 255, 0.35);
+  --hiw-back-wedge-highlight: rgba(255, 255, 255, 0.55);
+  --hiw-back-emerald-1: #10B981;
+  --hiw-back-emerald-2: rgba(16, 185, 129, 0.7);
+  --hiw-back-emerald-3: rgba(147, 165, 255, 0.4);
+  --hiw-back-halo-fill: #10122B;
+  --hiw-back-halo-stroke: #10B981;
+  --hiw-back-accents: #8B7FFF;
+
+  --hiw-front-bg: linear-gradient(165deg, #181938 0%, #0E1029 100%);
+  --hiw-front-border: rgba(139, 128, 255, 0.45);
+  --hiw-front-border-hover: rgba(165, 155, 255, 0.75);
+  --hiw-front-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(99, 102, 241, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --hiw-front-shadow-hover: 0 32px 80px rgba(0, 0, 0, 0.8), 0 0 50px rgba(99, 102, 241, 0.45);
+  --hiw-front-title: #FFFFFF;
+  --hiw-front-item-text: #F8FAFC;
+  --hiw-front-bullet: #818CF8;
+  --hiw-front-divider: rgba(147, 165, 255, 0.55);
+  --hiw-front-stencil-bg: #FFFFFF;
+  --hiw-front-stencil-cutout: #181938;
+  --hiw-front-watermark-1: rgba(147, 165, 255, 0.45);
+  --hiw-front-watermark-2: rgba(165, 180, 255, 0.5);
 }
 
 /* ─── DARK MODE: Base ─── */
@@ -61,35 +170,22 @@
   background: transparent !important;
 }
 
-/* ─── DARK MODE: Every "white" card becomes neon glass ─── */
-[data-theme='dark'] div[style*="background: white"],
-[data-theme='dark'] div[style*="background: 'white'"],
-[data-theme='dark'] div[style*="background:#fff"],
-[data-theme='dark'] .card,
-[data-theme='dark'] .studojo-card,
-[data-theme='dark'] .glass-dark {
-  background: rgba(8, 8, 28, 0.85) !important;
-  border: 1px solid rgba(123, 112, 255, 0.12) !important;
-  box-shadow:
-    0 0 40px rgba(0, 0, 0, 0.6),
-    inset 0 0 20px rgba(123, 112, 255, 0.02) !important;
-}
-
 /* ─── DARK MODE: Content wrapper gradient overlay ─── */
 [data-theme='dark'] .content-wrapper::before,
 [data-theme='dark'] .content-wrapper::after {
   display: none !important;
 }
 
-/* ─── DARK MODE: Header/Nav ─── */
-[data-theme='dark'] .sidebar {
-  background: rgba(10, 10, 30, 0.9) !important;
-  border-color: rgba(139, 92, 246, 0.15) !important;
+/* ─── Tarot Cards Specific Exclusion from Generic White Card Selector ─── */
+[data-theme='dark'] .tarot-card-face {
+  background: var(--hiw-front-bg) !important;
+  border-color: var(--hiw-front-border) !important;
+  box-shadow: var(--hiw-front-shadow) !important;
 }
-
-[data-theme='dark'] .top-bar {
-  background: rgba(10, 10, 30, 0.8) !important;
-  border-color: rgba(139, 92, 246, 0.1) !important;
+[data-theme='dark'] .tarot-card-back {
+  background: var(--hiw-back-bg) !important;
+  border-color: var(--hiw-back-border) !important;
+  box-shadow: var(--hiw-back-shadow) !important;
 }
 
 [data-theme='dark'] .nav-item:hover {
@@ -146,12 +242,10 @@
   background: rgba(245, 166, 35, 0.1) !important;
 }
 
-
 /* Elite Grain Texture Overlay */
 .noise-overlay {
   display: none !important;
 }
-
 
 /* ===== RESET ===== */
 *, *::before, *::after {
@@ -183,7 +277,7 @@ body {
   flex: 1;
   min-width: 0;
   position: relative;
-  overflow: hidden;
+  overflow-x: clip;
   background: var(--pearl);
   transition: background 0.5s ease;
 }
@@ -219,7 +313,6 @@ body {
     radial-gradient(circle at 90% 10%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
     radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
 }
-
 
 /* ===== SIDEBAR ===== */
 .sidebar {
@@ -607,7 +700,6 @@ body {
   opacity: 0.8;
 }
 
-
 .reality-card {
   background: var(--deep);
   border-radius: 24px;
@@ -672,14 +764,13 @@ body {
     padding-bottom: 60px;
   }
 
-  
   /* Fluid Typography for Mobile */
   h1 {
     font-size: clamp(38px, 9vw, 84px);
     line-height: 1.1;
     letter-spacing: -1.5px;
   }
-  
+
   h2 {
     font-size: clamp(28px, 7vw, 64px);
     line-height: 1.2;
@@ -691,19 +782,18 @@ body {
     line-height: 1.5;
   }
 
-
   /* Structural Collapse Classes */
   .responsive-grid {
     grid-template-columns: 1fr !important;
     gap: 32px !important;
   }
-  
+
   .responsive-flex {
     flex-direction: column !important;
     align-items: center !important;
     text-align: center !important;
   }
-  
+
   .responsive-flex > div, .responsive-grid > div {
     width: 100% !important;
     max-width: 100% !important;
@@ -725,12 +815,11 @@ body {
   .mobile-hide {
     display: none !important;
   }
-  
+
   .mobile-only {
     display: flex !important;
   }
 }
-
 
 /* ===== PERFORMANCE & ACCESSIBILITY GUARDS ===== */
 @media (prefers-reduced-motion: reduce) {
@@ -762,7 +851,7 @@ section, main {
   * {
     text-rendering: optimizeSpeed;
   }
-  
+
   /* TARGETED performance lock - Prevents the entire DOM from re-filtering on every scroll */
   [data-theme='dark'] header, 
   [data-theme='dark'] .glass-card, 
@@ -800,4 +889,93 @@ section, main {
 }
 .live-dot {
   animation: livePulse 2.5s infinite ease-in-out;
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
 }
