@@ -111,7 +111,7 @@ const DriftWall = ({
     (px, py) => {
       const plane = planeRef.current;
       if (!plane) return;
-      const scale = columns === 1 ? 1.25 : 1.18;
+      const scale = columns === 1 ? 1.06 : 1.18;
       plane.style.transform =
         `translate(-50%, -50%) scale(${scale}) ` +
         `rotateX(${tilt + py}deg) rotateY(${turn + px}deg) rotateZ(${roll}deg) ` +

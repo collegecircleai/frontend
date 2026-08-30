@@ -565,6 +565,7 @@ export default function CommunityPage() {
                     itemClassName="flex flex-col justify-center items-start overflow-hidden"
                   >
                     <div 
+                      className="scroll-stack-card-inner"
                       style={{ 
                         background: item.gradient, 
                         border: `1px solid ${item.border}`, 
@@ -884,9 +885,9 @@ export default function CommunityPage() {
                 title: '',
                 href: undefined,
                 content: (
-                  <div style={{ width: '100%', height: '100%', background: c.card, borderRadius: '16px', padding: '24px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '14px', justifyContent: 'space-between', border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`, boxShadow: isDark ? '0 12px 36px rgba(0,0,0,0.4)' : '0 12px 32px rgba(0,0,0,0.06)' }}>
+                  <div style={{ width: '100%', height: '100%', background: c.card, borderRadius: '16px', padding: isMobile ? '20px 18px' : '24px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '12px', justifyContent: 'space-between', border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`, boxShadow: isDark ? '0 12px 36px rgba(0,0,0,0.4)' : '0 12px 32px rgba(0,0,0,0.06)', boxSizing: 'border-box', overflow: 'hidden' }}>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: tweet.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: tweet.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         {tweet.icon}
                       </div>
                       <div>
@@ -894,23 +895,23 @@ export default function CommunityPage() {
                         <div style={{ fontSize: '10px', fontWeight: 700, color: c.text40, fontFamily: 'var(--font-mono)', letterSpacing: '0.12em' }}>{tweet.role}</div>
                       </div>
                     </div>
-                    <div style={{ fontSize: '15px', color: c.text80, lineHeight: 1.55, flex: 1 }}>
+                    <div style={{ fontSize: isMobile ? '13.5px' : '15px', color: c.text80, lineHeight: 1.55, flex: 1, wordBreak: 'normal', overflowWrap: 'break-word' }}>
                       {tweet.text}
                     </div>
-                    <div style={{ display: 'flex', gap: '18px', color: c.text40, fontSize: '13px', fontWeight: 500 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Heart size={15} /> {tweet.likes}</div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><MessageSquare size={15} /> {tweet.replies}</div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Repeat size={15} /> {tweet.retweets}</div>
+                    <div style={{ display: 'flex', gap: '16px', color: c.text40, fontSize: '12px', fontWeight: 500 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Heart size={14} /> {tweet.likes}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><MessageSquare size={14} /> {tweet.replies}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Repeat size={14} /> {tweet.retweets}</div>
                     </div>
                   </div>
                 )
               }))}
               columns={isMobile ? 1 : 3}
-              tileWidth={isMobile ? 360 : 360}
-              tileHeight={isMobile ? 245 : 240}
-              gap={isMobile ? 24 : 24}
-              tilt={16}
-              turn={-14}
+              tileWidth={isMobile ? 320 : 360}
+              tileHeight={isMobile ? 240 : 240}
+              gap={isMobile ? 20 : 24}
+              tilt={isMobile ? 12 : 16}
+              turn={isMobile ? -8 : -14}
               perspective={1200}
               depth={120}
               speed={42}
