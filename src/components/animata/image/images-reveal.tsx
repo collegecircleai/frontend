@@ -29,32 +29,69 @@ export default function ImagesReveal({ children }: { children: React.ReactNode }
   const yOffsets = ["20px", "-30px", "15px", "-10px", "30px", "-20px"];
   
   return (
-    <div className="relative flex flex-row justify-center w-full py-20" style={{ perspective: 1000 }}>
-      {React.Children.map(children, (child, i) => {
-        // Determine overlap margin depending on index (first item has no left margin)
-        const marginLeft = i === 0 ? '0' : '-200px'; // Tight overlap so the full deck fits the flex container width
-        
-        return (
-          <motion.div
-            key={i}
-            className="relative origin-center"
-            style={{ marginLeft, marginTop: yOffsets[i % yOffsets.length] }}
-            custom={{ index: i, angle: angles[i % angles.length] }}
-            initial="hidden"
-            animate="visible"
-            variants={cardVariants}
-            whileHover={{
-              scale: 1.05,
-              rotate: "0deg",
-              zIndex: 50,
-              y: -10,
-              transition: { duration: 0.3, type: "spring", stiffness: 150, damping: 20 },
-            }}
-          >
-            {child}
-          </motion.div>
-        );
-      })}
-    </div>
+    <>
+      <style>{`
+        .images-reveal-container {
+          perspective: 1000px;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          width: 100%;
+          padding: 80px 0;
+        }
+        .images-reveal-item {
+          position: relative;
+          transform-origin: center;
+        }
+        @media (max-width: 768px) {
+          .images-reveal-container {
+            justify-content: flex-start !important;
+            overflow-x: auto !important;
+            padding: 30px 20px 40px 20px !important;
+            gap: 16px !important;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+          }
+          .images-reveal-container::-webkit-scrollbar {
+            display: none;
+          }
+          .images-reveal-item {
+            margin-left: 0 !important;
+            margin-top: 0 !important;
+            transform: none !important;
+            flex-shrink: 0;
+            scroll-snap-align: center;
+          }
+        }
+      `}</style>
+      <div className="images-reveal-container">
+        {React.Children.map(children, (child, i) => {
+          // Determine overlap margin depending on index (first item has no left margin) on desktop
+          const marginLeft = i === 0 ? '0' : '-200px'; // Tight overlap so the full deck fits the flex container width
+          
+          return (
+            <motion.div
+              key={i}
+              className="images-reveal-item"
+              style={{ marginLeft, marginTop: yOffsets[i % yOffsets.length] }}
+              custom={{ index: i, angle: angles[i % angles.length] }}
+              initial="hidden"
+              animate="visible"
+              variants={cardVariants}
+              whileHover={{
+                scale: 1.05,
+                rotate: "0deg",
+                zIndex: 50,
+                y: -10,
+                transition: { duration: 0.3, type: "spring", stiffness: 150, damping: 20 },
+              }}
+            >
+              {child}
+            </motion.div>
+          );
+        })}
+      </div>
+    </>
   );
 }

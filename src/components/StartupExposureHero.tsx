@@ -230,7 +230,14 @@ export const StartupExposureHero = ({ isDark, c, fadeInUp }: Props) => {
       </motion.div>
 
       {/* Main Content Container (Padded) */}
-      <div style={{ padding: '40px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', zIndex: 10, position: 'relative', pointerEvents: 'none' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .startup-exposure-content {
+            padding: 28px 20px !important;
+          }
+        }
+      `}</style>
+      <div className="startup-exposure-content" style={{ padding: '40px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', zIndex: 10, position: 'relative', pointerEvents: 'none' }}>
         
         {/* Parallax Floating Rocket */}
         <motion.div 

@@ -56,8 +56,17 @@ const TiltCard = ({ children, isDark, featured = false, accentColor, borderColor
 
   return (
     <div style={{ perspective: 1200, width: '100%' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .tilt-card-box {
+            padding: 28px 20px !important;
+            border-radius: 24px !important;
+          }
+        }
+      `}</style>
       <motion.div
         ref={cardRef}
+        className="tilt-card-box"
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={handleMouseLeave}

@@ -105,28 +105,20 @@ export function AnimatedFolder({
           display: "flex",
           alignItems: "flex-end",
           justifyContent: "center",
-          height: isMobile ? "320px" : "380px",
+          height: "380px",
           zIndex: 20,
           pointerEvents: isOpen ? "auto" : "none",
         }}
       >
         <AnimatePresence>
           {cards.map((card, i) => {
-            // When closed: all stacked inside folder
-            // Desktop: spread horizontally into 3 distinct columns
-            // Mobile (<640px): stacked / fanned deck layout with reduced width so it fits within screen perfectly
+            // Cards fan out identically into 3 distinct columns just like desktop
             const total = cards.length;
-            const spreadX = isMobile
-              ? (i - (total - 1) / 2) * 55
-              : (i - (total - 1) / 2) * 290;
-            const spreadRotate = isMobile
-              ? (i - (total - 1) / 2) * 10
-              : (i - (total - 1) / 2) * 6;
-            const spreadY = isMobile
-              ? -100 - (total - 1 - i) * 18
-              : -120 - Math.abs(i - (total - 1) / 2) * -15;
+            const spreadX = (i - (total - 1) / 2) * (isMobile ? 180 : 290);
+            const spreadRotate = (i - (total - 1) / 2) * 6;
+            const spreadY = -120 - Math.abs(i - (total - 1) / 2) * -15;
 
-            const isHovered = hoveredIndex === i;
+            const isSelected = hoveredIndex === i;
 
             return (
               <motion.div
@@ -139,12 +131,12 @@ export function AnimatedFolder({
                   scale: 0.75,
                 }}
                 animate={{
-                  y: isOpen ? (isHovered ? (isMobile ? -145 : spreadY - 30) : spreadY) : 60,
-                  x: isOpen ? (isHovered ? (isMobile ? 0 : spreadX) : spreadX) : 0,
+                  y: isOpen ? (isSelected ? spreadY - 35 : spreadY) : 60,
+                  x: isOpen ? spreadX : 0,
                   opacity: isOpen ? 1 : 0,
-                  rotate: isOpen ? (isHovered ? 0 : spreadRotate) : 0,
-                  scale: isOpen ? (isHovered ? (isMobile ? 1.05 : 1.05) : (isMobile ? 0.92 : 1)) : 0.75,
-                  zIndex: isHovered ? 120 : 20 + i,
+                  rotate: isOpen ? (isSelected ? 0 : spreadRotate) : 0,
+                  scale: isOpen ? (isSelected ? 1.08 : (isMobile ? 0.95 : 1)) : 0.75,
+                  zIndex: isSelected ? 150 : 20 + i,
                 }}
                 transition={{
                   type: "spring",
@@ -159,17 +151,19 @@ export function AnimatedFolder({
                   if (!isMobile) setHoveredIndex(null);
                 }}
                 onPointerDown={(e) => {
-                  if (isMobile) {
-                    e.stopPropagation();
-                    setHoveredIndex((prev) => (prev === i ? null : i));
-                  }
+                  e.stopPropagation();
+                  setHoveredIndex((prev) => (prev === i ? null : i));
                 }}
-                className={`folder-card ${isHovered ? "hovered" : ""}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setHoveredIndex((prev) => (prev === i ? null : i));
+                }}
+                className={`folder-card ${isSelected ? "hovered" : ""}`}
                 style={{
                   position: "absolute",
-                  width: isMobile ? "240px" : "270px",
-                  borderRadius: isMobile ? "16px" : "20px",
-                  padding: isMobile ? "20px 18px" : "24px",
+                  width: isMobile ? "250px" : "270px",
+                  borderRadius: "20px",
+                  padding: "24px",
                   cursor: "pointer",
                   transformOrigin: "bottom center",
                   textAlign: "left",

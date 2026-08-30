@@ -207,21 +207,26 @@ export default function CommunityPage() {
             </motion.div>
 
             {/* Right Column - Image */}
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} style={{ flex: '1 1 450px', display: 'flex', justifyContent: 'center', position: 'relative' }}>
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} style={{ flex: '1 1 450px', display: 'flex', justifyContent: 'center', position: 'relative', width: '100%', maxWidth: '100%' }}>
               <style>{`
                 @media (max-width: 768px) {
-                  .hero-badge-1 { left: 10px !important; top: 5% !important; }
-                  .hero-badge-2 { left: 10px !important; bottom: 5% !important; }
-                  .hero-badge-3 { right: 10px !important; top: 50% !important; transform: translateY(-50%) !important; }
-                  .hero-badge { padding: 12px 16px !important; gap: 10px !important; }
+                  .hero-badge-1 { left: 0px !important; top: 0% !important; }
+                  .hero-badge-2 { left: 0px !important; bottom: 0% !important; }
+                  .hero-badge-3 { right: 0px !important; top: 45% !important; transform: translateY(-50%) !important; }
+                  .hero-badge { padding: 10px 14px !important; gap: 8px !important; border-radius: 14px !important; max-width: calc(100% - 20px); }
                   .hero-badge-title { font-size: 12px !important; }
-                  .hero-badge-sub { font-size: 9px !important; }
+                  .hero-badge-sub { font-size: 8px !important; }
+                }
+                @media (max-width: 480px) {
+                  .hero-badge-1 { top: -10px !important; left: 0px !important; }
+                  .hero-badge-2 { bottom: -10px !important; left: 0px !important; }
+                  .hero-badge-3 { right: 0px !important; top: 40% !important; }
                 }
               `}</style>
 
               {/* Fake concentric circles behind */}
-              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 'clamp(300px, 150vw, 700px)', height: 'clamp(300px, 150vw, 700px)', borderRadius: '50%', border: `1px solid ${c.border08}`, pointerEvents: 'none' }} />
-              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 'clamp(200px, 100vw, 500px)', height: 'clamp(200px, 100vw, 500px)', borderRadius: '50%', border: `1px solid ${c.border15}`, pointerEvents: 'none' }} />
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 'clamp(280px, 90vw, 700px)', height: 'clamp(280px, 90vw, 700px)', borderRadius: '50%', border: `1px solid ${c.border08}`, pointerEvents: 'none' }} />
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 'clamp(200px, 70vw, 500px)', height: 'clamp(200px, 70vw, 500px)', borderRadius: '50%', border: `1px solid ${c.border15}`, pointerEvents: 'none' }} />
 
               {/* Static Badges */}
               <div className="hero-badge hero-badge-1" style={{ position: 'absolute', top: '15%', left: '-5%', background: c.cardLight, backdropFilter: 'blur(20px)', border: `1px solid ${c.border08}`, padding: '16px 20px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '14px', zIndex: 10, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
@@ -315,7 +320,15 @@ export default function CommunityPage() {
             </motion.div>
 
             {/* Right Side Cards */}
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} style={{ flex: '1 1 600px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '140px' }}>
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="what-is-network-right" style={{ flex: '1 1 600px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '140px', width: '100%', maxWidth: '100%' }}>
+              <style>{`
+                @media (max-width: 768px) {
+                  .what-is-network-right {
+                    margin-top: 20px !important;
+                    width: 100% !important;
+                  }
+                }
+              `}</style>
               <ImagesReveal>
                 {[
                   { title: 'AI Workshops', desc: 'Immersive sessions on prompt engineering, agents, and the AI stack.', icon: <Network size={16} color="#8B80F9" /> },
@@ -816,7 +829,17 @@ export default function CommunityPage() {
           </motion.p>
 
           {/* Tweet Cards */}
-          <div style={{ height: 750, width: '100%', maxWidth: '1400px', margin: '0 auto', paddingBottom: '32px', transform: 'translateX(-4%)' }}>
+          <div className="driftwall-outer-wrap" style={{ height: 750, width: '100%', maxWidth: '1400px', margin: '0 auto', paddingBottom: '32px', transform: 'translateX(-4%)' }}>
+            <style>{`
+              @media (max-width: 768px) {
+                .driftwall-outer-wrap {
+                  height: 520px !important;
+                  transform: none !important;
+                  width: 100% !important;
+                  overflow: hidden;
+                }
+              }
+            `}</style>
             <DriftWall
               items={[
                 {
@@ -1037,11 +1060,29 @@ export default function CommunityPage() {
       {/* TIER PROGRESSION MODAL */}
       <AnimatePresence>
         {activeTierModal && (
-          <div onClick={() => setActiveTierModal(null)} style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '5%', background: c.overlay, backdropFilter: 'blur(10px)' }}>
-            <motion.div data-lenis-prevent="true" onClick={(e) => e.stopPropagation()} initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} style={{ width: '100%', maxWidth: '1200px', maxHeight: '90vh', overflowY: 'auto', overscrollBehavior: 'contain', background: isDark ? 'linear-gradient(180deg, rgba(20,15,30,1) 0%, rgba(10,10,15,1) 100%)' : '#FFFFFF', border: `1px solid ${c.border10}`, borderRadius: '24px', position: 'relative', padding: '64px', boxShadow: isDark ? '0 40px 100px rgba(0,0,0,0.5)' : '0 40px 100px rgba(0,0,0,0.1)' }}>
+          <div onClick={() => setActiveTierModal(null)} className="tier-modal-overlay" style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '5%', background: c.overlay, backdropFilter: 'blur(10px)' }}>
+            <style>{`
+              @media (max-width: 768px) {
+                .tier-modal-overlay {
+                  padding: 12px !important;
+                }
+                .tier-modal-content {
+                  padding: 28px 20px !important;
+                  border-radius: 20px !important;
+                  max-height: 94vh !important;
+                }
+                .tier-modal-close {
+                  top: 16px !important;
+                  right: 16px !important;
+                  width: 32px !important;
+                  height: 32px !important;
+                }
+              }
+            `}</style>
+            <motion.div data-lenis-prevent="true" onClick={(e) => e.stopPropagation()} initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="tier-modal-content" style={{ width: '100%', maxWidth: '1200px', maxHeight: '90vh', overflowY: 'auto', overscrollBehavior: 'contain', background: isDark ? 'linear-gradient(180deg, rgba(20,15,30,1) 0%, rgba(10,10,15,1) 100%)' : '#FFFFFF', border: `1px solid ${c.border10}`, borderRadius: '24px', position: 'relative', padding: '64px', boxShadow: isDark ? '0 40px 100px rgba(0,0,0,0.5)' : '0 40px 100px rgba(0,0,0,0.1)' }}>
 
               {/* Close button */}
-              <button onClick={() => setActiveTierModal(null)} style={{ position: 'absolute', top: '32px', right: '32px', width: '40px', height: '40px', borderRadius: '50%', background: c.border05, border: `1px solid ${c.border10}`, color: c.text, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10 }}>
+              <button onClick={() => setActiveTierModal(null)} className="tier-modal-close" style={{ position: 'absolute', top: '32px', right: '32px', width: '40px', height: '40px', borderRadius: '50%', background: c.border05, border: `1px solid ${c.border10}`, color: c.text, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10 }}>
                 ✕
               </button>
 
@@ -1049,11 +1090,11 @@ export default function CommunityPage() {
                 <div style={{ fontSize: '10px', fontWeight: 700, color: c.text50, letterSpacing: '0.2em', fontFamily: 'var(--font-mono)' }}>ECOSYSTEM PROGRESSION MAP</div>
               </div>
 
-              <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '16px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif', maxWidth: '800px' }}>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 800, color: c.text, lineHeight: 1.1, marginBottom: '16px', letterSpacing: '-0.02em', fontFamily: 'var(--font-body), system-ui, sans-serif', maxWidth: '800px' }}>
                 Build systems. <span style={{ color: '#9B90FF' }}>Build the future.</span>
               </h2>
 
-              <p style={{ color: c.text50, fontSize: '15px', lineHeight: 1.6, maxWidth: '600px', marginBottom: '64px' }}>
+              <p style={{ color: c.text50, fontSize: '14px', lineHeight: 1.6, maxWidth: '600px', marginBottom: '40px' }}>
                 Explore → Build → Contribute → Lead → Scale → Expand → Impact. Every level unlocks new opportunities — earned through contribution, not bought.
               </p>
 
@@ -1267,10 +1308,18 @@ export default function CommunityPage() {
 
                 return (
                   <motion.div key={activeTierModal} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }} style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', width: '100%' }}>
+                    <style>{`
+                      @media (max-width: 768px) {
+                        .tier-modal-box {
+                          padding: 20px 16px !important;
+                          border-radius: 18px !important;
+                        }
+                      }
+                    `}</style>
                     {/* Left Column */}
-                    <div style={{ flex: '1 1 500px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                    <div style={{ flex: '1 1 500px', display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
                       {/* Info Card */}
-                      <div style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px' }}>
+                      <div className="tier-modal-box" style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px' }}>
                         <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '24px' }}>
                           <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: `rgba(${parseInt(currentTier.color.slice(1, 3), 16)},${parseInt(currentTier.color.slice(3, 5), 16)},${parseInt(currentTier.color.slice(5, 7), 16)},0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentTier.color }}>
                             {currentTier.icon}
@@ -1289,7 +1338,7 @@ export default function CommunityPage() {
                       {/* Grid */}
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                         {currentTier.unlocks.map((perk, i) => (
-                          <div key={i} style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '20px', padding: '24px' }}>
+                          <div key={i} className="tier-modal-box" style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '20px', padding: '24px' }}>
                             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '16px' }}>
                               <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: `rgba(${parseInt(currentTier.color.slice(1, 3), 16)},${parseInt(currentTier.color.slice(3, 5), 16)},${parseInt(currentTier.color.slice(5, 7), 16)},0.05)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentTier.color }}>
                                 {perk.icon}
@@ -1303,9 +1352,9 @@ export default function CommunityPage() {
                     </div>
 
                     {/* Right Column */}
-                    <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                    <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
                       {/* XP Card */}
-                      <div style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px' }}>
+                      <div className="tier-modal-box" style={{ background: isDark ? c.border02 : '#F7F6F2', border: `1px solid ${c.border05}`, borderRadius: '24px', padding: '32px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                           <div style={{ fontSize: '10px', fontWeight: 700, color: c.text40, fontFamily: 'var(--font-mono)', letterSpacing: '0.15em' }}>XP PROGRESSION</div>
                           <div style={{ fontSize: '10px', fontWeight: 700, color: currentTier.color, fontFamily: 'var(--font-mono)' }}>{currentTier.xp.text}</div>
