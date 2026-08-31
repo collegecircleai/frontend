@@ -15,6 +15,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import BrandPanel from "@/components/brand/BrandPanel";
 import CCAILogo from "@/components/brand/CCAILogo";
 import { api, getFriendlyErrorMessage } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +52,7 @@ const MobileStyles = () => (
 function SetPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { hydrateUser } = useAuth();
   const token = searchParams.get("token");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -99,6 +101,24 @@ function SetPasswordContent() {
           if (refreshToken) {
             localStorage.setItem("refreshToken", refreshToken);
           }
+        }
+
+        // Same trap as the Google callback: tokens alone leave `user` null and
+        // /onboarding bounces straight back to /login.
+        try {
+          await hydrateUser();
+        } catch {
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("token");
+            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("user");
+          }
+          setError(
+            "Your password was set, but we could not start your session. Redirecting you to sign in.",
+          );
+          setIsSubmitting(false);
+          setTimeout(() => router.push("/login"), 2500);
+          return;
         }
 
         setIsSuccess(true);
