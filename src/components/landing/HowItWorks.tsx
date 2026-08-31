@@ -786,11 +786,11 @@ function CleanMockupCard({
             {/* Center Official Logo Vectors - Mathematically Centered at (140, 200) */}
             <g transform="translate(96.3, 154) scale(1.15)">
               <circle cx="32" cy="40" r="28" fill="#4D3FFF" />
-              <circle cx="52" cy="32" r="20" fill="white" />
-              <circle cx="52" cy="32" r="14" fill="white" />
+              <circle cx="52" cy="32" r="20" fill="var(--hiw-back-halo-fill, #FFFFFF)" />
+              <circle cx="52" cy="32" r="14" fill="var(--hiw-back-halo-fill, #FFFFFF)" />
               <circle cx="52" cy="32" r="9" fill="#00D28E" />
-              <circle cx="32" cy="40" r="10" fill="white" />
-              <circle cx="52" cy="32" r="4" fill="white" />
+              <circle cx="32" cy="40" r="10" fill="var(--hiw-back-halo-fill, #FFFFFF)" />
+              <circle cx="52" cy="32" r="4" fill="var(--hiw-back-halo-fill, #FFFFFF)" />
             </g>
           </svg>
         </div>
