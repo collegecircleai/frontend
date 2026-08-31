@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import api from "../lib/api";
 
 interface User {
@@ -27,6 +33,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<any>;
   logout: () => Promise<void>;
+  hydrateUser: () => Promise<User | null>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -36,6 +43,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Fetches the signed-in user from the access token alone. Every entry path that
+  // only persists tokens (Google callback fragment, set-password, silent refresh)
+  // depends on this to populate `user` -- without it ProtectedRoute bounces to /login.
+  const hydrateUser = useCallback(async (): Promise<User | null> => {
+    const response = await api.get("/auth/me");
+    const fetchedUser: User | null = response.data?.data ?? null;
+
+    if (fetchedUser) {
+      setUser(fetchedUser);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("user", JSON.stringify(fetchedUser));
+      }
+    }
+
+    return fetchedUser;
+  }, []);
 
   useEffect(() => {
     const initAuth = async () => {
@@ -156,6 +180,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (error) {
         console.error("Auth init error:", error);
       } finally {
+        // Runs whichever branch above returned: if we hold a token but no user
+        // (Google callback, set-password, silent refresh), fetch it before we
+        // report the session as resolved.
+        const activeToken =
+          typeof window !== "undefined" ? localStorage.getItem("token") : null;
+        const activeUser =
+          typeof window !== "undefined" ? localStorage.getItem("user") : null;
+
+        if (activeToken && !activeUser) {
+          try {
+            await hydrateUser();
+          } catch (error) {
+            // Token is unusable. The api 401 handler has already cleared storage;
+            // leave the session unauthenticated rather than half-signed-in.
+          }
+        }
+
         setIsLoading(false);
       }
     };
@@ -171,7 +212,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     window.addEventListener("auth:cleared", handleAuthCleared);
     return () => window.removeEventListener("auth:cleared", handleAuthCleared);
-  }, []);
+  }, [hydrateUser]);
 
   const login = async (email: string, password: string) => {
     const response = await api.post("/auth/login", { email, password });
@@ -226,6 +267,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isLoading,
         login,
         logout,
+        hydrateUser,
       }}
     >
       {children}
