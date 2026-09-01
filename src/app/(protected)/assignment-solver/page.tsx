@@ -354,7 +354,9 @@ export default function AssignmentSolverPage() {
         jsPDF: { orientation: "portrait", unit: "mm", format: "a4" },
       };
 
-      const { default: html2pdf } = await import("html2pdf.js");
+      // @ts-ignore
+      const html2pdfModule = await import("html2pdf.js");
+      const html2pdf = html2pdfModule.default || html2pdfModule;
       html2pdf().set(options).from(htmlContent).save();
     } catch (err) {
       setError("Failed to download PDF. Please try again.");
@@ -620,7 +622,10 @@ export default function AssignmentSolverPage() {
                       padding: "16px 48px",
                       fontSize: "15px",
                       borderRadius: "12px",
-                      background: selectedFile ? "#4D3FFF" : "#ccc",
+                      background: selectedFile ? "var(--violet)" : "var(--border-light, rgba(255,255,255,0.08))",
+                      color: selectedFile ? "#fff" : "var(--mist)",
+                      cursor: selectedFile ? "pointer" : "not-allowed",
+                      border: "none",
                       opacity: uploadState === "uploading" ? 0.7 : 1,
                     }}
                   >
@@ -688,6 +693,8 @@ export default function AssignmentSolverPage() {
                           fontFamily: "inherit",
                           minHeight: "80px",
                           resize: "vertical",
+                          background: "var(--deep, transparent)",
+                          color: "var(--ink)",
                         }}
                       />
                     </div>

@@ -98,6 +98,19 @@
   --hiw-front-stencil-cutout: #FFFFFF;
   --hiw-front-watermark-1: #BAC8FF;
   --hiw-front-watermark-2: #7B8FFF;
+
+  /* ── Dashboard Pricing Page Tokens (Light) ── */
+  --pricing-bg: var(--pearl, #F7F5F0);
+  --pricing-card-bg: #FFFFFF;
+  --pricing-card-popular-bg: #FFFFFF;
+  --pricing-card-border: rgba(0, 0, 0, 0.08);
+  --pricing-card-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  --pricing-card-popular-shadow: 0 20px 45px rgba(77, 63, 255, 0.12);
+  --pricing-toggle-bg: rgba(0, 0, 0, 0.05);
+  --pricing-btn-bg: rgba(77, 63, 255, 0.08);
+  --pricing-btn-color: #4D3FFF;
+  --pricing-quote-bg: rgba(0, 200, 150, 0.06);
+  --pricing-quote-border: rgba(0, 200, 150, 0.18);
 }
 
 [data-theme='dark'] {
@@ -115,6 +128,19 @@
   --logo-tagline: rgba(160, 159, 192, 0.6);
   --hero-img-filter: brightness(0.85) saturate(1.2) contrast(1.2);
   --hero-mask: radial-gradient(circle at 30% 50%, black 0%, rgba(0,0,0,0.8) 50%, transparent 90%);
+
+  /* ── Dashboard Pricing Page Tokens (Dark) ── */
+  --pricing-bg: transparent;
+  --pricing-card-bg: rgba(20, 18, 42, 0.85);
+  --pricing-card-popular-bg: rgba(26, 24, 48, 0.95);
+  --pricing-card-border: rgba(139, 132, 255, 0.18);
+  --pricing-card-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  --pricing-card-popular-shadow: 0 20px 50px rgba(77, 63, 255, 0.25);
+  --pricing-toggle-bg: rgba(255, 255, 255, 0.06);
+  --pricing-btn-bg: rgba(139, 132, 255, 0.12);
+  --pricing-btn-color: #FFFFFF;
+  --pricing-quote-bg: rgba(0, 200, 150, 0.08);
+  --pricing-quote-border: rgba(0, 200, 150, 0.2);
 
   /* ── How It Works: Tarot Card Design Tokens (Dark) ── */
   --hiw-back-bg: linear-gradient(150deg, #141635 0%, #0B0D24 100%);
@@ -429,6 +455,7 @@ body {
   transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+
 .tactile-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 12px 32px rgba(9,9,15,0.06);
@@ -436,7 +463,8 @@ body {
 
 /* Studojo-style thick border card (CC>AI version) */
 .studojo-card {
-  background: #fff;
+  background: var(--cream, #fff);
+  color: var(--ink);
   border-radius: 24px;
   padding: 32px;
   border: 2px solid var(--ink);
@@ -445,14 +473,29 @@ body {
   cursor: pointer;
 }
 
+[data-theme='dark'] .studojo-card {
+  background: rgba(20, 18, 42, 0.85);
+  border-color: rgba(139, 132, 255, 0.35);
+  box-shadow: 5px 5px 0px rgba(77, 63, 255, 0.3);
+  color: var(--ink);
+}
+
 .studojo-card:hover {
   transform: translate(-2px, -2px);
   box-shadow: 7px 7px 0px var(--ink);
 }
 
+[data-theme='dark'] .studojo-card:hover {
+  box-shadow: 7px 7px 0px rgba(77, 63, 255, 0.5);
+}
+
 .studojo-card:active {
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0px var(--ink);
+}
+
+[data-theme='dark'] .studojo-card:active {
+  box-shadow: 1px 1px 0px rgba(77, 63, 255, 0.5);
 }
 
 /* ===== BUTTONS (CC>AI Official) ===== */
