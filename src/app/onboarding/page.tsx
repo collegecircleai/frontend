@@ -107,16 +107,16 @@ function Sidebar({ step, isMobile }: { step: number; isMobile: boolean }) {
           <CCAILogo size={32} variant="light" />
           <div
             style={{
-              fontSize: "9px",
-              fontFamily: FONTS.mono,
-              fontWeight: 700,
+              fontSize: "11px",
+              fontFamily: FONTS.sans,
+              fontWeight: 500,
               color: COLORS.textLight,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              marginTop: "12px",
+              letterSpacing: "0.05em",
+              marginTop: "8px",
+              opacity: 0.9,
             }}
           >
-            GURUKUL DIGITAL INFRASTRUCTURE
+            Student Intelligence Infrastructure
           </div>
         </div>
 

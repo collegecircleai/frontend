@@ -69,15 +69,17 @@ function CCAILogo({ collapsed = false }: { collapsed?: boolean }) {
           </div>
           <div
             style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "9px",
+              fontFamily: "var(--font-body)",
+              fontSize: "10px",
+              fontWeight: 400,
               color: "var(--mist)",
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              marginTop: "3px",
+              letterSpacing: "0.06em",
+              marginTop: "2px",
+              opacity: 0.85,
+              whiteSpace: "nowrap",
             }}
           >
-            Gurukul Digital
+            Student Intelligence
           </div>
         </div>
       )}
