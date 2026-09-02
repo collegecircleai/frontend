@@ -1215,6 +1215,7 @@ export default function Onboarding() {
 
   return (
     <div
+      data-lenis-prevent="true"
       style={{
         display: "flex",
         flexDirection: isMobile ? "column" : "row",
