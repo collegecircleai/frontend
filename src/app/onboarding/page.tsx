@@ -300,6 +300,17 @@ function Step1({
   onNext: () => void;
   isMobile: boolean;
 }) {
+  const [error, setError] = useState(false);
+
+  const handleNext = () => {
+    if (name.trim().length === 0) {
+      setError(true);
+    } else {
+      setError(false);
+      onNext();
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -401,30 +412,35 @@ function Step1({
               fontFamily: FONTS.mono,
               fontWeight: 700,
               letterSpacing: "0.25em",
-              color: COLORS.textLight,
+              color: error ? "#ef4444" : COLORS.textLight,
               marginBottom: "16px",
               textTransform: "uppercase",
+              transition: "color 0.2s ease",
             }}
           >
-            Full Legal Name
+            Full Legal Name {error && <span style={{ textTransform: "none", letterSpacing: "normal", fontWeight: 400 }}>— Cannot be blank</span>}
           </label>
           <div
             style={{ position: "relative", width: isMobile ? "100%" : "400px" }}
           >
             <input
               value={name}
-              onChange={(e) => onNameChange(e.target.value)}
+              onChange={(e) => {
+                setError(false);
+                onNameChange(e.target.value);
+              }}
               placeholder="Enter your full name"
               style={{
                 width: "100%",
                 backgroundColor: "#fff",
-                border: `1.5px solid ${COLORS.border}`,
+                border: `1.5px solid ${error ? "#ef4444" : COLORS.border}`,
                 borderRadius: "12px",
                 padding: isMobile ? "14px 18px" : "18px 24px",
                 fontSize: "15px",
                 fontFamily: FONTS.sans,
                 color: COLORS.textMain,
                 outline: "none",
+                transition: "border-color 0.2s ease",
               }}
             />
             <Edit3
@@ -434,7 +450,7 @@ function Step1({
                 right: "24px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                color: COLORS.textLight,
+                color: error ? "#ef4444" : COLORS.textLight,
               }}
             />
           </div>
@@ -450,7 +466,7 @@ function Step1({
         }}
       >
         <button
-          onClick={onNext}
+          onClick={handleNext}
           style={{
             flex: isMobile ? 1 : "initial",
             display: "flex",
