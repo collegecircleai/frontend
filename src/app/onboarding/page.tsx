@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
@@ -1137,6 +1137,7 @@ export default function Onboarding() {
   const { user, setUser, isLoading } = useAuth();
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
+  const nameInitialized = useRef(false);
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);
@@ -1162,8 +1163,11 @@ export default function Onboarding() {
     if (mounted && !isLoading && !user) {
       router.push("/login");
     }
-    if (user?.name && !name) setName(user.name);
-  }, [user, isLoading, mounted, name, router]);
+    if (user?.name && !nameInitialized.current) {
+      setName(user.name);
+      nameInitialized.current = true;
+    }
+  }, [user, isLoading, mounted, router]);
 
   useEffect(() => {
     if (step === 4) {
