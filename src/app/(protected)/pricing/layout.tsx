@@ -9,7 +9,6 @@ import {
   Upload,
   BarChart2,
   Zap,
-  Shield,
   LogOut,
   Menu,
   X,
@@ -303,17 +302,6 @@ function Sidebar({
             collapsed={collapsed}
           />
         ))}
-
-        {/* Admin — only if role === 'admin' */}
-        {user?.role === "admin" && (
-          <NavLink
-            href="/admin"
-            label="Admin"
-            icon={Shield}
-            active={pathname?.startsWith("/admin")}
-            collapsed={collapsed}
-          />
-        )}
       </nav>
 
       {/* Divider */}

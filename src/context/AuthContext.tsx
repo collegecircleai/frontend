@@ -277,7 +277,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 export function getPostAuthRoute(user: User | null): string {
   if (!user) return "/login";
-  if (user.role === "admin") return "/admin";
+  if (user.role === "admin") return "/dashboard";
   if (!user.isOnboarded) return "/onboarding";
   return "/dashboard";
 }
