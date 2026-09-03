@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import api from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
+import WelcomeGiftPopup from "./WelcomeGiftPopup";
 
 /* ─────────────────────────────────────────
    TYPES
@@ -469,6 +470,7 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const router = useRouter();
 
+  const [showWelcomeGift, setShowWelcomeGift] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
   const [session, setSession] = useState<RecentSession | null>(null);
@@ -487,6 +489,33 @@ export default function DashboardPage() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    if (!user) {
+      setShowWelcomeGift(false);
+      return;
+    }
+
+    api
+      .get("/auth/me")
+      .then((response) => {
+        const profile = response.data?.data ?? response.data;
+        if (!cancelled) setShowWelcomeGift(profile?.has_seen_welcome_gift === false);
+      })
+      .catch(() => {
+        if (!cancelled) setShowWelcomeGift(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
+
+  const dismissWelcomeGift = async () => {
+    await api.patch("/auth/me", { has_seen_welcome_gift: true });
+    setShowWelcomeGift(false);
+  };
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -721,6 +750,9 @@ export default function DashboardPage() {
     <>
       <style>{shimmerCSS + dashCSS}</style>
 
+      {showWelcomeGift && (
+        <WelcomeGiftPopup onDismiss={dismissWelcomeGift} />
+      )}
        {/* ── SECTION 1: Greeting ── */}
        <div 
         className="cc-fade-in" 
