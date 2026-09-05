@@ -26,12 +26,12 @@ export default function VisualLearning() {
         </div>
         
         <h2 style={{
-          fontFamily: 'var(--font-display)', fontSize: '56px', fontWeight: 800,
+          fontFamily: 'var(--font-display)', fontSize: '56px', fontWeight: 500,
           color: 'white', textAlign: 'center', lineHeight: 1.1,
           marginBottom: '24px'
         }}>
           Don't just read.<br />
-          <span style={{ color: '#8B80F9', fontStyle: 'italic', fontWeight: 700 }}>See</span> it.
+          <span style={{ color: '#8B80F9', fontStyle: 'italic', fontWeight: 400 }}>See</span> it.
         </h2>
 
         <p style={{ fontSize: '15px', color: '#888899', marginBottom: '80px', textAlign: 'center', fontWeight: 400 }}>

@@ -41,7 +41,7 @@ const Reality = memo(function Reality() {
       </div>
       
       <h2 style={{
-        fontFamily: 'var(--font-display)', fontSize: '44px', fontWeight: 800,
+        fontFamily: 'var(--font-display)', fontSize: '44px', fontWeight: 500,
         color: 'var(--ink)', textAlign: 'center', lineHeight: 1.2,
         marginBottom: '20px'
       }}>

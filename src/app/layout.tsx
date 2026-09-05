@@ -4,9 +4,9 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import {
   DM_Sans,
-  Playfair_Display,
   DM_Mono,
   Noto_Sans_Devanagari,
+  EB_Garamond,
 } from "next/font/google";
 import { Analytics } from '@vercel/analytics/next';
 const dmSans = DM_Sans({
@@ -16,9 +16,19 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-const playfair = Playfair_Display({
+const ebGaramond = EB_Garamond({
+  subsets: ["latin"],
+  variable: "--font-garamond",
+  weight: ["400", "500", "600", "700", "800"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const ebGaramondDisplay = EB_Garamond({
   subsets: ["latin"],
   variable: "--font-display",
+  weight: ["400", "500", "600", "700", "800"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -60,13 +70,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${playfair.variable} ${dmMono.variable} ${notoDevanagari.variable}`}
+      className={`${dmSans.variable} ${ebGaramondDisplay.variable} ${dmMono.variable} ${notoDevanagari.variable} ${ebGaramond.variable}`}
       suppressHydrationWarning
     >
       <head>
         <link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="any" />
         <link rel="icon" href="/icon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />
         <link rel="icon" href="/icon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet" />
         <link rel="shortcut icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icon.svg" />
         <script
@@ -94,7 +107,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={dmSans.className}>
+      <body className={ebGaramond.className}>
         <AuthProvider>
           <SplashScreen />
           <div className="noise-overlay" />

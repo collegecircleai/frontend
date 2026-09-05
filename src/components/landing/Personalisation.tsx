@@ -40,7 +40,7 @@ const Personalisation = memo(function Personalisation() {
         </div>
         
         <h2 style={{
-          fontFamily: 'var(--font-display)', fontSize: '56px', fontWeight: 800,
+          fontFamily: 'var(--font-display)', fontSize: '56px', fontWeight: 500,
           color: 'var(--ink)', lineHeight: 1.1, marginBottom: '24px'
         }}>
           The more you study,<br />

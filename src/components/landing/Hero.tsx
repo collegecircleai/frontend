@@ -26,6 +26,8 @@ const StaggeredText = memo(function StaggeredText({ text, delay = 0, italic = fa
             display: 'inline-block', 
             whiteSpace: char === ' ' ? 'pre' : 'normal',
             fontStyle: italic ? 'italic' : 'normal',
+            fontFamily: italic ? "'EB Garamond', Garamond, Georgia, serif" : 'inherit',
+            fontSynthesis: italic ? 'none' : 'auto',
             color: italic ? 'var(--violet)' : 'inherit'
           }}
         >
@@ -180,16 +182,22 @@ const Hero = memo(function Hero({ onGetStarted }: HeroProps) {
               </motion.span>
               
               <motion.h1 style={{
-                fontFamily: 'var(--font-display)', fontSize: '72px', fontWeight: 900,
+                fontFamily: 'var(--font-display)', fontSize: '72px', fontWeight: 500,
                 lineHeight: 1.1, color: 'var(--ink)', marginBottom: '32px', letterSpacing: '-0.02em'
               }}>
                 <StaggeredText text="Learn Anything." delay={0.2} /><br />
                 <motion.span 
+                  className="eb-garamond-italic"
                   variants={{
                     hidden: { opacity: 0, y: 20 },
                     show: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.8 } }
                   }}
-                  style={{ color: 'var(--violet)', fontStyle: 'italic', fontWeight: 'normal', fontFamily: 'var(--font-display)' }}
+                  style={{ 
+                    color: 'var(--violet)', 
+                    fontStyle: 'italic', 
+                    fontWeight: 400, 
+                    fontFamily: "'EB Garamond', Garamond, Georgia, serif" 
+                  }}
                 >
                   Instantly.
                 </motion.span>
@@ -258,7 +266,7 @@ const Hero = memo(function Hero({ onGetStarted }: HeroProps) {
           </motion.div>
 
           <motion.h1 style={{
-            fontFamily: 'var(--font-display)', fontSize: 'clamp(42px, 8vw, 84px)', fontWeight: 900,
+            fontFamily: 'var(--font-display)', fontSize: 'clamp(42px, 8vw, 84px)', fontWeight: 500,
             lineHeight: 1.05, color: 'var(--ink)', marginBottom: '32px', letterSpacing: '-0.02em'
           }}>
             <StaggeredText text="Learning," delay={0.2} /><br />

@@ -11,7 +11,8 @@
   
   /* Fonts */
   --font-sans: 'DM Sans', sans-serif;
-  --font-display: 'Playfair Display', serif;
+  --font-garamond: 'EB Garamond', Garamond, Georgia, serif;
+  --font-display: var(--font-garamond), 'EB Garamond', Georgia, serif;
   --font-mono: 'DM Mono', monospace;
 
   /* Legacy Fallbacks */
@@ -31,7 +32,7 @@
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-garamond), var(--font-display), serif;
   background: var(--grad-main);
   color: var(--text-primary);
   min-height: 100vh;
@@ -39,7 +40,7 @@ body {
 }
 
 h1, h2, h3, .serif {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
 }
 
 /* Glass Utility */

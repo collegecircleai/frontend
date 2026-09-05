@@ -139,7 +139,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
 
                   <div style={{ textAlign: 'center', marginBottom: '24px' }}>
                     <div style={{ display: 'inline-flex', justifyContent: 'center', marginBottom: '12px' }}><CCAILogo size={32} variant="light" /></div>
-                    <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', fontWeight: 900, color: '#000000', marginBottom: '4px', letterSpacing: '-1px' }}>Join the Circle</h2>
+                    <h2 style={{ fontFamily: "var(--font-garamond), 'EB Garamond', Georgia, serif", fontSize: '32px', fontWeight: 700, color: '#000000', marginBottom: '4px', letterSpacing: '-0.5px' }}>Join the Circle</h2>
                     <p style={{ fontFamily: 'DM Sans, sans-serif', color: '#666666', fontSize: '14px', fontWeight: 500 }}>Start your journey with CC&gt;AI.</p>
                   </div>
 
@@ -219,7 +219,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
                   <div style={{ marginBottom: '24px', width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(77, 63, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--violet)' }}>
                     <Mail size={48} />
                   </div>
-                  <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '22px', fontWeight: 700, color: '#000000', marginBottom: '12px' }}>Check your email</h2>
+                  <h2 style={{ fontFamily: "var(--font-garamond), 'EB Garamond', Georgia, serif", fontSize: '24px', fontWeight: 600, color: '#000000', marginBottom: '12px' }}>Check your email</h2>
                   <p style={{ fontFamily: 'DM Sans, sans-serif', color: '#666666', fontSize: '15px', lineHeight: 1.6, marginBottom: '8px' }}>
                     We've sent a verification link to <strong>{formData.email}</strong>. Click it to set your password and get started.
                   </p>

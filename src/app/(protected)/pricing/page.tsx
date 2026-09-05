@@ -28,7 +28,7 @@ const C = {
   quoteBorder: "var(--pricing-quote-border, rgba(0,200,150,0.18))",
 };
 const FONT = {
-  display: "'Playfair Display', serif",
+  display: "var(--font-garamond), 'EB Garamond', Georgia, serif",
   body: "'DM Sans', sans-serif",
   mono: "'DM Mono', monospace",
 };

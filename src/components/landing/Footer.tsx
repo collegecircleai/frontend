@@ -9,6 +9,7 @@ export default function Footer() {
     { name: 'How it Works', href: '/#how-it-works' },
     { name: 'Features', href: '/#features' },
     { name: 'Personalisation', href: '/#personalisation' },
+    { name: 'About', href: '/about' },
     { name: 'Student Community', href: '/student-community' }
   ]
 
@@ -33,7 +34,11 @@ export default function Footer() {
           <Link href="/" style={{ textDecoration: 'none' }}>
             <CCAILogo size={32} variant="dark" />
           </Link>
-          <div style={{ fontSize: 'clamp(9px, 1.5vw, 12px)', opacity: 0.8 }}>
+          <div style={{ 
+            fontFamily: "var(--font-garamond), 'EB Garamond', Georgia, serif",
+            fontSize: 'clamp(12px, 1.2vw, 15px)', 
+            opacity: 0.8 
+          }}>
             College Circle AI Pvt. Ltd.
           </div>
         </div>
@@ -41,16 +46,20 @@ export default function Footer() {
         {/* Center Nav */}
         <div style={{ 
           display: 'flex', 
-          gap: 'clamp(12px, 3vw, 40px)',
+          gap: 'clamp(14px, 3vw, 40px)',
           flexWrap: 'wrap',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          alignItems: 'center'
         }}>
           {navLinks.map((link) => (
             <Link 
               key={link.name} 
               href={link.href}
               style={{ 
-                fontSize: 'clamp(11px, 2vw, 14px)', color: '#888899', textDecoration: 'none',
+                fontFamily: "var(--font-garamond), 'EB Garamond', Georgia, serif",
+                fontSize: 'clamp(14px, 1.3vw, 17px)', 
+                color: '#888899', 
+                textDecoration: 'none',
                 transition: 'color 0.2s ease', 
                 whiteSpace: 'nowrap'
               }}
@@ -75,8 +84,9 @@ export default function Footer() {
           <Link 
             href="https://collegecircleai.com"
             style={{ 
-              fontSize: 'clamp(12px, 2vw, 14px)', 
-              fontWeight: 600, 
+              fontFamily: "var(--font-garamond), 'EB Garamond', Georgia, serif",
+              fontSize: 'clamp(14px, 1.4vw, 17px)', 
+              fontWeight: 500, 
               color: 'white',
               textDecoration: 'none',
               transition: 'opacity 0.2s ease'

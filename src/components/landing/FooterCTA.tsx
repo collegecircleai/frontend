@@ -46,11 +46,11 @@ export default function FooterCTA({ onGetStarted }: FooterCTAProps) {
         </div>
 
         <h2 style={{
-          fontFamily: 'var(--font-display)', fontSize: '72px', fontWeight: 900,
+          fontFamily: 'var(--font-display)', fontSize: '72px', fontWeight: 500,
           color: 'white', lineHeight: 1.1, marginBottom: '24px'
         }}>
           Your teacher.<br />
-          <span style={{ color: '#9FA2FF', fontStyle: 'italic', fontWeight: 700 }}>24/7.</span>
+          <span style={{ color: '#9FA2FF', fontStyle: 'italic', fontWeight: 400 }}>24/7.</span>
         </h2>
 
         <p style={{

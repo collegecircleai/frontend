@@ -194,14 +194,14 @@ function HowItWorksMobile() {
           style={{
             fontFamily: 'var(--font-display)',
             fontSize: '30px',
-            fontWeight: 800,
+            fontWeight: 500,
             color: 'var(--ink, #1a1a2e)',
             lineHeight: 1.2,
             margin: 0
           }}
         >
           We turn your syllabus into<br />
-          your <span style={{ color: 'var(--logo-accent, #4D3FFF)', fontStyle: 'italic', fontWeight: 700 }}>entire</span> learning system.
+          your <span style={{ color: 'var(--logo-accent, #4D3FFF)', fontStyle: 'italic', fontWeight: 400 }}>entire</span> learning system.
         </h2>
       </div>
 
@@ -524,7 +524,7 @@ function HowItWorksDesktop() {
             style={{
               fontFamily: 'var(--font-display)',
               fontSize: 'clamp(24px, 3.4vw, 40px)',
-              fontWeight: 800,
+              fontWeight: 500,
               color: 'var(--ink, #1a1a2e)',
               lineHeight: 1.2,
               margin: 0,
@@ -532,7 +532,7 @@ function HowItWorksDesktop() {
             }}
           >
             We turn your syllabus into<br />
-            your <span style={{ color: 'var(--logo-accent, #4D3FFF)', fontStyle: 'italic', fontWeight: 700 }}>entire</span> learning system.
+            your <span style={{ color: 'var(--logo-accent, #4D3FFF)', fontStyle: 'italic', fontWeight: 400 }}>entire</span> learning system.
           </h2>
         </div>
 

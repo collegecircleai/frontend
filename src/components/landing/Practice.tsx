@@ -62,7 +62,7 @@ export default function Practice() {
         </div>
         
         <h2 style={{
-          fontFamily: 'var(--font-display)', fontSize: '48px', fontWeight: 800,
+          fontFamily: 'var(--font-display)', fontSize: '48px', fontWeight: 500,
           color: 'var(--ink)', textAlign: 'center', lineHeight: 1.2,
           marginBottom: '80px'
         }}>

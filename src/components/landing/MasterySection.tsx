@@ -34,11 +34,11 @@ const MasterySection = memo(function MasterySection({ onGetStarted }: { onGetSta
         {/* Left Column: Content */}
         <div style={{ position: 'relative', zIndex: 2 }}>
           <h2 style={{
-            fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 800,
+            fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 500,
             color: 'white', lineHeight: 1.1, marginBottom: '24px'
           }}>
             Master your fate.<br />
-            <span style={{ color: 'var(--violet)', fontStyle: 'italic' }}>Begin the inquiry.</span>
+            <span style={{ color: 'var(--violet)', fontStyle: 'italic', fontWeight: 400 }}>Begin the inquiry.</span>
           </h2>
           
           <p style={{

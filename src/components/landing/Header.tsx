@@ -51,6 +51,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
     { label: 'How it Works', href: '/preview#how-it-works' },
     { label: 'Features', href: '/preview#features' },
     { label: 'Personalisation', href: '/preview#personalisation' },
+    { label: 'About', href: '/about' },
     { label: 'Student Community', href: '/student-community' }
   ]
 
@@ -84,6 +85,49 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
         boxShadow: isScrolled ? '0 15px 35px rgba(0,0,0,0.05)' : '0 4px 12px rgba(0,0,0,0.02)'
       }}
     >
+      <style jsx global>{`
+        .header-nav-link {
+          color: rgba(30, 30, 36, 0.72) !important;
+          font-size: 15.5px !important;
+          font-weight: 500;
+          letter-spacing: 0.01em;
+          text-decoration: none;
+          white-space: nowrap;
+          transition: color 0.2s ease, opacity 0.2s ease;
+        }
+        .header-nav-link:hover,
+        .header-nav-link.active {
+          color: #111115 !important;
+        }
+
+        [data-theme='dark'] .header-nav-link {
+          color: rgba(240, 238, 248, 0.75) !important;
+        }
+        [data-theme='dark'] .header-nav-link:hover,
+        [data-theme='dark'] .header-nav-link.active {
+          color: #ffffff !important;
+          text-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+        }
+
+        .header-signin-link {
+          color: #1e1e24 !important;
+          font-size: 15.5px !important;
+          font-weight: 600;
+          text-decoration: none;
+          transition: color 0.2s ease;
+        }
+        .header-signin-link:hover {
+          color: var(--violet, #4D3FFF) !important;
+        }
+
+        [data-theme='dark'] .header-signin-link {
+          color: #f3effc !important;
+        }
+        [data-theme='dark'] .header-signin-link:hover {
+          color: #a098ff !important;
+        }
+      `}</style>
+
       <div style={{ display: 'flex', justifyContent: 'flex-start', flex: 1 }}>
         <Link href="/" style={{ textDecoration: 'none' }}>
           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
@@ -112,15 +156,10 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
             }}
             onMouseEnter={() => setHoveredIndex(idx)}
           >
-            <Link href={item.href} style={{
-              textDecoration: 'none',
-              color: 'var(--ink)',
-              fontSize: '14px',
-              fontWeight: 500,
-              whiteSpace: 'nowrap',
-              opacity: hoveredIndex === idx ? 1 : 0.6,
-              transition: 'opacity 0.3s ease'
-            }}>
+            <Link
+              href={item.href}
+              className={`header-nav-link ${hoveredIndex === idx ? 'active' : ''}`}
+            >
               {item.label}
             </Link>
 
@@ -199,7 +238,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
           {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </motion.button>
 
-        <Link href="/login" className="mobile-hide" style={{ textDecoration: 'none', color: 'var(--ink)', fontSize: '14px', fontWeight: 600, padding: '8px 16px' }}>
+        <Link href="/login" className="mobile-hide header-signin-link" style={{ padding: '8px 16px' }}>
           Sign In
         </Link>
 
@@ -268,10 +307,9 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
                 key={item.label}
                 href={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
+                className="header-nav-link"
                 style={{
-                  textDecoration: 'none',
-                  color: 'var(--ink)',
-                  fontSize: '16px',
+                  fontSize: '17px',
                   fontWeight: 600,
                   display: 'flex',
                   alignItems: 'center',
@@ -281,7 +319,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
                 }}
               >
                 {item.label}
-                <ArrowRight size={16} opacity={0.3} />
+                <ArrowRight size={16} opacity={0.4} />
               </Link>
             ))}
           </motion.div>
