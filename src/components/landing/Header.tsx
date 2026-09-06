@@ -1,10 +1,20 @@
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { ArrowRight, Moon, Sun, Menu, X } from 'lucide-react'
 import CCAILogo from '../brand/CCAILogo'
 
 export default function Header({ onGetStarted }: { onGetStarted?: () => void }) {
+  const router = useRouter()
+  const handleGetStarted = () => {
+    if (onGetStarted) {
+      onGetStarted()
+    } else {
+      router.push('/login')
+    }
+  }
+
   const { scrollY } = useScroll()
   const [isScrolled, setIsScrolled] = useState(false)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
@@ -243,7 +253,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
         </Link>
 
         <motion.button
-          onClick={onGetStarted}
+          onClick={handleGetStarted}
           whileHover={{
             scale: 1.05,
             boxShadow: '0 8px 25px rgba(77, 63, 255, 0.3)'
