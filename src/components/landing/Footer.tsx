@@ -17,7 +17,7 @@ export default function Footer() {
   return (
     <footer style={{
       background: '#050505',
-      padding: 'clamp(40px, 8vw, 80px) clamp(16px, 4vw, 80px) clamp(24px, 4vw, 40px) clamp(16px, 4vw, 80px)',
+      padding: 'clamp(40px, 8vw, 80px) clamp(16px, 4vw, 80px) clamp(20px, 3vw, 32px) clamp(16px, 4vw, 80px)',
       color: '#888899',
       display: 'flex', flexDirection: 'column'
     }}>
@@ -143,7 +143,7 @@ export default function Footer() {
       {/* Divider */}
       <div style={{
         height: '1px', background: 'rgba(255,255,255,0.05)', width: '100%',
-        marginBottom: 'clamp(24px, 5vw, 40px)'
+        marginBottom: 'clamp(28px, 4vw, 44px)'
       }} />
 
       {/* Bottom Legal / Copyright */}
@@ -151,15 +151,15 @@ export default function Footer() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'column',
-        gap: '8px',
         textAlign: 'center',
-        fontSize: 'clamp(11px, 1vw, 13px)',
+        fontSize: 'clamp(12px, 1.15vw, 14.5px)',
         fontFamily: "var(--font-garamond), 'EB Garamond', Georgia, serif",
-        color: '#888899'
+        color: 'rgba(255, 255, 255, 0.45)',
+        letterSpacing: '0.01em',
+        paddingBottom: 'clamp(4px, 1vw, 10px)'
       }}>
         <div>
-          © 2026 All rights reserved.
+          © 2026 College Circle AI Pvt. Ltd. All rights reserved.
         </div>
       </div>
     </footer>
