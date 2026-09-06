@@ -41,7 +41,7 @@ export default function Practice() {
   ]
 
   return (
-    <section style={{
+    <section id="practice" style={{
       background: 'var(--pearl)',
       padding: '160px 80px',
       display: 'flex', flexDirection: 'column', alignItems: 'center'

@@ -5,7 +5,7 @@ import { Workflow, Network, BarChart3 } from 'lucide-react'
 
 export default function VisualLearning() {
   return (
-    <section style={{
+    <section id="visual-learning" style={{
       background: '#09080E', 
       padding: '160px 80px',
       display: 'flex', flexDirection: 'column', alignItems: 'center'
