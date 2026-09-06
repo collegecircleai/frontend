@@ -139,11 +139,11 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
 
         /* ── Exact Uiverse 3D Rocker Switch ── */
         .uiverse-3d-switch {
-          font-size: 13px;
+          font-size: 11px;
           position: relative;
           display: inline-block;
-          width: 4.8em;
-          height: 2.4em;
+          width: 4.5em;
+          height: 2.25em;
           user-select: none;
           cursor: pointer;
           opacity: 0.9;
@@ -421,7 +421,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
                 filter: theme === 'light' ? 'drop-shadow(0 0 2px rgba(245, 158, 11, 0.35))' : 'none',
               }}
             >
-              <Sun size={15} strokeWidth={2.2} />
+              <Sun size={13} strokeWidth={2.2} />
             </span>
             <span
               className="right"
@@ -431,7 +431,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
                 filter: theme === 'dark' ? 'drop-shadow(0 0 3px rgba(196, 181, 253, 0.45))' : 'none',
               }}
             >
-              <Moon size={14} strokeWidth={2.4} />
+              <Moon size={12} strokeWidth={2.4} />
             </span>
           </div>
         </label>
