@@ -139,23 +139,25 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
 
         /* ── Exact Uiverse 3D Rocker Switch ── */
         .uiverse-3d-switch {
-          font-size: 13.5px;
+          font-size: 13px;
           position: relative;
           display: inline-block;
-          width: 5em;
-          height: 2.5em;
+          width: 4.8em;
+          height: 2.4em;
           user-select: none;
           cursor: pointer;
-          transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), filter 0.2s ease;
+          opacity: 0.9;
+          transform: scale(1);
+          transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
         }
 
         .uiverse-3d-switch:hover {
-          transform: scale(1.03);
-          filter: brightness(1.05);
+          opacity: 1;
+          transform: scale(1.05);
         }
 
         .uiverse-3d-switch:active {
-          transform: scale(0.97);
+          transform: scale(0.96);
         }
 
         .uiverse-3d-switch .cb {
@@ -170,19 +172,14 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
           cursor: pointer;
           width: 100%;
           height: 100%;
-          background-color: #E2E8F0;
-          border-radius: 0.25em;
+          background-color: #F1F5F9;
+          border-radius: 0.4em;
           transition: background-color 0.25s ease, outline-color 0.25s ease, box-shadow 0.25s ease;
           overflow: hidden;
-          /* Refined soft slate border instead of solid black */
-          outline: 1.5px solid #CBD5E1;
+          outline: 1px solid rgba(0, 0, 0, 0.08);
           box-shadow: 
-            -0.25em 0 0 0 #CBD5E1, 
-            -0.25em 0.25em 0 0 #CBD5E1,
-            0.25em 0 0 0 #CBD5E1, 
-            0.25em 0.25em 0 0 #CBD5E1, 
-            0 0.25em 0 0 #CBD5E1,
-            0 3px 8px rgba(0, 0, 0, 0.06);
+            0 1px 2px rgba(0, 0, 0, 0.04),
+            inset 0 1px 1px rgba(255, 255, 255, 0.8);
         }
 
         .uiverse-3d-switch .toggle > .left {
@@ -190,8 +187,9 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
           display: flex;
           width: 50%;
           height: 88%;
-          background-color: #f5f5f7;
-          color: #222226;
+          background-color: #ffffff;
+          color: #d97706;
+          filter: drop-shadow(0 0 2px rgba(217, 119, 6, 0.3));
           left: 0;
           bottom: 0;
           align-items: center;
@@ -207,7 +205,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
           content: "";
           width: 100%;
           height: 100%;
-          background-color: rgb(215, 215, 220);
+          background-color: rgb(228, 230, 235);
           transform-origin: center left;
           transform: rotateY(90deg);
         }
@@ -217,7 +215,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
           content: "";
           width: 100%;
           height: 100%;
-          background-color: rgb(130, 130, 138);
+          background-color: rgb(170, 172, 180);
           transform-origin: center bottom;
           transform: rotateX(90deg);
         }
@@ -227,8 +225,8 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
           display: flex;
           width: 50%;
           height: 88%;
-          background-color: #f5f5f7;
-          color: rgb(185, 185, 195);
+          background-color: #fafafc;
+          color: #94a3b8;
           right: 1px;
           bottom: 0;
           align-items: center;
@@ -244,7 +242,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
           content: "";
           width: 100%;
           height: 100%;
-          background-color: rgb(215, 215, 220);
+          background-color: rgb(228, 230, 235);
           transform-origin: center right;
           transform: rotateY(-90deg);
         }
@@ -275,59 +273,69 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
           color: #a78bfa;
         }
 
-        /* ── Dark Mode: Crisp Violet / Obsidian Outer Bezel ── */
+        /* ── Dark Mode: Refined, Subtle & Integrated (Non-distracting) ── */
+        [data-theme='dark'] .uiverse-3d-switch {
+          opacity: 0.88;
+          filter: none;
+        }
+
+        [data-theme='dark'] .uiverse-3d-switch:hover {
+          opacity: 1;
+          filter: brightness(1.06);
+        }
+
         [data-theme='dark'] .uiverse-3d-switch .toggle {
-          background-color: #0c0b16;
-          outline: 1.5px solid rgba(139, 128, 249, 0.4);
+          background-color: #12111d;
+          outline: 1px solid rgba(255, 255, 255, 0.1);
           box-shadow: 
-            -0.25em 0 0 0 #1b192e, 
-            -0.25em 0.25em 0 0 #1b192e,
-            0.25em 0 0 0 #1b192e, 
-            0.25em 0.25em 0 0 #1b192e, 
-            0 0.25em 0 0 #1b192e,
-            0 0 16px rgba(139, 128, 249, 0.35);
+            -0.25em 0 0 0 #181726, 
+            -0.25em 0.25em 0 0 #181726,
+            0.25em 0 0 0 #181726, 
+            0.25em 0.25em 0 0 #181726, 
+            0 0.25em 0 0 #181726,
+            0 2px 8px rgba(0, 0, 0, 0.35);
         }
 
         [data-theme='dark'] .uiverse-3d-switch .toggle > .left {
-          background-color: #24223b;
-          color: rgba(255, 255, 255, 0.35);
+          background-color: #1a1829;
+          color: rgba(255, 255, 255, 0.22);
         }
 
         [data-theme='dark'] .uiverse-3d-switch .left::before {
-          background-color: #19172a;
+          background-color: #141220;
         }
 
         [data-theme='dark'] .uiverse-3d-switch .left::after {
-          background-color: #0d0c18;
+          background-color: #0b0a12;
         }
 
         [data-theme='dark'] .uiverse-3d-switch .toggle > .right {
-          background-color: #2b2847;
-          color: rgba(255, 255, 255, 0.35);
+          background-color: #211f35;
+          color: rgba(255, 255, 255, 0.22);
         }
 
         [data-theme='dark'] .uiverse-3d-switch .right::before {
-          background-color: #19172a;
+          background-color: #141220;
         }
 
         [data-theme='dark'] .uiverse-3d-switch .right::after {
-          background-color: #0d0c18;
+          background-color: #0b0a12;
         }
 
         [data-theme='dark'] .uiverse-3d-switch input:not(:checked) + .toggle > .left {
-          color: #fbbf24;
-          filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.6));
+          color: #f59e0b;
+          filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.4));
         }
 
         [data-theme='dark'] .uiverse-3d-switch input:checked + .toggle > .left {
-          color: rgba(255, 255, 255, 0.25);
+          color: rgba(255, 255, 255, 0.18);
           filter: none;
         }
 
         [data-theme='dark'] .uiverse-3d-switch input:checked + .toggle > .right {
           color: #c4b5fd;
-          text-shadow: 0 0 10px rgba(196, 181, 253, 0.85);
-          filter: drop-shadow(0 0 6px rgba(196, 181, 253, 0.7));
+          text-shadow: none;
+          filter: drop-shadow(0 0 3px rgba(196, 181, 253, 0.4));
         }
       `}</style>
 
@@ -405,10 +413,24 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
             onChange={toggleTheme}
           />
           <div className="toggle">
-            <span className="left" title="Light Theme">
-              <Sun size={15} strokeWidth={2.4} />
+            <span
+              className="left"
+              title="Light Theme"
+              style={{
+                color: theme === 'light' ? '#f59e0b' : 'rgba(255, 255, 255, 0.25)',
+                filter: theme === 'light' ? 'drop-shadow(0 0 2px rgba(245, 158, 11, 0.35))' : 'none',
+              }}
+            >
+              <Sun size={15} strokeWidth={2.2} />
             </span>
-            <span className="right" title="Dark Theme">
+            <span
+              className="right"
+              title="Dark Theme"
+              style={{
+                color: theme === 'dark' ? '#c4b5fd' : 'rgba(0, 0, 0, 0.28)',
+                filter: theme === 'dark' ? 'drop-shadow(0 0 3px rgba(196, 181, 253, 0.45))' : 'none',
+              }}
+            >
               <Moon size={14} strokeWidth={2.4} />
             </span>
           </div>
