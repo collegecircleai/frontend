@@ -43,21 +43,60 @@ export default function Footer() {
   const socialLinks = [
     {
       href: 'https://mail.google.com/mail/?view=cm&fs=1&to=collegecircleai@gmail.com&su=College%20Circle%20AI%20Support',
-      icon: <Mail size={17} />,
       label: 'Email Support',
       target: '_blank',
+      hoverColor: '#EA4335',
+      hoverBg: 'rgba(234, 67, 53, 0.16)',
+      hoverGlow: '0 0 16px rgba(234, 67, 53, 0.45)',
+      icon: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+          <rect width="20" height="16" x="2" y="4" rx="3" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+      ),
     },
-    { href: 'https://www.linkedin.com/company/collegecircleai/', icon: <Linkedin size={17} />, label: 'LinkedIn', target: '_blank' },
-    { href: 'https://www.instagram.com/college.circle.ai/', icon: <Instagram size={17} />, label: 'Instagram', target: '_blank' },
+    {
+      href: 'https://www.linkedin.com/company/collegecircleai/',
+      label: 'LinkedIn',
+      target: '_blank',
+      hoverColor: '#0A66C2',
+      hoverBg: 'rgba(10, 102, 194, 0.16)',
+      hoverGlow: '0 0 16px rgba(10, 102, 194, 0.45)',
+      icon: (
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+          <rect width="4" height="12" x="2" y="9" />
+          <circle cx="4" cy="4" r="2" />
+        </svg>
+      ),
+    },
+    {
+      href: 'https://www.instagram.com/college.circle.ai/',
+      label: 'Instagram',
+      target: '_blank',
+      hoverColor: '#E1306C',
+      hoverBg: 'rgba(225, 48, 108, 0.16)',
+      hoverGlow: '0 0 16px rgba(225, 48, 108, 0.45)',
+      icon: (
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+          <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+          <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      ),
+    },
     {
       href: 'https://x.com/AICollegeCircle',
       label: 'X',
+      target: '_blank',
+      hoverColor: '#FFFFFF',
+      hoverBg: 'rgba(255, 255, 255, 0.16)',
+      hoverGlow: '0 0 16px rgba(255, 255, 255, 0.45)',
       icon: (
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
           <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
         </svg>
       ),
-      target: '_blank',
     },
   ]
 
@@ -105,14 +144,34 @@ export default function Footer() {
                 color: '#e4e4e7',
                 textDecoration: 'none',
                 letterSpacing: '0.01em',
-                transition: 'opacity 0.2s ease',
+                transition: 'opacity 0.2s ease, color 0.2s ease',
               }}
-              onMouseOver={(e) => (e.currentTarget.style.opacity = '0.7')}
-              onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
+              onMouseOver={(e) => {
+                e.currentTarget.style.color = '#FFFFFF'
+                e.currentTarget.style.opacity = '0.8'
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.color = '#e4e4e7'
+                e.currentTarget.style.opacity = '1'
+              }}
             >
               collegecircleai.com
             </Link>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+
+            {/* Single Unified Pill Capsule for Social Icons */}
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '4px 6px',
+                borderRadius: '100px',
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
+                backdropFilter: 'blur(12px)',
+                gap: '4px',
+              }}
+            >
               {socialLinks.map((social, i) => (
                 <Link
                   key={i}
@@ -120,27 +179,30 @@ export default function Footer() {
                   target={social.target}
                   rel={social.target === '_blank' ? 'noopener noreferrer' : undefined}
                   aria-label={social.label}
+                  className="footer-social-pill-item"
                   style={{
-                    color: '#9e9ea7',
+                    color: '#A6A6B8',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '6px',
-                    background: 'rgba(255, 255, 255, 0.04)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    transition: 'all 0.2s ease',
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                    position: 'relative',
+                    textDecoration: 'none',
                   }}
                   onMouseOver={(e) => {
-                    e.currentTarget.style.color = '#ffffff'
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)'
+                    e.currentTarget.style.color = social.hoverColor
+                    e.currentTarget.style.background = social.hoverBg
+                    e.currentTarget.style.boxShadow = social.hoverGlow
+                    e.currentTarget.style.transform = 'scale(1.12)'
                   }}
                   onMouseOut={(e) => {
-                    e.currentTarget.style.color = '#9e9ea7'
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)'
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)'
+                    e.currentTarget.style.color = '#A6A6B8'
+                    e.currentTarget.style.background = 'transparent'
+                    e.currentTarget.style.boxShadow = 'none'
+                    e.currentTarget.style.transform = 'scale(1)'
                   }}
                 >
                   {social.icon}
