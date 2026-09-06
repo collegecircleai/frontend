@@ -10,7 +10,8 @@ export default function Footer() {
     { name: 'Features', href: '/#features' },
     { name: 'Personalisation', href: '/#personalisation' },
     { name: 'About', href: '/about' },
-    { name: 'Student Community', href: '/student-community' }
+    { name: 'Student Community', href: '/student-community' },
+    { name: 'Privacy Policy', href: '/privacy-policy' }
   ]
 
   return (
@@ -154,10 +155,32 @@ export default function Footer() {
 
       {/* Bottom Legal / Copyright */}
       <div style={{
-        textAlign: 'center', fontSize: 'clamp(7px, 1.5vw, 10px)', fontFamily: 'var(--font-mono)',
-        opacity: 0.5, letterSpacing: '0.05em'
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '12px',
+        fontSize: 'clamp(11px, 1vw, 13px)',
+        fontFamily: "var(--font-garamond), 'EB Garamond', Georgia, serif",
+        color: '#888899'
       }}>
-        © 2026 College Circle AI Pvt. Ltd.
+        <div>
+          © 2026 College Circle AI Pvt. Ltd. All rights reserved.
+        </div>
+        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+          <Link
+            href="/privacy-policy"
+            style={{
+              color: '#888899',
+              textDecoration: 'none',
+              transition: 'color 0.2s ease'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.color = 'white'}
+            onMouseOut={(e) => e.currentTarget.style.color = '#888899'}
+          >
+            Privacy Policy
+          </Link>
+        </div>
       </div>
     </footer>
   )
