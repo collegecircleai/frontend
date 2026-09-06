@@ -47,12 +47,14 @@ export default function PrivacyPolicyClient() {
 
         .privacy-title {
           font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
-          font-size: clamp(38px, 5.5vw, 64px);
-          font-weight: 500;
-          letter-spacing: -1.68px;
+          font-size: clamp(40px, 5.5vw, 60px);
+          font-weight: 400;
+          letter-spacing: -0.02em;
           text-align: center;
           margin: 0 0 36px 0;
           color: #000000;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
         }
         [data-theme='dark'] .privacy-title {
           color: #ffffff;
