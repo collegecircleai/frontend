@@ -9,6 +9,24 @@ import ElegantParticles from '@/components/effects/ElegantParticles'
 import ComponentErrorBoundary from '@/components/effects/ErrorBoundary'
 
 export default function PrivacyPolicyClient() {
+  const handleSupportEmail = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    window.open(
+      'https://mail.google.com/mail/?view=cm&fs=1&to=support@collegecircleai.com&su=College%20Circle%20AI%20Support',
+      '_blank',
+      'noopener,noreferrer'
+    )
+    const iframe = document.createElement('iframe')
+    iframe.style.display = 'none'
+    iframe.src = 'mailto:support@collegecircleai.com'
+    document.body.appendChild(iframe)
+    setTimeout(() => {
+      if (document.body.contains(iframe)) {
+        document.body.removeChild(iframe)
+      }
+    }, 1000)
+  }
+
   return (
     <div
       className="privacy-page-bg"
@@ -150,13 +168,19 @@ export default function PrivacyPolicyClient() {
           color: #0f7fff;
           text-decoration: underline;
           text-underline-offset: 3px;
-          transition: opacity 0.15s ease;
+          cursor: pointer;
+          transition: color 0.15s ease, opacity 0.15s ease;
         }
         .privacy-link:hover {
-          opacity: 0.8;
+          color: #0056b3;
+          opacity: 0.9;
         }
         [data-theme='dark'] .privacy-link {
           color: #5ea4ff;
+        }
+        [data-theme='dark'] .privacy-link:hover {
+          color: #90c2ff;
+          opacity: 1;
         }
 
         .privacy-footer-links {
@@ -320,13 +344,13 @@ export default function PrivacyPolicyClient() {
               College Circle AI offers both free and paid subscription plans. Free plans provide access to limited features. Paid plans unlock additional capabilities as described on the platform at the time of purchase.
             </p>
             <p>
-              <strong>Refund policy:</strong> If you are not satisfied with your subscription, you may request a full refund within 24 hours of purchase by emailing <a href="mailto:support@collegecircleai.com" className="privacy-link">support@collegecircleai.com</a>. Refund requests received within this window will be processed and the amount returned to your original payment method within 5–7 business days, depending on your bank or payment provider. After the 24-hour window, subscriptions are non-refundable.
+              <strong>Refund policy:</strong> If you are not satisfied with your subscription, you may request a full refund within 24 hours of purchase by emailing <a href="mailto:support@collegecircleai.com" onClick={handleSupportEmail} className="privacy-link">support@collegecircleai.com</a>. Refund requests received within this window will be processed and the amount returned to your original payment method within 5–7 business days, depending on your bank or payment provider. After the 24-hour window, subscriptions are non-refundable.
             </p>
             <p>
               <strong>Cancellation:</strong> You may cancel your subscription at any time. Upon cancellation, you retain access to paid features until the end of your current billing period. No further charges will be made.
             </p>
             <p>
-              <strong>Billing disputes:</strong> For any billing issue, error, or dispute, email <a href="mailto:support@collegecircleai.com" className="privacy-link">support@collegecircleai.com</a>. We will acknowledge your request within 24 hours and aim to resolve it within 7 working days.
+              <strong>Billing disputes:</strong> For any billing issue, error, or dispute, email <a href="mailto:support@collegecircleai.com" onClick={handleSupportEmail} className="privacy-link">support@collegecircleai.com</a>. We will acknowledge your request within 24 hours and aim to resolve it within 7 working days.
             </p>
 
             <h2 className="privacy-heading-1">8. AI-generated content</h2>
@@ -398,7 +422,7 @@ export default function PrivacyPolicyClient() {
             <h2 className="privacy-heading-1">15. Contact</h2>
             <p>
               Should you have any inquiries or comments regarding our privacy policy, data requests, refund requests, or if you wish to discuss its enforcement or any other related matters, please feel free to reach out at{' '}
-              <a href="mailto:support@collegecircleai.com" className="privacy-link">
+              <a href="mailto:support@collegecircleai.com" onClick={handleSupportEmail} className="privacy-link">
                 support@collegecircleai.com
               </a>
             </p>
