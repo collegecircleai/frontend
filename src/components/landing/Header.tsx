@@ -136,6 +136,199 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
         [data-theme='dark'] .header-signin-link:hover {
           color: #a098ff !important;
         }
+
+        /* ── Exact Uiverse 3D Rocker Switch ── */
+        .uiverse-3d-switch {
+          font-size: 13.5px;
+          position: relative;
+          display: inline-block;
+          width: 5em;
+          height: 2.5em;
+          user-select: none;
+          cursor: pointer;
+          transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), filter 0.2s ease;
+        }
+
+        .uiverse-3d-switch:hover {
+          transform: scale(1.03);
+          filter: brightness(1.05);
+        }
+
+        .uiverse-3d-switch:active {
+          transform: scale(0.97);
+        }
+
+        .uiverse-3d-switch .cb {
+          opacity: 0;
+          width: 0;
+          height: 0;
+          position: absolute;
+        }
+
+        .uiverse-3d-switch .toggle {
+          position: absolute;
+          cursor: pointer;
+          width: 100%;
+          height: 100%;
+          background-color: #E2E8F0;
+          border-radius: 0.25em;
+          transition: background-color 0.25s ease, outline-color 0.25s ease, box-shadow 0.25s ease;
+          overflow: hidden;
+          /* Refined soft slate border instead of solid black */
+          outline: 1.5px solid #CBD5E1;
+          box-shadow: 
+            -0.25em 0 0 0 #CBD5E1, 
+            -0.25em 0.25em 0 0 #CBD5E1,
+            0.25em 0 0 0 #CBD5E1, 
+            0.25em 0.25em 0 0 #CBD5E1, 
+            0 0.25em 0 0 #CBD5E1,
+            0 3px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .uiverse-3d-switch .toggle > .left {
+          position: absolute;
+          display: flex;
+          width: 50%;
+          height: 88%;
+          background-color: #f5f5f7;
+          color: #222226;
+          left: 0;
+          bottom: 0;
+          align-items: center;
+          justify-content: center;
+          transform-origin: right;
+          transform: rotateX(10deg);
+          transform-style: preserve-3d;
+          transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), color 200ms ease, background-color 200ms ease;
+        }
+
+        .uiverse-3d-switch .left::before {
+          position: absolute;
+          content: "";
+          width: 100%;
+          height: 100%;
+          background-color: rgb(215, 215, 220);
+          transform-origin: center left;
+          transform: rotateY(90deg);
+        }
+
+        .uiverse-3d-switch .left::after {
+          position: absolute;
+          content: "";
+          width: 100%;
+          height: 100%;
+          background-color: rgb(130, 130, 138);
+          transform-origin: center bottom;
+          transform: rotateX(90deg);
+        }
+
+        .uiverse-3d-switch .toggle > .right {
+          position: absolute;
+          display: flex;
+          width: 50%;
+          height: 88%;
+          background-color: #f5f5f7;
+          color: rgb(185, 185, 195);
+          right: 1px;
+          bottom: 0;
+          align-items: center;
+          justify-content: center;
+          transform-origin: left;
+          transform: rotateX(10deg) rotateY(-45deg);
+          transform-style: preserve-3d;
+          transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), color 200ms ease, background-color 200ms ease;
+        }
+
+        .uiverse-3d-switch .right::before {
+          position: absolute;
+          content: "";
+          width: 100%;
+          height: 100%;
+          background-color: rgb(215, 215, 220);
+          transform-origin: center right;
+          transform: rotateY(-90deg);
+        }
+
+        .uiverse-3d-switch .right::after {
+          position: absolute;
+          content: "";
+          width: 100%;
+          height: 100%;
+          background-color: rgb(130, 130, 138);
+          transform-origin: center bottom;
+          transform: rotateX(90deg);
+        }
+
+        /* ── Active Face Illuminations ── */
+        .uiverse-3d-switch input:not(:checked) + .toggle > .left {
+          color: #f59e0b;
+          filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.4));
+        }
+
+        .uiverse-3d-switch input:checked + .toggle > .left {
+          transform: rotateX(10deg) rotateY(45deg);
+          color: rgb(185, 185, 195);
+        }
+
+        .uiverse-3d-switch input:checked + .toggle > .right {
+          transform: rotateX(10deg) rotateY(0deg);
+          color: #a78bfa;
+        }
+
+        /* ── Dark Mode: Crisp Violet / Obsidian Outer Bezel ── */
+        [data-theme='dark'] .uiverse-3d-switch .toggle {
+          background-color: #0c0b16;
+          outline: 1.5px solid rgba(139, 128, 249, 0.4);
+          box-shadow: 
+            -0.25em 0 0 0 #1b192e, 
+            -0.25em 0.25em 0 0 #1b192e,
+            0.25em 0 0 0 #1b192e, 
+            0.25em 0.25em 0 0 #1b192e, 
+            0 0.25em 0 0 #1b192e,
+            0 0 16px rgba(139, 128, 249, 0.35);
+        }
+
+        [data-theme='dark'] .uiverse-3d-switch .toggle > .left {
+          background-color: #24223b;
+          color: rgba(255, 255, 255, 0.35);
+        }
+
+        [data-theme='dark'] .uiverse-3d-switch .left::before {
+          background-color: #19172a;
+        }
+
+        [data-theme='dark'] .uiverse-3d-switch .left::after {
+          background-color: #0d0c18;
+        }
+
+        [data-theme='dark'] .uiverse-3d-switch .toggle > .right {
+          background-color: #2b2847;
+          color: rgba(255, 255, 255, 0.35);
+        }
+
+        [data-theme='dark'] .uiverse-3d-switch .right::before {
+          background-color: #19172a;
+        }
+
+        [data-theme='dark'] .uiverse-3d-switch .right::after {
+          background-color: #0d0c18;
+        }
+
+        [data-theme='dark'] .uiverse-3d-switch input:not(:checked) + .toggle > .left {
+          color: #fbbf24;
+          filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.6));
+        }
+
+        [data-theme='dark'] .uiverse-3d-switch input:checked + .toggle > .left {
+          color: rgba(255, 255, 255, 0.25);
+          filter: none;
+        }
+
+        [data-theme='dark'] .uiverse-3d-switch input:checked + .toggle > .right {
+          color: #c4b5fd;
+          text-shadow: 0 0 10px rgba(196, 181, 253, 0.85);
+          filter: drop-shadow(0 0 6px rgba(196, 181, 253, 0.7));
+        }
       `}</style>
 
       <div style={{ display: 'flex', justifyContent: 'flex-start', flex: 1 }}>
@@ -199,38 +392,27 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
         gap: 'clamp(6px, 1.5vw, 12px)',
         flex: 1
       }}>
-        {/* Theme Toggle Button */}
-        <motion.button
-          onClick={toggleTheme}
-          whileHover={{ scale: 1.1, backgroundColor: 'rgba(139, 128, 249, 0.15)' }}
-          whileTap={{ scale: 0.9 }}
-          suppressHydrationWarning
-          style={{
-            backgroundColor: 'rgba(139, 128, 249, 0)',
-            border: '1px solid var(--border)',
-            borderRadius: '12px',
-            width: '36px',
-            height: '36px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'var(--ink)',
-            cursor: 'pointer',
-            transition: 'background-color 0.3s ease'
-          }}
+        {/* Exact 3D Mechanical Rocker Theme Switch from provided code */}
+        <label
+          className="uiverse-3d-switch"
+          aria-label={theme === 'dark' ? 'Switch to Light mode' : 'Switch to Dark mode'}
+          title={theme === 'dark' ? 'Switch to Light mode' : 'Switch to Dark mode'}
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={theme}
-              initial={{ y: 20, opacity: 0, rotate: -45 }}
-              animate={{ y: 0, opacity: 1, rotate: 0 }}
-              exit={{ y: -20, opacity: 0, rotate: 45 }}
-              transition={{ duration: 0.2 }}
-            >
-              {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
-            </motion.div>
-          </AnimatePresence>
-        </motion.button>
+          <input
+            type="checkbox"
+            className="cb"
+            checked={theme === 'dark'}
+            onChange={toggleTheme}
+          />
+          <div className="toggle">
+            <span className="left" title="Light Theme">
+              <Sun size={15} strokeWidth={2.4} />
+            </span>
+            <span className="right" title="Dark Theme">
+              <Moon size={14} strokeWidth={2.4} />
+            </span>
+          </div>
+        </label>
 
         {/* Premium Mobile Menu Toggle */}
         <motion.button
