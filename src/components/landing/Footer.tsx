@@ -30,18 +30,11 @@ export default function Footer() {
           gap: '32px'
         }}
       >
-        {/* Logo & Company */}
+        {/* Logo */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(8px, 2vw, 24px)' }}>
           <Link href="/" style={{ textDecoration: 'none' }}>
             <CCAILogo size={32} variant="dark" />
           </Link>
-          <div style={{ 
-            fontFamily: "var(--font-garamond), 'EB Garamond', Georgia, serif",
-            fontSize: 'clamp(12px, 1.2vw, 15px)', 
-            opacity: 0.8 
-          }}>
-            College Circle AI Pvt. Ltd.
-          </div>
         </div>
 
         {/* Center Nav */}
@@ -156,30 +149,17 @@ export default function Footer() {
       {/* Bottom Legal / Copyright */}
       <div style={{
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '12px',
+        flexDirection: 'column',
+        gap: '8px',
+        textAlign: 'center',
         fontSize: 'clamp(11px, 1vw, 13px)',
         fontFamily: "var(--font-garamond), 'EB Garamond', Georgia, serif",
         color: '#888899'
       }}>
         <div>
-          © 2026 College Circle AI Pvt. Ltd. All rights reserved.
-        </div>
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <Link
-            href="/privacy-policy"
-            style={{
-              color: '#888899',
-              textDecoration: 'none',
-              transition: 'color 0.2s ease'
-            }}
-            onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-            onMouseOut={(e) => e.currentTarget.style.color = '#888899'}
-          >
-            Privacy Policy
-          </Link>
+          © 2026 All rights reserved.
         </div>
       </div>
     </footer>

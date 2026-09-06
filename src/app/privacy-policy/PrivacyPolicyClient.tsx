@@ -48,15 +48,15 @@ export default function PrivacyPolicyClient() {
         .privacy-title {
           font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
           font-size: clamp(38px, 5.5vw, 64px);
-          font-weight: 400;
-          letter-spacing: -0.02em;
+          font-weight: 500;
+          letter-spacing: -1.68px;
           text-align: center;
           margin: 0 0 36px 0;
-          color: #111118;
+          color: #000000;
         }
         [data-theme='dark'] .privacy-title {
-          color: #faf8f5;
-          text-shadow: 0 2px 28px rgba(255, 255, 255, 0.06);
+          color: #ffffff;
+          text-shadow: 0 2px 28px rgba(255, 255, 255, 0.08);
         }
 
         .privacy-back-link {
@@ -65,75 +65,96 @@ export default function PrivacyPolicyClient() {
           gap: 6px;
           font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
           font-size: 15px;
-          color: rgba(26, 26, 34, 0.6);
+          letter-spacing: -0.45px;
+          color: rgba(0, 0, 0, 0.5);
           text-decoration: none;
           margin-bottom: 28px;
-          transition: color 0.2s ease, transform 0.2s ease;
+          transition: color 0.15s ease, transform 0.15s ease;
         }
         .privacy-back-link:hover {
-          color: var(--violet, #4d3fff);
+          color: #000000;
           transform: translateX(-3px);
         }
         [data-theme='dark'] .privacy-back-link {
-          color: rgba(230, 226, 245, 0.6);
+          color: rgba(255, 255, 255, 0.5);
         }
         [data-theme='dark'] .privacy-back-link:hover {
-          color: #a59bff;
+          color: #ffffff;
         }
 
         .privacy-content {
           font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
-          font-size: clamp(17px, 1.22vw, 19.5px);
-          line-height: 1.68;
-          color: rgba(26, 26, 34, 0.88);
+          font-size: clamp(17px, 1.25vw, 19.5px);
+          line-height: 1.55;
+          letter-spacing: -0.4px;
+          color: rgba(0, 0, 0, 0.6);
         }
         [data-theme='dark'] .privacy-content {
-          color: rgba(235, 232, 246, 0.86);
+          color: rgba(255, 255, 255, 0.72);
         }
 
         .privacy-content p {
-          margin: 0 0 18px 0;
+          margin: 0 0 16px 0;
+          color: rgba(0, 0, 0, 0.6);
+        }
+        [data-theme='dark'] .privacy-content p {
+          color: rgba(255, 255, 255, 0.72);
+        }
+
+        .privacy-content strong {
+          color: #000000;
+          font-weight: 600;
+        }
+        [data-theme='dark'] .privacy-content strong {
+          color: #ffffff;
         }
 
         .privacy-heading-1 {
           font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
-          font-size: clamp(22px, 2vw, 27px);
+          font-size: clamp(22px, 2vw, 26px);
           font-weight: 600;
-          color: #111118;
-          margin: 40px 0 14px 0;
-          letter-spacing: -0.01em;
+          color: #000000;
+          margin: 36px 0 12px 0;
+          letter-spacing: -0.66px;
+          line-height: 1.2;
         }
         [data-theme='dark'] .privacy-heading-1 {
-          color: #faf8f5;
+          color: #ffffff;
         }
 
         .privacy-heading-2 {
           font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
-          font-size: clamp(19px, 1.5vw, 22px);
+          font-size: clamp(18px, 1.4vw, 20px);
           font-weight: 600;
-          color: #111118;
-          margin: 28px 0 10px 0;
+          color: #000000;
+          margin: 24px 0 8px 0;
+          letter-spacing: -0.51px;
+          line-height: 1.3;
         }
         [data-theme='dark'] .privacy-heading-2 {
-          color: #f0ecf9;
+          color: #ffffff;
         }
 
         .privacy-list-item {
           margin-bottom: 12px;
           padding-left: 4px;
+          color: rgba(0, 0, 0, 0.6);
+        }
+        [data-theme='dark'] .privacy-list-item {
+          color: rgba(255, 255, 255, 0.72);
         }
 
         .privacy-link {
-          color: #4d3fff;
+          color: #0f7fff;
           text-decoration: underline;
           text-underline-offset: 3px;
-          transition: opacity 0.2s ease;
+          transition: opacity 0.15s ease;
         }
         .privacy-link:hover {
           opacity: 0.8;
         }
         [data-theme='dark'] .privacy-link {
-          color: #a59bff;
+          color: #5ea4ff;
         }
 
         .privacy-footer-links {
