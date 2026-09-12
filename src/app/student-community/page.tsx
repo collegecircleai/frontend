@@ -64,7 +64,7 @@ export default function CommunityPage() {
   const isDark = theme === 'dark';
 
   const c = {
-    bg: isDark ? '#0A0A1E' : '#F7F6F2',
+    bg: 'var(--pearl)',
     text: isDark ? '#FFFFFF' : '#1A1A1E',
     text80: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)',
     text70: isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)',

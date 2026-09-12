@@ -29,15 +29,15 @@
 }
 
 [data-theme='dark'] {
-  --pearl: #0A0A1E;
+  --pearl: #0D0C1D;
   --ink: #FFFFFF;
-  --cream: #0A0A1E;
+  --cream: #0D0C1D;
   --deep: #0D0C1D; /* Design-system dark surface */
   --border: rgba(139, 92, 246, 0.25);
   --border-light: rgba(139, 92, 246, 0.08);
   --mist: #B0B0D8;
   --violet-pale: #1E1E50;
-  --header-bg: 10, 10, 30;
+  --header-bg: 13, 12, 29; /* #0D0C1D as an rgb triple for rgba() */
   --glow: rgba(139, 92, 246, 0.4);
   --logo-accent: var(--violet-light);
   --logo-tagline: rgba(160, 159, 192, 0.6);
@@ -47,7 +47,7 @@
 
 /* ─── DARK MODE: Base ─── */
 [data-theme='dark'] body {
-  background: #0A0A1E;
+  background: #0D0C1D;
 }
 
 [data-theme='dark'] .noise-overlay {
@@ -83,12 +83,12 @@
 
 /* ─── DARK MODE: Header/Nav ─── */
 [data-theme='dark'] .sidebar {
-  background: rgba(10, 10, 30, 0.9) !important;
+  background: rgba(var(--header-bg), 0.9) !important;
   border-color: rgba(139, 92, 246, 0.15) !important;
 }
 
 [data-theme='dark'] .top-bar {
-  background: rgba(10, 10, 30, 0.8) !important;
+  background: rgba(var(--header-bg), 0.8) !important;
   border-color: rgba(139, 92, 246, 0.1) !important;
 }
 

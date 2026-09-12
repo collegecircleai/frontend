@@ -315,7 +315,7 @@ export function AnimatedFolder({
         }
 
         [data-theme='dark'] .folder-card {
-          background: #0A0A1E;
+          background: var(--deep);
           border: 1px solid rgba(139, 92, 246, 0.2);
           box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(139, 92, 246, 0.05);
         }
