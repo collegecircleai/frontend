@@ -132,24 +132,12 @@ export default function ClassroomDetails() {
       try {
         setLoading(true);
         const res = await api.get(`/classrooms/${params.id}`);
+        // GET /api/classrooms/:id returns { classroom, chunks } — the only shape
+        // the backend produces.
         const result = res.data?.data || res.data;
 
-        console.log("Details raw response:", result);
-
-        const classroomData = result.classroom || result;
-        setSession(classroomData);
-
-        // Robust chunk search
-        let foundChunks = [];
-        if (Array.isArray(result.chunks)) {
-          foundChunks = result.chunks;
-        } else if (Array.isArray(classroomData.chunks)) {
-          foundChunks = classroomData.chunks;
-        } else if (result.audioChunks && Array.isArray(result.audioChunks)) {
-          foundChunks = result.audioChunks;
-        }
-
-        setChunks(foundChunks);
+        setSession(result.classroom);
+        setChunks(Array.isArray(result.chunks) ? result.chunks : []);
       } catch (err) {
         console.error("Failed to fetch session details:", err);
         setSession(null);

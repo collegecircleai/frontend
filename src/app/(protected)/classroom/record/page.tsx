@@ -9,25 +9,38 @@ import {
   ArrowLeft,
   Loader2,
   Sparkles,
-  User,
-  BookOpen,
-  Clock,
 } from "lucide-react";
-import api, { getFriendlyErrorMessage } from "@/lib/api";
+import { getFriendlyErrorMessage } from "@/lib/api";
+import {
+  startLiveTranscription,
+  type LiveStatus,
+  type LiveTranscriptionSession,
+} from "@/lib/liveTranscription";
+
+const JADE = "#00C896";
+const VIOLET = "#4D3FFF";
+
+type TranscriptLine = { time: string; text: string; saved: boolean };
+
+const formatTime = (date: Date) =>
+  date.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
 
 export default function RecordPage() {
   const router = useRouter();
   const [isRecording, setIsRecording] = useState(false);
-  const [transcript, setTranscript] = useState<
-    { time: string; text: string }[]
-  >([]);
+  const [transcript, setTranscript] = useState<TranscriptLine[]>([]);
+  const [partial, setPartial] = useState("");
+  const [status, setStatus] = useState<LiveStatus>("stopped");
   const [sessionName, setSessionName] = useState("");
   const [subject, setSubject] = useState("");
   const [professor, setProfessor] = useState("");
   const [lectureNo, setLectureNo] = useState("1");
   const [isSaving, setIsSaving] = useState(false);
   const [classroomId, setClassroomId] = useState<string | null>(null);
-  const classroomIdRef = useRef<string | null>(null);
   const [toast, setToast] = useState<{
     msg: string;
     type: "error" | "success";
@@ -38,160 +51,13 @@ export default function RecordPage() {
     setTimeout(() => setToast(null), 4000);
   };
 
-  const recognitionRef = useRef<any>(null);
-  const audioStreamRef = useRef<MediaStream | null>(null);
+  const sessionRef = useRef<LiveTranscriptionSession | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const retryCountRef = useRef<number>(0);
-  const maxRetriesRef = useRef<number>(5);
-  const isRecordingRef = useRef(false);
-  const recognitionActiveRef = useRef(false);
-  const recognitionStartPendingRef = useRef(false);
-  const restartTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const clearRestartTimer = () => {
-    if (restartTimerRef.current) {
-      clearTimeout(restartTimerRef.current);
-      restartTimerRef.current = null;
-    }
-  };
-
-  const startRecognitionSafely = () => {
-    const recognition = recognitionRef.current;
-    if (
-      !recognition ||
-      !isRecordingRef.current ||
-      recognitionActiveRef.current ||
-      recognitionStartPendingRef.current
-    ) {
-      return;
-    }
-
-    recognitionStartPendingRef.current = true;
-    try {
-      recognition.start();
-    } catch (err) {
-      const message = String((err as Error)?.message || err);
-      if (!message.includes("already started")) {
-        console.error("Failed to start speech recognition:", err);
-      }
-    } finally {
-      recognitionStartPendingRef.current = false;
-    }
-  };
-
-  const scheduleRecognitionRestart = (delayMs: number) => {
-    clearRestartTimer();
-    restartTimerRef.current = setTimeout(() => {
-      if (!isRecordingRef.current) {
-        return;
-      }
-
-      startRecognitionSafely();
-    }, delayMs);
-  };
-
-  const setupSpeechRecognition = () => {
-    const SpeechRecognition =
-      (window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.lang = "en-US";
-      recognitionRef.current.continuous = true;
-      recognitionRef.current.interimResults = true;
-      recognitionRef.current.maxAlternatives = 1;
-
-      recognitionRef.current.onstart = () => {
-        recognitionActiveRef.current = true;
-        recognitionStartPendingRef.current = false;
-        clearRestartTimer();
-      };
-
-      recognitionRef.current.onresult = (event: any) => {
-        retryCountRef.current = 0; // Reset retry count on successful result
-        let currentTranscript = "";
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          currentTranscript += event.results[i][0].transcript;
-        }
-
-        if (event.results[event.results.length - 1].isFinal) {
-          const timestamp = new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          });
-          setTranscript((prev) => [
-            ...prev,
-            { time: timestamp, text: currentTranscript },
-          ]);
-
-          if (classroomIdRef.current) {
-            sendChunk(currentTranscript, classroomIdRef.current);
-          }
-        }
-      };
-
-      recognitionRef.current.onerror = (event: any) => {
-        console.error("Speech recognition error:", event.error);
-        if (event.error === "network") {
-          recognitionActiveRef.current = false;
-          retryCountRef.current += 1;
-          if (retryCountRef.current <= maxRetriesRef.current) {
-            showToast(
-              `Network reconnecting... (${retryCountRef.current}/${maxRetriesRef.current})`,
-            );
-            scheduleRecognitionRestart(
-              1000 + retryCountRef.current * 500,
-            );
-          } else {
-            showToast(
-              "Network Error: Service unreachable. Please check your connection.",
-            );
-            setIsRecording(false);
-            isRecordingRef.current = false;
-          }
-        } else if (event.error === "not-allowed") {
-          showToast("Microphone access denied.");
-          setIsRecording(false);
-          isRecordingRef.current = false;
-        } else if (event.error === "audio-capture") {
-          showToast("No microphone found or microphone is already in use.");
-          setIsRecording(false);
-          isRecordingRef.current = false;
-        } else if (event.error === "no-speech") {
-          recognitionActiveRef.current = false;
-          scheduleRecognitionRestart(500);
-        }
-      };
-
-      recognitionRef.current.onend = () => {
-        recognitionActiveRef.current = false;
-        recognitionStartPendingRef.current = false;
-        if (isRecordingRef.current && recognitionRef.current) {
-          scheduleRecognitionRestart(250);
-        }
-      };
-    }
-  };
 
   useEffect(() => {
-    isRecordingRef.current = isRecording;
-  }, [isRecording]);
-
-  useEffect(() => {
-    setupSpeechRecognition();
-
     return () => {
-      isRecordingRef.current = false;
-      recognitionActiveRef.current = false;
-      recognitionStartPendingRef.current = false;
-      clearRestartTimer();
-      recognitionRef.current?.abort?.();
-      recognitionRef.current = null;
-      if (audioStreamRef.current) {
-        audioStreamRef.current.getTracks().forEach((track) => track.stop());
-        audioStreamRef.current = null;
-      }
+      sessionRef.current?.stop();
+      sessionRef.current = null;
     };
   }, []);
 
@@ -199,18 +65,7 @@ export default function RecordPage() {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [transcript]);
-
-  const sendChunk = async (text: string, cid?: string) => {
-    const id = cid || classroomIdRef.current;
-    if (!text.trim() || !id) return;
-    try {
-      console.log("Saving transcript chunk:", text);
-      await api.post(`/classrooms/${id}/chunks`, { content: text });
-    } catch (err) {
-      console.error("Failed to send chunk:", err);
-    }
-  };
+  }, [transcript, partial]);
 
   const startRecording = async () => {
     if (!sessionName.trim() || !subject.trim()) {
@@ -218,83 +73,79 @@ export default function RecordPage() {
       return;
     }
 
-    const SpeechRecognition =
-      (window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      showToast(
-        "Your browser does not support Web Speech API. Please use Chrome or Edge.",
-      );
-      return;
-    }
-
     try {
       setIsSaving(true);
-      retryCountRef.current = 0; // Reset retry count on new session
+      setPartial("");
 
-      if (!audioStreamRef.current) {
-        audioStreamRef.current = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
-      }
-
-      const res = await api.post("/classrooms", {
+      sessionRef.current = await startLiveTranscription({
         name: sessionName,
-        subject: subject,
+        subject,
         professor: professor || "Unknown",
         lecture_no: parseInt(lectureNo) || 1,
+        onSessionCreated: setClassroomId,
+        onStatus: setStatus,
+        onPartial: setPartial,
+        onFinal: (line) => {
+          setPartial("");
+          setTranscript((prev) => [
+            ...prev,
+            { time: formatTime(line.at), text: line.text, saved: line.saved },
+          ]);
+        },
+        onError: (message, fatal) => {
+          showToast(message);
+          if (fatal) {
+            sessionRef.current = null;
+            setIsRecording(false);
+            setStatus("stopped");
+            setPartial("");
+          }
+        },
       });
 
-      const data = res.data?.data || res.data;
-      const id = data.class_id || data.id || data.classroom_id;
-
-      if (!id) throw new Error("Backend response missing ID.");
-
-      setClassroomId(id);
-      classroomIdRef.current = id;
       setIsRecording(true);
-      isRecordingRef.current = true;
-      if (recognitionRef.current) {
-        startRecognitionSafely();
-      }
       setIsSaving(false);
     } catch (err: any) {
-      console.error("Failed to start session:", err);
-      if (audioStreamRef.current) {
-        audioStreamRef.current.getTracks().forEach((track) => track.stop());
-        audioStreamRef.current = null;
-      }
+      sessionRef.current = null;
       setIsSaving(false);
-      showToast(getFriendlyErrorMessage(err, "Unable to start this session."));
+      setStatus("stopped");
+      const denied =
+        err?.name === "NotAllowedError" || err?.name === "SecurityError";
+      showToast(
+        denied
+          ? "Microphone access denied. Allow the mic to record this lecture."
+          : err?.name === "NotFoundError"
+            ? "No microphone found."
+            : getFriendlyErrorMessage(err, "Unable to start this session."),
+      );
     }
   };
 
   const stopRecording = () => {
-    isRecordingRef.current = false;
-    recognitionActiveRef.current = false;
-    recognitionStartPendingRef.current = false;
-    clearRestartTimer();
-    recognitionRef.current?.stop();
-    if (audioStreamRef.current) {
-      audioStreamRef.current.getTracks().forEach((track) => track.stop());
-      audioStreamRef.current = null;
-    }
+    sessionRef.current?.stop();
+    sessionRef.current = null;
     setIsRecording(false);
+    setPartial("");
+    setStatus("stopped");
   };
 
-  const handleFinish = async () => {
-    try {
-      setIsSaving(true);
-      if (isRecording) {
-        recognitionRef.current?.stop();
-        setIsRecording(false);
-      }
-      setTimeout(() => router.push("/classroom"), 600);
-    } catch (err) {
-      router.push("/classroom");
-    }
+  const handleFinish = () => {
+    stopRecording();
+    setIsSaving(true);
+    const target = classroomId ? `/classroom/${classroomId}` : "/classroom";
+    setTimeout(() => router.push(target), 600);
   };
+
+  const statusLabel =
+    status === "reconnecting"
+      ? "RECONNECTING…"
+      : status === "connecting"
+        ? "CONNECTING…"
+        : status === "speaking"
+          ? "LISTENING"
+          : "LIVE TRANSCRIPTION ACTIVE";
+
+  const statusColor = status === "reconnecting" ? "#FF4D5A" : JADE;
 
   return (
     <div
@@ -387,9 +238,11 @@ export default function RecordPage() {
                   display: "flex",
                   alignItems: "center",
                   gap: 8,
-                  color: "#4D3FFF",
-                  fontSize: 14,
-                  fontWeight: 700,
+                  color: statusColor,
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 13,
+                  fontWeight: 500,
+                  letterSpacing: "0.08em",
                   marginTop: 4,
                 }}
               >
@@ -397,12 +250,12 @@ export default function RecordPage() {
                   style={{
                     width: 8,
                     height: 8,
-                    background: "#4D3FFF",
+                    background: statusColor,
                     borderRadius: "50%",
                     animation: "pulse 1.5s infinite",
                   }}
                 />
-                AI TRANSCRIPTION ACTIVE
+                {statusLabel}
               </div>
             )}
           </div>
@@ -720,12 +573,13 @@ export default function RecordPage() {
                       flexShrink: 0,
                       fontFamily: "var(--font-mono)",
                       fontSize: 12,
-                      fontWeight: 800,
-                      color: "#4D3FFF",
-                      opacity: 0.6,
+                      fontWeight: 500,
+                      color: line.saved ? VIOLET : "#FF4D5A",
+                      opacity: 0.7,
                     }}
                   >
                     {line.time}
+                    {!line.saved && " ⚠"}
                   </div>
                   <div
                     style={{
@@ -742,20 +596,40 @@ export default function RecordPage() {
                   </div>
                 </div>
               ))}
+              {/* Provisional text for the utterance still being spoken. Replaced
+                  in place by the styled final line when Sarvam's VAD closes it. */}
               {isRecording && (
-                <div
-                  style={{
-                    display: "flex",
-                    gap: 40,
-                    color: "#4D3FFF",
-                    opacity: 0.5,
-                  }}
-                >
-                  <div style={{ width: 90, fontWeight: 900, fontSize: 12 }}>
-                    LIVE
+                <div style={{ display: "flex", gap: 40 }}>
+                  <div
+                    style={{
+                      width: 90,
+                      flexShrink: 0,
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 12,
+                      fontWeight: 500,
+                      color: statusColor,
+                      letterSpacing: "0.08em",
+                    }}
+                  >
+                    {status === "speaking" ? "● REC" : "LIVE"}
                   </div>
-                  <div style={{ flex: 1, fontSize: 20 }}>
-                    Capturing lecture audio...
+                  <div
+                    style={{
+                      flex: 1,
+                      fontSize: 20,
+                      lineHeight: 1.8,
+                      fontWeight: 400,
+                      fontStyle: partial ? "normal" : "italic",
+                      color: partial ? "var(--mist)" : statusColor,
+                      opacity: partial ? 0.9 : 0.5,
+                      borderLeft: `3px dashed ${statusColor}33`,
+                      paddingLeft: 40,
+                    }}
+                  >
+                    {partial ||
+                      (status === "reconnecting"
+                        ? "Reconnecting to transcription…"
+                        : "Listening…")}
                   </div>
                 </div>
               )}
@@ -775,15 +649,23 @@ export default function RecordPage() {
                   display: "flex",
                   alignItems: "center",
                   gap: 12,
-                  color: "#4D3FFF",
-                  fontWeight: 800,
-                  fontSize: 14,
+                  color: JADE,
+                  fontFamily: "var(--font-mono)",
+                  fontWeight: 500,
+                  fontSize: 13,
+                  letterSpacing: "0.08em",
                 }}
               >
-                <Sparkles size={18} /> AI ASSISTANT TRANSCRIBING
+                <Sparkles size={18} /> SARVAM REALTIME TRANSCRIPTION
               </div>
-              <div style={{ fontWeight: 700, color: "var(--mist)" }}>
-                {transcript.length} segments saved
+              <div
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontWeight: 500,
+                  color: "var(--mist)",
+                }}
+              >
+                {transcript.filter((line) => line.saved).length} segments saved
               </div>
             </div>
           </div>
