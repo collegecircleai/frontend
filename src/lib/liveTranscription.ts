@@ -175,6 +175,11 @@ export const startLiveTranscription = async (
             message.message ?? "Transcription error",
             message.fatal === true,
           );
+          // The server closes right after a fatal error; stopping here keeps
+          // onclose from silently reconnecting with the mic still live.
+          if (message.fatal === true) {
+            stop();
+          }
           return;
         default:
           return;
