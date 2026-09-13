@@ -158,24 +158,20 @@ export default function ClassroomDetails() {
       setSummaryData(null);
       setOpenQuizIndex(null);
 
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
-      const response = await fetch(
-        `${api.defaults.baseURL}/classrooms/${params.id}/generate-notes-quiz`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-        },
+      // Through `api` so an expired token gets the shared refresh-and-retry;
+      // the fetch adapter is what lets axios hand back the SSE body as a stream.
+      const response = await api.post(
+        `/classrooms/${params.id}/generate-notes-quiz`,
+        undefined,
+        { adapter: "fetch", responseType: "stream" },
       );
+      const body = response.data as ReadableStream<Uint8Array> | null;
 
-      if (!response.ok || !response.body) {
+      if (!body) {
         throw new Error("Unable to generate summary for this lecture.");
       }
 
-      const reader = response.body.getReader();
+      const reader = body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
       let eventName = "message";
