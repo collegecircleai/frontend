@@ -883,6 +883,7 @@ export default function ClassroomDetails() {
                     color: "var(--ink)",
                     lineHeight: 1.8,
                     fontWeight: 500,
+                    // impeccable-disable-next-line side-tab -- faint 8% quote rule on transcript lines, not a coloured card tab
                     borderLeft: "3px solid rgba(77,63,255,0.08)",
                     paddingLeft: 40,
                   }}
