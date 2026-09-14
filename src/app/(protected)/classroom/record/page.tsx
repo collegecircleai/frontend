@@ -122,18 +122,19 @@ export default function RecordPage() {
   };
 
   const stopRecording = () => {
-    sessionRef.current?.stop();
+    const stopped = sessionRef.current?.stop();
     sessionRef.current = null;
     setIsRecording(false);
     setPartial("");
     setStatus("stopped");
+    return stopped;
   };
 
-  const handleFinish = () => {
-    stopRecording();
+  const handleFinish = async () => {
     setIsSaving(true);
-    const target = classroomId ? `/classroom/${classroomId}` : "/classroom";
-    setTimeout(() => router.push(target), 600);
+    // Wait for the server to save the last line, so the detail page loads it.
+    await stopRecording();
+    router.push(classroomId ? `/classroom/${classroomId}` : "/classroom");
   };
 
   const statusLabel =

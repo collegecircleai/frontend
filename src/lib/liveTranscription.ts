@@ -22,11 +22,14 @@ export type LiveTranscriptionOptions = {
 };
 
 export type LiveTranscriptionSession = {
-  stop: () => void;
+  /** Resolves once the server has saved the last line and closed, or after 4s. */
+  stop: () => Promise<void>;
   getClassId: () => string | null;
 };
 
 const WS_PATH = "/ws/live-classroom";
+// Above the server's 2.5s flush cap, so it only fires if the close never comes.
+const STOP_TIMEOUT_MS = 4_000;
 
 const buildSocketUrl = (token: string) => {
   const httpBase = api.defaults.baseURL!.replace(/\/api\/?$/, "");
@@ -87,6 +90,7 @@ export const startLiveTranscription = async (
   let classId: string | null = null;
   let stopped = false;
   let reconnectUsed = false;
+  let stopping: Promise<void> | null = null;
 
   const teardownAudio = () => {
     stream.getTracks().forEach((track) => track.stop());
@@ -94,17 +98,35 @@ export const startLiveTranscription = async (
   };
 
   const stop = () => {
-    if (stopped) {
-      return;
+    if (stopping) {
+      return stopping;
     }
     stopped = true;
-    if (socket?.readyState === WebSocket.OPEN) {
-      socket.send(JSON.stringify({ event: "session.end" }));
-      socket.close(1000);
-    }
-    socket = null;
     teardownAudio();
     options.onStatus?.("stopped");
+
+    const open = socket?.readyState === WebSocket.OPEN ? socket : null;
+    if (!open) {
+      socket = null;
+      stopping = Promise.resolve();
+      return stopping;
+    }
+
+    // The server flushes the utterance in progress, saves it, sends it as a
+    // transcript.final (still handled by onmessage), then closes. That close is
+    // the "fully saved" signal; the timeout covers a server that never sends it.
+    open.send(JSON.stringify({ event: "session.end" }));
+    stopping = new Promise<void>((resolve) => {
+      const fallback = setTimeout(() => {
+        open.close(1000);
+        resolve();
+      }, STOP_TIMEOUT_MS);
+      open.addEventListener("close", () => {
+        clearTimeout(fallback);
+        resolve();
+      });
+    });
+    return stopping;
   };
 
   const connect = async () => {
@@ -213,7 +235,8 @@ export const startLiveTranscription = async (
   const worklet = new AudioWorkletNode(audioContext, "pcm16-processor");
 
   worklet.port.onmessage = (event: MessageEvent<ArrayBuffer>) => {
-    if (socket?.readyState === WebSocket.OPEN) {
+    // The socket now outlives stop(); no audio may follow session.end.
+    if (!stopped && socket?.readyState === WebSocket.OPEN) {
       socket.send(
         JSON.stringify({ event: "audio_input", audio: toBase64(event.data) }),
       );
