@@ -11,7 +11,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
     if (onGetStarted) {
       onGetStarted()
     } else {
-      router.push('/login')
+      router.push('/register')
     }
   }
 

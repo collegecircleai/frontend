@@ -39,7 +39,7 @@ export default function LandingPage() {
     setMounted(true);
   }, []);
 
-  const openOnboarding = () => router.push("/login");
+  const openOnboarding = () => router.push("/register");
 
   return (
     <div
