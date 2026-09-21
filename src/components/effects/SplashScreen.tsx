@@ -179,7 +179,7 @@ export default function SplashScreen() {
             style={{ 
               display: 'flex', 
               flexDirection: 'column', 
-              alignItems: 'center', 
+              alignItems: 'center',
               zIndex: 10,
               position: 'relative'
             }}
@@ -188,25 +188,25 @@ export default function SplashScreen() {
               viewBox="0 0 80 80" 
               fill="none" 
               initial={{ scale: 0.9, opacity: 0 }}
-                animate={
-                  phase === 'building' 
-                    ? { scale: 1, opacity: 1, x: isMobile ? 8 : -3 } 
-                    : { scale: isMobile ? 35 : 60, opacity: 0, x: isMobile ? 8 : -3 }
-                }
-                transition={
-                  phase === 'building'
-                    ? { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
-                    : { duration: 1.1, ease: [0.85, 0, 0.15, 1] } 
-                }
-                style={{ 
-                  width: 'clamp(120px, 25vw, 180px)', 
-                  height: 'clamp(120px, 25vw, 180px)',
-                  filter: isMobile ? 'none' : 'drop-shadow(0 30px 40px rgba(77, 63, 255, 0.2))',
-                  transformOrigin: '65% 40%',
-                  willChange: 'transform, opacity',
-                  backfaceVisibility: 'hidden'
-                }}
-              >
+              animate={
+                phase === 'building' 
+                  ? { scale: 1, opacity: 1, x: isMobile ? 8 : -3 } 
+                  : { scale: isMobile ? 35 : 60, opacity: 0, x: isMobile ? 8 : -3 }
+              }
+              transition={
+                phase === 'building'
+                  ? { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+                  : { duration: 1.1, ease: [0.85, 0, 0.15, 1] } 
+              }
+              style={{ 
+                width: 'clamp(120px, 25vw, 180px)', 
+                height: 'clamp(120px, 25vw, 180px)',
+                filter: isMobile ? 'none' : 'drop-shadow(0 30px 40px rgba(77, 63, 255, 0.2))',
+                transformOrigin: '65% 40%',
+                willChange: 'transform',
+                backfaceVisibility: 'hidden'
+              }}
+            >
               <motion.circle 
                 cx="32" cy="40" r="28" 
                 stroke="var(--violet)"
