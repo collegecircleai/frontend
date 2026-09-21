@@ -102,10 +102,10 @@ const Hero = memo(function Hero({ onGetStarted }: HeroProps) {
               <motion.img 
                 key={isMounted ? 'hero-ready' : 'hero-waiting'}
                 initial={{ 
-                  opacity: 0.2,
-                  scale: 1.05,
-                  clipPath: 'circle(0% at 30% 50%)',
-                  filter: 'brightness(1.5) blur(10px)'
+                  opacity: 0.85,
+                  scale: 1.02,
+                  clipPath: 'circle(120% at 30% 50%)',
+                  filter: 'var(--hero-img-filter) blur(0px)'
                 }}
                 animate={isMounted ? { 
                   opacity: 1, 
@@ -114,10 +114,12 @@ const Hero = memo(function Hero({ onGetStarted }: HeroProps) {
                   filter: 'var(--hero-img-filter) blur(0px)'
                 } : {}}
                 transition={{ 
-                  duration: 2.5, 
+                  duration: 1.2, 
                   ease: [0.16, 1, 0.3, 1], 
-                  delay: 3.5 
+                  delay: 0.1 
                 }}
+                fetchPriority="high"
+                decoding="async"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWpzbPp1-YwGt6q-tvN4Gdt0ZCho1Pq_BWxy1-IAeWhBteRfnFen0EgdLfimLBGHUUfuZhjYa92xvRM4dIoyjo5eYXItcU2uGWX4Z1alJIUuDOpOCgOL9hzcYYXck-5sdD-KzzjdsNYjB-dre5gfXrh8jDLMWkalHZkRx94pr5tlrjP4pdoFT_WwNcFrINcupIv0C8QSjTl_kbCwJ3F3kpRVe4g01edF-WBYiqEvzsmQaKxcfivAyZSBmVPUa1UlZuuaqthUXVdWq3"
                 alt="Student Background"
                 style={{
