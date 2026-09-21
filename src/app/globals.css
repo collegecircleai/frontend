@@ -11,16 +11,16 @@
   --violet-light: #7B70FF;
   --violet-pale: #EAE8FF;
   --ink: #1A1A1E;   /* Softer charcoal for better readability */
-  --deep: #FAFAF8;  /* Eye-friendly bone white for cards */
-  --pearl: #F7F6F2;
-  --cream: #EDE9E0;
+  --deep: #FFFDF8;  /* Slightly lighter cream for cards, pairs with --pearl #FEFCF6 */
+  --pearl: #FEFCF6;
+  --cream: #FEFCF6;
   --jade: #00C896;
   --amber: #F5A623;
   --coral: #FF4D5A;
   --mist: #7A799A;   /* Increased contrast for comfortable reading */
   --border: oklch(0.922 0 0);
   --border-light: rgba(9,9,15,0.06);
-  --header-bg: 255, 255, 255; /* Luminous White for better separation from Pearl */
+  --header-bg: 254, 252, 246; /* Warm creamy tone matching --pearl #FEFCF6 */
   --logo-accent: var(--violet);
   --logo-tagline: var(--mist);
   --hero-img-filter: saturate(1.5) contrast(1.1);
@@ -32,7 +32,7 @@
   --font-body: var(--font-garamond), 'EB Garamond', Garamond, Georgia, serif;
   --font-sans: 'DM Sans', sans-serif;
   --font-mono: 'DM Mono', monospace;
-  --background: oklch(1 0 0);
+  --background: var(--pearl);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -345,7 +345,7 @@ body {
 /* ===== SIDEBAR ===== */
 .sidebar {
   width: 260px;
-  background: rgba(247, 246, 242, 0.8);
+  background: rgba(254, 252, 246, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
@@ -404,7 +404,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 20px 56px;
-  background: rgba(247, 246, 242, 0.6);
+  background: rgba(254, 252, 246, 0.6);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 
