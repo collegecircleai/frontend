@@ -4,14 +4,24 @@ import { useEffect, useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function SplashScreen() {
-  const [isVisible, setIsVisible] = useState(true)
+  const [isVisible, setIsVisible] = useState(false)
   const [phase, setPhase] = useState<'building' | 'portal' | 'done'>('building')
   const [stars, setStars] = useState<any[]>([])
   const [mounted, setMounted] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
+    // Check if user has already seen splash screen in this session
+    const hasSeenSplash = sessionStorage.getItem('cc_splash_seen')
+    if (hasSeenSplash) {
+      return
+    }
+
+    // First time visitor in this session: mark seen immediately & activate splash
+    sessionStorage.setItem('cc_splash_seen', 'true')
+    setIsVisible(true)
     setMounted(true)
+
     const mobile = window.innerWidth <= 768
     setIsMobile(mobile)
     document.body.style.overflow = 'hidden'
