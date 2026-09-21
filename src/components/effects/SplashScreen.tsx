@@ -174,33 +174,20 @@ export default function SplashScreen() {
             }}
           />
 
-          {/* Central Logo Construction with Contained Layout Geometry to Prevent CLS */}
+          {/* Central Logo Construction */}
           <motion.div
             style={{ 
               display: 'flex', 
               flexDirection: 'column', 
               alignItems: 'center', 
               zIndex: 10,
-              position: 'relative',
-              contain: 'layout paint'
+              position: 'relative'
             }}
           >
-            {/* Stable anchor box for the SVG: ensures layout geometry remains 100% constant during scale-up */}
-            <div
-              style={{
-                width: 'clamp(120px, 25vw, 180px)',
-                height: 'clamp(120px, 25vw, 180px)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'relative',
-                flexShrink: 0
-              }}
-            >
-              <motion.svg 
-                viewBox="0 0 80 80" 
-                fill="none" 
-                initial={{ scale: 0.9, opacity: 0 }}
+            <motion.svg 
+              viewBox="0 0 80 80" 
+              fill="none" 
+              initial={{ scale: 0.9, opacity: 0 }}
                 animate={
                   phase === 'building' 
                     ? { scale: 1, opacity: 1, x: isMobile ? 8 : -3 } 
@@ -212,13 +199,12 @@ export default function SplashScreen() {
                     : { duration: 1.1, ease: [0.85, 0, 0.15, 1] } 
                 }
                 style={{ 
-                  width: '100%', 
-                  height: '100%',
+                  width: 'clamp(120px, 25vw, 180px)', 
+                  height: 'clamp(120px, 25vw, 180px)',
                   filter: isMobile ? 'none' : 'drop-shadow(0 30px 40px rgba(77, 63, 255, 0.2))',
                   transformOrigin: '65% 40%',
                   willChange: 'transform, opacity',
-                  backfaceVisibility: 'hidden',
-                  position: 'absolute'
+                  backfaceVisibility: 'hidden'
                 }}
               >
               <motion.circle 
@@ -272,7 +258,6 @@ export default function SplashScreen() {
                 transition={{ duration: 0.4, delay: 1.25, ease: 'easeOut' }} 
               />
             </motion.svg>
-            </div>
             
             <motion.div 
               animate={
