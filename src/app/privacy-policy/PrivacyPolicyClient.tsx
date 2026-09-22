@@ -19,12 +19,14 @@ export default function PrivacyPolicyClient() {
     const iframe = document.createElement('iframe')
     iframe.style.display = 'none'
     iframe.src = 'mailto:support@collegecircleai.com'
-    document.body.appendChild(iframe)
-    setTimeout(() => {
-      if (document.body.contains(iframe)) {
-        document.body.removeChild(iframe)
-      }
-    }, 1000)
+    if (document.body) {
+      document.body.appendChild(iframe)
+      setTimeout(() => {
+        if (iframe && iframe.parentNode) {
+          iframe.parentNode.removeChild(iframe)
+        }
+      }, 1000)
+    }
   }
 
   return (

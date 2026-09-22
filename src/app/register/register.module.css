@@ -1,0 +1,386 @@
+.registerContainer {
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #F8F5EE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 60px;
+  box-sizing: border-box;
+  font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
+  position: relative;
+}
+
+.registerCardWrapper {
+  width: 100%;
+  max-width: 1420px;
+  min-height: 680px;
+  display: grid;
+  grid-template-columns: 540px 1px 1fr;
+  align-items: center;
+  position: relative;
+}
+
+.registerLeftCol {
+  display: flex;
+  flex-direction: column;
+  padding-left: 88px;
+  padding-right: 40px;
+  box-sizing: border-box;
+  max-width: 540px;
+  width: 100%;
+}
+
+.registerDividerLine {
+  width: 1px;
+  height: 90%;
+  background-color: rgba(220, 214, 202, 0.7);
+}
+
+.registerRightCol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 48px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.registerTopRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 48px;
+}
+
+.registerLoginTopRight {
+  position: absolute;
+  top: -24px;
+  right: 10px;
+  font-size: 14.5px;
+  color: #4A463F;
+  font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
+}
+
+.registerInputWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.registerInputIcon {
+  position: absolute;
+  left: 16px;
+  color: #78736B;
+  pointer-events: none;
+}
+
+.registerFieldInput {
+  width: 100%;
+  height: 52px;
+  padding: 0 16px 0 46px;
+  border-radius: 12px;
+  border: 1.5px solid #D8D2C5;
+  background-color: #F8F5EE;
+  font-size: 15.5px;
+  color: #1A1A1E;
+  outline: none;
+  font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.registerFieldInput::placeholder {
+  color: #8C867B;
+  font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
+}
+
+.registerFieldInput:focus {
+  border-color: #2F2A8A;
+  background-color: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(47, 42, 138, 0.08);
+}
+
+.registerSubmitBtn {
+  width: 100%;
+  height: 52px;
+  background-color: #2424E6;
+  border: none;
+  border-radius: 12px;
+  color: #FFFFFF;
+  font-size: 16.5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 4px 16px rgba(36, 36, 230, 0.2);
+}
+
+.registerSubmitBtn:hover:not(:disabled) {
+  background-color: #1A1AC4;
+}
+
+.registerSubmitBtn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.registerOrDivider {
+  display: flex;
+  align-items: center;
+  margin: 22px 0;
+  width: 100%;
+}
+
+.registerOrDivider::before,
+.registerOrDivider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: #DDD6C8;
+}
+
+.registerOrDivider span {
+  padding: 0 14px;
+  font-size: 13.5px;
+  color: #8E887E;
+  font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
+}
+
+.registerGoogleBtn {
+  height: 48px;
+  width: 220px;
+  background-color: #F8F5EE;
+  border: 1.5px solid #D8D2C5;
+  border-radius: 12px;
+  color: #2B2925;
+  font-size: 14.5px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.registerTitle {
+  font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
+  font-size: 42px;
+  font-weight: 500;
+  color: #141316;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0 0 10px 0;
+}
+
+.registerSubtitle {
+  font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
+  font-size: 17px;
+  color: #5C574F;
+  margin: 0 0 28px 0;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.registerGoogleWrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.registerFootnote {
+  margin-top: 36px;
+  font-size: 13.5px;
+  color: #7D776C;
+  line-height: 1.45;
+  font-family: var(--font-garamond), 'EB Garamond', Georgia, serif;
+}
+
+.registerFootnoteLink {
+  color: #2424E6;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s ease, text-decoration 0.15s ease;
+}
+
+.registerFootnoteLink:hover {
+  color: #1A1AC4;
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   MOBILE OPTIMIZATION (@media max-width: 960px)
+   Engineered following Apple & modern tier-1 SaaS mobile onboarding standards:
+   - Full-width touch targets (minimum 50px height)
+   - 16px minimum font size on inputs to eliminate iOS auto-zoom
+   - Safe-area inset paddings (env(safe-area-inset-*))
+   - Optimal vertical rhythm and centered brand hierarchy
+   - Fluid typography with natural line wraps
+   - Smooth active tap micro-feedback without outline jumps
+   ========================================================================== */
+@media (max-width: 960px) {
+  .registerContainer {
+    min-height: 100dvh;
+    height: auto;
+    padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+    align-items: center;
+    justify-content: flex-start;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .registerCardWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 440px;
+    min-height: auto;
+    margin: 0 auto;
+  }
+
+  .registerLeftCol {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: 100%;
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .registerDividerLine {
+    display: none !important;
+  }
+
+  .registerRightCol {
+    display: none !important;
+  }
+
+  .registerLoginTopRight {
+    position: static;
+    top: auto;
+    right: auto;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: 15px;
+    order: 99; /* Smooth mobile flow: placed conveniently at bottom or top cleanly */
+    padding-top: 18px;
+    border-top: 1px solid rgba(220, 214, 202, 0.5);
+  }
+
+  .registerTopRow {
+    justify-content: center;
+    margin-bottom: 28px;
+    width: 100%;
+  }
+
+  .registerTopRow a {
+    gap: 10px;
+  }
+
+  .registerTitle {
+    font-size: clamp(30px, 8vw, 36px);
+    line-height: 1.18;
+    letter-spacing: -0.015em;
+    text-align: center;
+    margin: 0 0 10px 0;
+  }
+
+  .registerSubtitle {
+    font-size: clamp(15.5px, 4.2vw, 17px);
+    line-height: 1.45;
+    text-align: center;
+    margin: 0 auto 28px auto;
+    max-width: 320px;
+  }
+
+  .registerInputWrap {
+    margin-bottom: 14px;
+  }
+
+  .registerFieldInput {
+    height: 52px;
+    font-size: 16px; /* Critical: 16px prevents iOS Safari auto-zoom on focus */
+    padding: 0 16px 0 46px;
+    border-radius: 14px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .registerSubmitBtn {
+    height: 52px;
+    font-size: 16.5px;
+    border-radius: 14px;
+    margin-top: 6px;
+    /* Apple-standard active tap feel */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .registerSubmitBtn:active:not(:disabled) {
+    transform: scale(0.985);
+  }
+
+  .registerOrDivider {
+    margin: 20px 0;
+  }
+
+  .registerGoogleWrap {
+    width: 100%;
+  }
+
+  .registerGoogleBtn {
+    width: 100%;
+    height: 50px;
+    font-size: 15px;
+    border-radius: 14px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .registerGoogleBtn:active {
+    transform: scale(0.985);
+    background-color: #FFFFFF;
+  }
+
+  .registerFootnote {
+    margin-top: 28px;
+    text-align: center;
+    font-size: 13.5px;
+    line-height: 1.5;
+    padding: 0 8px;
+  }
+}
+
+/* Extra small devices (iPhone SE, small Androids <= 380px) */
+@media (max-width: 380px) {
+  .registerContainer {
+    padding: 16px 14px 28px 14px;
+  }
+
+  .registerTitle {
+    font-size: 28px;
+  }
+
+  .registerSubtitle {
+    font-size: 15px;
+    margin-bottom: 22px;
+  }
+
+  .registerFieldInput,
+  .registerSubmitBtn,
+  .registerGoogleBtn {
+    height: 48px;
+  }
+}

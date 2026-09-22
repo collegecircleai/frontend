@@ -348,12 +348,14 @@ export default function Footer() {
                           const iframe = document.createElement('iframe')
                           iframe.style.display = 'none'
                           iframe.src = 'mailto:collegecircleai@gmail.com'
-                          document.body.appendChild(iframe)
-                          setTimeout(() => {
-                            if (document.body.contains(iframe)) {
-                              document.body.removeChild(iframe)
-                            }
-                          }, 1000)
+                          if (document.body) {
+                            document.body.appendChild(iframe)
+                            setTimeout(() => {
+                              if (iframe && iframe.parentNode) {
+                                iframe.parentNode.removeChild(iframe)
+                              }
+                            }, 1000)
+                          }
                         }}
                         style={{
                           fontFamily: "var(--font-garamond), 'EB Garamond', Georgia, serif",

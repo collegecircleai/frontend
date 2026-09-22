@@ -1,33 +1,76 @@
 "use client";
 
-import React, { useState } from "react";
-import { api, getFriendlyErrorMessage } from "../../lib/api";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import BrandPanel from "@/components/brand/BrandPanel";
-import CCAILogo from "@/components/brand/CCAILogo";
-import { Mail, ArrowRight, User as UserIcon, AlertCircle } from "lucide-react";
+import { api, getFriendlyErrorMessage } from "../../lib/api";
+import { getPostAuthRoute, useAuth } from "../../context/AuthContext";
+import { AlertCircle, Mail, ArrowRight, User } from "lucide-react";
+import styles from "./register.module.css";
 
 export default function Register() {
+  const router = useRouter();
+  const { user, isLoading, hydrateUser } = useAuth();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isSent, setIsSent] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const googleAuthPath = "/api/auth/google";
+  const [googleAuthError, setGoogleAuthError] = useState(false);
 
   const handleGoogleAuth = () => {
     const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-    window.location.href = `${apiBase.replace(/\/+$/, "")}${googleAuthPath}`;
+    window.location.href = `${apiBase.replace(/\/+$/, "")}/api/auth/google`;
   };
 
-  React.useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const searchParams = new URLSearchParams(window.location.search);
+    setGoogleAuthError(searchParams.get("googleAuth") === "failed");
   }, []);
+
+  // Handle Google OAuth hash return if redirected back to /register
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const hash = window.location.hash.replace(/^#/, "");
+    if (!hash) return;
+
+    const hashParams = new URLSearchParams(hash);
+    const accessToken = hashParams.get("accessToken");
+    const refreshToken = hashParams.get("refreshToken");
+
+    if (!accessToken) return;
+
+    localStorage.setItem("token", accessToken);
+    if (refreshToken) {
+      localStorage.setItem("refreshToken", refreshToken);
+    }
+
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${window.location.search}`
+    );
+
+    hydrateUser()
+      .then((googleUser) => router.replace(getPostAuthRoute(googleUser)))
+      .catch(() => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user");
+        setGoogleAuthError(true);
+      });
+  }, [hydrateUser, router]);
+
+  // If already logged in, route to authorized dashboard
+  useEffect(() => {
+    if (isLoading) return;
+    if (!user) return;
+    router.replace(getPostAuthRoute(user));
+  }, [isLoading, router, user]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +97,7 @@ export default function Register() {
         setError("An account with this email already exists.");
       } else {
         setError(
-          getFriendlyErrorMessage(err, "Unable to complete registration."),
+          getFriendlyErrorMessage(err, "Unable to complete registration.")
         );
       }
     } finally {
@@ -62,150 +105,192 @@ export default function Register() {
     }
   };
 
-  const inputStyle = {
-    width: "100%",
-    padding: "16px 20px",
-    borderRadius: "12px",
-    border: "1px solid #E5E7EB",
-    fontSize: "15px",
-    fontFamily: "DM Sans, sans-serif",
-    outline: "none",
-    transition: "all 0.3s ease",
-    background: "#F9FAFB",
-    color: "#000000",
-  };
-
-  const labelStyle = {
-    display: "block",
-    fontSize: "11px",
-    fontWeight: 800,
-    color: "#9CA3AF",
-    textTransform: "uppercase" as const,
-    letterSpacing: "0.1em",
-    marginBottom: "14px",
-    fontFamily: "DM Sans, sans-serif",
-  };
-
-  const googleButtonStyle = {
-    width: "100%",
-    padding: "18px",
-    background: "#FFFFFF",
-    color: "#111827",
-    borderRadius: "14px",
-    fontSize: "16px",
-    fontWeight: 700,
-    border: "1px solid #E5E7EB",
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "12px",
-    fontFamily: "DM Sans, sans-serif",
-    transition: "all 0.2s ease",
-  };
-
   return (
-    <div className="min-h-screen flex bg-[#F8F5F2]">
-      {/* LEFT: BRAND PANEL */}
-      <div className="hidden lg:block lg:w-1/2">
-        <BrandPanel />
-      </div>
-
-      {/* RIGHT: FORM */}
-      <div
-        style={{
-          padding: isMobile ? "48px 32px" : "48px 64px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "relative",
-          overflow: "hidden",
-          flex: 1,
-        }}
-        className="w-full lg:w-1/2"
-      >
-        {/* Precise Watermark Book (Matching Screenshot) */}
-        <div className="absolute -top-6 right-12 pointer-events-none opacity-[0.04] w-55 h-55 text-black">
-          <svg
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-full h-full"
+    <div className={styles.registerContainer}>
+      <div className={styles.registerCardWrapper}>
+        {/* Top Right "Already have an account? Log in" */}
+        <div className={styles.registerLoginTopRight}>
+          Already have an account?{" "}
+          <Link
+            href="/login"
+            style={{
+              color: "#2424E6",
+              fontWeight: 600,
+              textDecoration: "none",
+              marginLeft: "4px",
+            }}
           >
-            {/* Left Page */}
-            <path d="M 2 7 C 2 7, 6 4, 11 6 L 11 21 C 6 19, 2 21, 2 21 Z" />
-            {/* Right Page with integrated fold */}
-            <path d="M 13 6 C 18 4, 22 7, 22 7 L 22 21 C 22 21, 18 19, 13 21 Z" />
-            {/* Subtle Page Fold Detail */}
-            <path
-              d="M 13 6 C 15 3, 19 3, 21 6 L 21 20 C 19 17, 15 17, 13 20 Z"
-              opacity="0.3"
-            />
-          </svg>
+            Log in
+          </Link>
         </div>
 
-        <div
-          style={{
-            position: "absolute",
-            top: isMobile ? "24px" : "48px",
-            left: isMobile ? "32px" : "32px",
-            zIndex: 20,
-          }}
-          className="lg:hidden"
-        >
-          <CCAILogo size={32} variant="light" />
-        </div>
+        {/* Left Column: Logo, Heading, Inputs, Buttons */}
+        <div className={styles.registerLeftCol}>
+          {/* Top Brand Mark */}
+          <div className={styles.registerTopRow}>
+            <Link
+              href="/"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "12px",
+                textDecoration: "none",
+              }}
+            >
+              {/* Visual Circle Logo Mark */}
+              <svg
+                width="38"
+                height="38"
+                viewBox="0 0 80 80"
+                fill="none"
+                aria-hidden="true"
+              >
+                <circle cx="34" cy="40" r="28" fill="#2424E6" />
+                <circle cx="50" cy="34" r="18" fill="#F8F5EE" />
+                <circle cx="50" cy="34" r="9" fill="#10B981" opacity="0.9" />
+                <circle cx="34" cy="40" r="8" fill="#F8F5EE" />
+              </svg>
+              <span
+                style={{
+                  fontFamily:
+                    "var(--font-garamond), 'EB Garamond', Georgia, serif",
+                  fontSize: "23px",
+                  fontWeight: 500,
+                  color: "#18171A",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                College Circle AI
+              </span>
+            </Link>
+          </div>
 
-        <div className="max-w-md w-full px-8">
           <AnimatePresence mode="wait">
             {!isSent ? (
               <motion.div
-                key="form-container"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.5 }}
+                key="form-view"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
               >
-                <div style={{ marginBottom: "64px" }}>
-                  <h2
-                    className="serif"
-                    style={{
-                      fontSize: isMobile ? "32px" : "40px",
-                      fontWeight: 600,
-                      color: "#09090F",
-                      marginBottom: "12px",
-                    }}
-                  >
-                    Join the Circle
-                  </h2>
+                {/* Title & Subtitle */}
+                <h1 className={styles.registerTitle}>
+                  Create your account
+                </h1>
+                <p className={styles.registerSubtitle}>
+                  Start your personalised learning journey
+                  <br />
+                  with College Circle AI.
+                </p>
 
-                  <p
+                {/* Errors */}
+                {googleAuthError && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
                     style={{
-                      color: "#6B7280",
-                      fontSize: "16px",
-                      fontFamily: "DM Sans, sans-serif",
+                      backgroundColor: "#FEF2F2",
+                      border: "1px solid #FEE2E2",
+                      padding: "10px 14px",
+                      borderRadius: "10px",
+                      color: "#B91C1C",
+                      fontSize: "14px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      marginBottom: "16px",
                     }}
                   >
-                    Create your scholastic identity to begin your journey.
-                  </p>
+                    <AlertCircle size={16} style={{ flexShrink: 0 }} />
+                    <span>Google sign-in failed. Please try again.</span>
+                  </motion.div>
+                )}
+
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    style={{
+                      backgroundColor: "#FEF2F2",
+                      border: "1px solid #FEE2E2",
+                      padding: "10px 14px",
+                      borderRadius: "10px",
+                      color: "#B91C1C",
+                      fontSize: "14px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      marginBottom: "16px",
+                    }}
+                  >
+                    <AlertCircle size={16} style={{ flexShrink: 0 }} />
+                    <span>{error}</span>
+                  </motion.div>
+                )}
+
+                <form onSubmit={handleRegister}>
+                  {/* Full name input */}
+                  <div className={styles.registerInputWrap}>
+                    <User
+                      className={styles.registerInputIcon}
+                      size={18}
+                      strokeWidth={1.75}
+                    />
+                    <input
+                      id="name"
+                      type="text"
+                      required
+                      placeholder="Full name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className={styles.registerFieldInput}
+                    />
+                  </div>
+
+                  {/* Email address input */}
+                  <div className={styles.registerInputWrap}>
+                    <Mail
+                      className={styles.registerInputIcon}
+                      size={18}
+                      strokeWidth={1.75}
+                    />
+                    <input
+                      id="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      placeholder="Email address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className={styles.registerFieldInput}
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className={styles.registerSubmitBtn}
+                  >
+                    <span>
+                      {loading ? "Creating account..." : "Create account"}
+                    </span>
+                    {!loading && <ArrowRight size={17} />}
+                  </button>
+                </form>
+
+                {/* Divider */}
+                <div className={styles.registerOrDivider}>
+                  <span>or</span>
                 </div>
 
-                <form onSubmit={handleRegister} className="">
-                  <motion.button
+                {/* Continue with Google button only (Centered, No Github) */}
+                <div className={styles.registerGoogleWrap}>
+                  <button
                     type="button"
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
                     onClick={handleGoogleAuth}
-                    style={{ ...googleButtonStyle, marginBottom: "24px" }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = "#D1D5DB";
-                      e.currentTarget.style.boxShadow =
-                        "0 6px 18px rgba(17, 24, 39, 0.06)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = "#E5E7EB";
-                      e.currentTarget.style.boxShadow = "none";
-                    }}
+                    className={styles.registerGoogleBtn}
                   >
                     <svg
                       width="18"
@@ -230,241 +315,111 @@ export default function Register() {
                         d="M12 5.38c1.47 0 2.78.51 3.82 1.52l2.86-2.86C16.95 2.38 14.7 1.4 12 1.4 8.1 1.4 4.86 3.64 3.27 7.86l4.35 3.38c.72-2.17 2.73-3.86 5.1-3.86z"
                       />
                     </svg>
-                    Sign up with Google
-                  </motion.button>
+                    <span>Continue with Google</span>
+                  </button>
+                </div>
 
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                      marginBottom: "32px",
-                      color: "#9CA3AF",
-                      fontFamily: "DM Sans, sans-serif",
-                      fontSize: "12px",
-                      letterSpacing: "0.12em",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    <span
-                      style={{ flex: 1, height: "1px", background: "#E5E7EB" }}
-                    />
-                    <span>or continue with email</span>
-                    <span
-                      style={{ flex: 1, height: "1px", background: "#E5E7EB" }}
-                    />
-                  </div>
-
-                  {error && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      style={{
-                        background: "#FEF2F2",
-                        border: "1px solid #FEE2E2",
-                        padding: "12px 16px",
-                        borderRadius: "12px",
-                        color: "#B91C1C",
-                        fontSize: "14px",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "12px",
-                      }}
-                    >
-                      <AlertCircle size={18} />
-                      {error}
-                    </motion.div>
-                  )}
-
-                  <div style={{ marginBottom: "40px" }}>
-                    <label htmlFor="name" style={labelStyle}>
-                      Full Name
-                    </label>
-                    <div className="relative">
-                      <UserIcon
-                        size={18}
-                        style={{
-                          position: "absolute",
-                          right: "20px",
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          color: "#9CA3AF",
-                        }}
-                      />
-                      <input
-                        id="name"
-                        type="text"
-                        required
-                        style={inputStyle}
-                        placeholder="Enter your full name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        onFocus={(e) => {
-                          e.target.style.background = "white";
-                          e.target.style.borderColor = "var(--violet)";
-                          e.target.style.boxShadow =
-                            "0 0 0 4px rgba(77, 63, 255, 0.05)";
-                        }}
-                        onBlur={(e) => {
-                          e.target.style.background = "#F9FAFB";
-                          e.target.style.borderColor = "#E5E7EB";
-                          e.target.style.boxShadow = "none";
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div style={{ marginBottom: "40px" }}>
-                    <label htmlFor="email" style={labelStyle}>
-                      Email Address
-                    </label>
-                    <div className="relative">
-                      <Mail
-                        size={18}
-                        style={{
-                          position: "absolute",
-                          right: "20px",
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          color: "#9CA3AF",
-                        }}
-                      />
-                      <input
-                        id="email"
-                        type="email"
-                        autoComplete="email"
-                        required
-                        style={inputStyle}
-                        placeholder="Enter your email address"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        onFocus={(e) => {
-                          e.target.style.background = "white";
-                          e.target.style.borderColor = "var(--violet)";
-                          e.target.style.boxShadow =
-                            "0 0 0 4px rgba(77, 63, 255, 0.05)";
-                        }}
-                        onBlur={(e) => {
-                          e.target.style.background = "#F9FAFB";
-                          e.target.style.borderColor = "#E5E7EB";
-                          e.target.style.boxShadow = "none";
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <motion.button
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
-                    type="submit"
-                    disabled={loading}
-                    style={{
-                      width: "100%",
-                      padding: "18px",
-                      background: "#4D3FFF",
-                      color: "white",
-                      borderRadius: "14px",
-                      fontSize: "16px",
-                      fontWeight: 700,
-                      border: "none",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "12px",
-                      marginTop: "32px",
-                      opacity: loading ? 0.7 : 1,
-                    }}
-                  >
-                    {loading ? "Initializing..." : "Create Account"}
-                    {!loading && <ArrowRight size={20} />}
-                  </motion.button>
-                </form>
-
-                <div
-                  style={{
-                    marginTop: "40px",
-                    textAlign: "center",
-                    fontSize: "15px",
-                    color: "#6B7280",
-                    fontFamily: "DM Sans, sans-serif",
-                  }}
-                >
-                  Already have an account?{" "}
+                {/* Footnote: Privacy Policy */}
+                <div className={styles.registerFootnote}>
+                  By creating an account, you agree to our{" "}
                   <Link
-                    href="/login"
-                    style={{
-                      color: "var(--violet)",
-                      fontWeight: 600,
-                      textDecoration: "none",
-                    }}
+                    href="/privacy-policy"
+                    className={styles.registerFootnoteLink}
                   >
-                    Sign in &rarr;
+                    Privacy Policy
                   </Link>
+                  .
                 </div>
               </motion.div>
             ) : (
+              /* Success View: Verification Sent */
               <motion.div
-                key="success-container"
-                initial={{ opacity: 0, scale: 0.95 }}
+                key="success-view"
+                initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
-                style={{ textAlign: "center" }}
+                style={{
+                  padding: "24px 0",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
               >
                 <div
                   style={{
-                    width: "80px",
-                    height: "80px",
+                    width: "60px",
+                    height: "60px",
                     borderRadius: "50%",
-                    background: "rgba(77, 63, 255, 0.1)",
+                    backgroundColor: "rgba(36, 36, 230, 0.08)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: "var(--violet)",
-                    margin: "0 auto 32px",
+                    color: "#2424E6",
+                    marginBottom: "20px",
                   }}
                 >
-                  <Mail size={40} />
+                  <Mail size={30} />
                 </div>
                 <h2
-                  className="serif"
                   style={{
-                    fontSize: "32px",
+                    fontFamily:
+                      "var(--font-garamond), 'EB Garamond', Georgia, serif",
+                    fontSize: "34px",
                     fontWeight: 600,
-                    color: "#09090F",
-                    marginBottom: "16px",
+                    color: "#18171A",
+                    marginBottom: "10px",
                   }}
                 >
                   Check your email
                 </h2>
                 <p
                   style={{
-                    color: "#6B7280",
                     fontSize: "16px",
-                    fontFamily: "DM Sans, sans-serif",
-                    lineHeight: 1.6,
-                    marginBottom: "32px",
+                    color: "#5C574F",
+                    lineHeight: 1.5,
+                    marginBottom: "24px",
                   }}
                 >
-                  We've sent a verification link to <strong>{email}</strong>.
-                  Click it to set your password and complete your registration.
+                  We&apos;ve sent a verification link to{" "}
+                  <strong style={{ color: "#18171A" }}>{email}</strong>. Click
+                  the link to set your password and get started.
                 </p>
                 <Link
                   href="/login"
                   style={{
                     display: "inline-block",
-                    padding: "14px 32px",
-                    background: "var(--ink)",
-                    color: "white",
-                    borderRadius: "12px",
+                    width: "fit-content",
+                    padding: "12px 28px",
+                    backgroundColor: "#18171B",
+                    color: "#FFFFFF",
+                    borderRadius: "11px",
                     textDecoration: "none",
-                    fontWeight: 600,
+                    fontWeight: 500,
+                    fontSize: "15px",
                   }}
                 >
-                  Back to Sign In
+                  Return to Log In
                 </Link>
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
+
+        {/* Hairline Divider between Form and Illustration */}
+        <div className={styles.registerDividerLine} />
+
+        {/* Right Column: Owl Mascot Illustration */}
+        <div className={styles.registerRightCol}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/signup 2.png"
+            alt="College Circle AI Mascot Learning Illustration"
+            style={{
+              width: "100%",
+              maxWidth: "760px",
+              maxHeight: "820px",
+              objectFit: "contain",
+              display: "block",
+            }}
+          />
         </div>
       </div>
     </div>
