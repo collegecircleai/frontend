@@ -61,7 +61,6 @@ import SmoothScroll from "@/components/effects/SmoothScroll";
 import ComponentErrorBoundary from "@/components/effects/ErrorBoundary";
 import SplashScreen from "@/components/effects/SplashScreen";
 import { AuthProvider } from "@/context/AuthContext";
-import { Analytics } from "@vercel/analytics/next";
 
 export default function RootLayout({
   children,
