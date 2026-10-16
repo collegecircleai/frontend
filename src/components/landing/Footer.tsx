@@ -10,6 +10,7 @@ export default function Footer() {
       title: 'Company',
       links: [
         { name: 'About College Circle AI', href: '/about' },
+        { name: 'Blog', href: '/blog' },
         { name: 'The Builders', href: '/about#builders' },
         { name: 'Build with Us', href: '/about#join-builders' },
         { name: 'Student Community', href: '/student-community' },
