@@ -1,3 +1,5 @@
+'use client'
+
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -62,6 +64,7 @@ export default function Header({ onGetStarted }: { onGetStarted?: () => void }) 
     { label: 'Features', href: '/preview#features' },
     { label: 'Personalisation', href: '/preview#personalisation' },
     { label: 'About', href: '/about' },
+    { label: 'Blog', href: '/blog' },
     { label: 'Student Community', href: '/student-community' }
   ]
 
