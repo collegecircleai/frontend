@@ -125,6 +125,15 @@ function renderInlineBold(text: string) {
   });
 }
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function renderMathExpression(
   expression: string,
   displayMode: boolean,
@@ -137,7 +146,7 @@ function renderMathExpression(
       output: "html",
     });
   } catch {
-    return expression;
+    return escapeHtml(expression);
   }
 }
 
@@ -153,20 +162,28 @@ function hasAnyMath(line: string): boolean {
   );
 }
 
+const MATH_SPLIT_PATTERN =
+  /(\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)|\$[^$\n]+\$)/g;
+
 function renderLineWithMath(text: string) {
+  // split() with one capture group puts the math pieces at odd indexes.
   const html = text
-    .replace(/\$\$([\s\S]+?)\$\$/g, (_match, expr: string) => {
-      return renderMathExpression(expr.trim(), true);
+    .split(MATH_SPLIT_PATTERN)
+    .map((piece, index) => {
+      if (index % 2 === 0) {
+        // Plain text: escape it so it can never become HTML.
+        return escapeHtml(piece);
+      }
+      // Math piece: pass the raw expression to KaTeX (it escapes its own output).
+      if (piece.startsWith("$$") || piece.startsWith("\\[")) {
+        return renderMathExpression(piece.slice(2, -2).trim(), true);
+      }
+      if (piece.startsWith("\\(")) {
+        return renderMathExpression(piece.slice(2, -2).trim(), false);
+      }
+      return renderMathExpression(piece.slice(1, -1).trim(), false);
     })
-    .replace(/\\\[([\s\S]+?)\\\]/g, (_match, expr: string) => {
-      return renderMathExpression(expr.trim(), true);
-    })
-    .replace(/\\\(([\s\S]+?)\\\)/g, (_match, expr: string) => {
-      return renderMathExpression(expr.trim(), false);
-    })
-    .replace(/\$([^$\n]+)\$/g, (_match, expr: string) => {
-      return renderMathExpression(expr.trim(), false);
-    });
+    .join("");
 
   return (
     <span
